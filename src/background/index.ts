@@ -30,8 +30,19 @@ import { addToHistory, loadHistory, getLastHistoryItem } from './history';
 
 console.log('[EchoType] Background service worker started');
 
-// Load initial settings
-let currentSettings = await loadSettings();
+// Current settings (loaded async)
+let currentSettings = {
+  autoCopyToClipboard: true,
+  autoPasteToActiveTab: false,
+  returnFocusAfterStart: false,
+  historySize: 5,
+};
+
+// Initialize settings asynchronously
+(async () => {
+  currentSettings = await loadSettings();
+  console.log('[EchoType] Settings loaded:', currentSettings);
+})();
 
 // Listen for settings changes
 onSettingsChange((settings) => {
