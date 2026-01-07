@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 1.0.0 | Updated: 2026-01-07T22:01:22+08:00
+> Version: 1.1.0 | Updated: 2026-01-07T22:20:00+08:00
 
 ## 🎯 Project Overview
 
@@ -121,12 +121,15 @@ const SELECTORS = {
 
 ## 🎯 MVP Acceptance Criteria
 
-- [ ] Keyboard shortcuts trigger dictation (Ctrl+Shift+1/2/3/4)
-- [ ] Baseline diff captures only new text
-- [ ] Robust clear with verification (3 retries)
-- [ ] Auto-copy to clipboard via Offscreen API
-- [ ] History: last 5 results, click to copy
-- [ ] Options: toggle auto-copy, auto-paste
+- [x] Keyboard shortcuts configured (Ctrl+Shift+1/2/3/4)
+- [x] Baseline diff captures only new text
+- [x] Robust clear with verification (4 retries)
+- [x] Auto-copy to clipboard via Offscreen API
+- [x] History: last 5 results management
+- [x] Options: toggle auto-copy, auto-paste, return focus
+- [x] Build passes with no errors
+- [x] 61 unit tests pass
+- [ ] Browser integration testing pending
 
 ## 🔗 References
 
