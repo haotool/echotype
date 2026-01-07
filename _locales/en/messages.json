@@ -152,5 +152,17 @@
   "yesterday": {
     "message": "Yesterday",
     "description": "Time: yesterday"
+  },
+  "customizeShortcuts": {
+    "message": "Customize Shortcuts",
+    "description": "Button to customize shortcuts"
+  },
+  "shortcutsNote": {
+    "message": "Note: Open Chrome's shortcut settings to customize keyboard shortcuts",
+    "description": "Note about customizing shortcuts"
+  },
+  "notSet": {
+    "message": "Not set",
+    "description": "Shortcut not set"
   }
 }

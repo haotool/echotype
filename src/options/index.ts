@@ -47,6 +47,9 @@ const elements = {
   saveStatus: document.getElementById('saveStatus') as HTMLElement,
   historyList: document.getElementById('historyList') as HTMLElement,
   clearHistory: document.getElementById('clearHistory') as HTMLButtonElement,
+  customizeShortcuts: document.getElementById(
+    'customizeShortcuts'
+  ) as HTMLButtonElement,
 };
 
 // ============================================================================
@@ -69,6 +72,9 @@ async function loadUI(): Promise<void> {
 
   // Load history
   await loadHistoryUI();
+  
+  // Load shortcuts
+  await loadShortcutsUI();
 }
 
 async function handleChange(): Promise<void> {
@@ -191,6 +197,42 @@ async function handleClearHistory(): Promise<void> {
 }
 
 // ============================================================================
+// Shortcuts Functions
+// ============================================================================
+
+/**
+ * Load and display current keyboard shortcuts
+ */
+async function loadShortcutsUI(): Promise<void> {
+  try {
+    const commands = await chrome.commands.getAll();
+    
+    commands.forEach((command) => {
+      if (!command.name) return;
+      
+      const element = document.getElementById(`shortcut-${command.name}`);
+      if (element) {
+        element.textContent = command.shortcut || getMessage('notSet');
+        if (!command.shortcut) {
+          element.classList.add('not-set');
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Failed to load shortcuts:', error);
+  }
+}
+
+/**
+ * Open Chrome's keyboard shortcuts settings page
+ */
+function openShortcutsSettings(): void {
+  // Chrome doesn't allow direct navigation to chrome:// URLs
+  // We need to create a new tab with the shortcuts page
+  chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+}
+
+// ============================================================================
 // Event Listeners
 // ============================================================================
 
@@ -198,6 +240,7 @@ elements.autoCopyToClipboard.addEventListener('change', handleChange);
 elements.autoPasteToActiveTab.addEventListener('change', handleChange);
 elements.returnFocusAfterStart.addEventListener('change', handleChange);
 elements.clearHistory.addEventListener('click', handleClearHistory);
+elements.customizeShortcuts.addEventListener('click', openShortcutsSettings);
 
 // Listen for history updates
 chrome.runtime.onMessage.addListener((message) => {

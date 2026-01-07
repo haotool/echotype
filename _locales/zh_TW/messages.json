@@ -152,5 +152,17 @@
   "yesterday": {
     "message": "昨天",
     "description": "時間：昨天"
+  },
+  "customizeShortcuts": {
+    "message": "自訂快捷鍵",
+    "description": "自訂快捷鍵按鈕"
+  },
+  "shortcutsNote": {
+    "message": "提示：點擊上方按鈕可在 Chrome 設定中自訂快捷鍵",
+    "description": "自訂快捷鍵提示"
+  },
+  "notSet": {
+    "message": "未設定",
+    "description": "快捷鍵未設定"
   }
 }

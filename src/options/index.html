@@ -166,6 +166,11 @@
       font-size: 0.8125rem;
     }
 
+    .shortcut-key.not-set {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
     .version {
       text-align: center;
       color: var(--text-muted);
@@ -266,6 +271,31 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    .btn-customize {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: var(--bg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-customize:hover {
+      background: var(--accent-hover);
+    }
+
+    .shortcuts-note {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -324,24 +354,26 @@
 
     <div class="card">
       <div class="card-title" data-i18n="shortcuts">Keyboard Shortcuts</div>
-      <div class="shortcuts">
+      <div class="shortcuts" id="shortcutsContainer">
         <div class="shortcut-item">
           <span data-i18n="shortcutStart">Start dictation</span>
-          <span class="shortcut-key">Ctrl+Shift+1</span>
+          <span class="shortcut-key" id="shortcut-start-dictation">Ctrl+Shift+1</span>
         </div>
         <div class="shortcut-item">
           <span data-i18n="shortcutPause">Pause dictation</span>
-          <span class="shortcut-key">Ctrl+Shift+2</span>
+          <span class="shortcut-key" id="shortcut-pause-dictation">Ctrl+Shift+2</span>
         </div>
         <div class="shortcut-item">
           <span data-i18n="shortcutSubmit">Submit dictation</span>
-          <span class="shortcut-key">Ctrl+Shift+3</span>
+          <span class="shortcut-key" id="shortcut-submit-dictation">Ctrl+Shift+3</span>
         </div>
         <div class="shortcut-item">
           <span data-i18n="shortcutPaste">Paste result</span>
-          <span class="shortcut-key">Ctrl+Shift+4</span>
+          <span class="shortcut-key" id="shortcut-paste-last-result">Ctrl+Shift+4</span>
         </div>
       </div>
+      <button class="btn-customize" id="customizeShortcuts" data-i18n="customizeShortcuts">Customize Shortcuts</button>
+      <p class="shortcuts-note" data-i18n="shortcutsNote">Note: Open Chrome's shortcut settings to customize keyboard shortcuts</p>
     </div>
 
     <p class="version">EchoType v0.2.0</p>
