@@ -5,6 +5,37 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-01-07
+
+### Added
+- **Multi-language Support (i18n)**
+  - English (`_locales/en/messages.json`)
+  - Traditional Chinese (`_locales/zh_TW/messages.json`)
+  - Auto-detection based on browser locale
+  - 40+ translated UI strings
+- **Audio Feedback**
+  - Start dictation sound (440Hz A4)
+  - Success sound (880Hz A5)
+  - Error sound (220Hz A3)
+  - Uses Web Audio API via Offscreen Document
+- **Keyboard Shortcuts Display**
+  - Dynamic shortcuts display using `chrome.commands.getAll()`
+  - "Customize Shortcuts" button to Chrome settings
+  - Visual indication for unset shortcuts
+- **i18n Utilities** (`src/shared/i18n.ts`)
+  - `getMessage()` - Get localized messages
+  - `applyI18n()` - Auto-translate data-i18n elements
+  - `formatRelativeTime()` - Localized relative time
+
+### Changed
+- Updated manifest with `default_locale: "en"`
+- Options page now shows actual keyboard shortcuts
+- Popup and Options use i18n for all text
+
+### Technical
+- 86 unit tests passing
+- Build size: ~22KB
+
 ## [0.2.0] - 2026-01-07
 
 ### Added
@@ -32,9 +63,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Voice feedback audio cues
-- Custom keyboard shortcuts
-- Multi-language support
+- Browser integration testing
+- E2E test coverage
+- Advanced ChatGPT DOM resilience
 
 ## [0.1.0] - 2026-01-07
 
@@ -92,7 +123,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 0.3.0 | 2026-01-07 | i18n, audio feedback, shortcuts display |
+| 0.2.0 | 2026-01-07 | Popup UI, badge status, history UI |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/your-username/EchoType/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/your-username/EchoType/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/your-username/EchoType/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/your-username/EchoType/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/your-username/EchoType/releases/tag/v0.1.0

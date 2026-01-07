@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 1.2.0 | Updated: 2026-01-07T22:26:00+08:00
+> Version: 1.3.0 | Updated: 2026-01-07T22:52:00+08:00
 
 ## 🎯 Project Overview
 
@@ -128,7 +128,7 @@ const SELECTORS = {
 - [x] History: last 5 results management
 - [x] Options: toggle auto-copy, auto-paste, return focus
 - [x] Build passes with no errors
-- [x] 75 unit tests pass
+- [x] 86 unit tests pass
 - [x] E2E test framework configured (Playwright)
 - [ ] Browser integration testing pending
 
