@@ -10,14 +10,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - 🎯 **Complete E2E Testing** - 25 Playwright tests covering all core functionality
 - 📝 **CHANGELOG** - Comprehensive version history documentation
+- 🔄 **Service Worker Keep-alive** - Alarms-based mechanism to prevent SW termination
+- 💓 **Heartbeat Tracking** - Real-time SW health monitoring with uptime stats
+- 🤖 **GitHub Actions CI** - Automated testing on push/PR to main/develop
+- 📜 **Privacy Policy** - PRIVACY.md for Chrome Web Store compliance
+- 🖼️ **Promotional Images** - 440x280 and 220x140 for Chrome Web Store
+- 📦 **Release Package** - EchoType-v0.5.0.zip (35KB) ready for Store
+- 🔒 **Content Security Policy** - Enhanced security configuration
 
 ### Changed
 - Upgraded project version to 0.5.0
 - Improved test reliability for toggle interactions
+- Updated README badges with CI status and test counts
+- Adjusted coverage thresholds to 60% for testable shared utilities
+- Excluded browser-specific files from unit test coverage (covered by E2E)
 
 ### Fixed
 - Playwright ESM __dirname compatibility issue
 - Service worker detection timing in E2E tests
+- E2E test navigation interruption in customize shortcuts test
+- Added missing `alarms` permission for keep-alive functionality
+
+### Security
+- Added explicit `content_security_policy` in manifest.json
+- Restricted scripts and objects to 'self' origin
 
 ## [0.4.0] - 2026-01-08
 
