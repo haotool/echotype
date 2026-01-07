@@ -5,12 +5,36 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-01-07
 
 ### Added
-- Popup UI for quick access
-- Badge status indicators
-- History UI display
+- **Popup UI** - Modern dark theme popup with status display
+  - Live status indicator (Ready/Recording/Processing)
+  - Start/Pause/Submit control buttons
+  - Last result display with one-click copy
+  - Keyboard shortcuts reference
+- **Badge Status** - Visual feedback on extension icon
+  - 'REC' with red background during recording
+  - '...' with orange during processing
+  - '✓' green flash on success
+  - '!' red flash on error
+- **History UI** - Options page history management
+  - Display last 5 dictation results
+  - Relative timestamps (剛才, X 分鐘前)
+  - One-click copy for each item
+  - Clear all with confirmation
+- PNG icons (16/32/48/128px) with brand color
+
+### Changed
+- Updated Options page design with history section
+- Improved HistoryItem type with numeric timestamp
+
+## [Unreleased]
+
+### Planned
+- Voice feedback audio cues
+- Custom keyboard shortcuts
+- Multi-language support
 
 ## [0.1.0] - 2026-01-07
 
