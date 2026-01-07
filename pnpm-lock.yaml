@@ -27,7 +27,7 @@ importers:
         specifier: ^8.19.1
         version: 8.52.0(eslint@9.39.2)(typescript@5.9.3)
       '@vitest/coverage-v8':
-        specifier: ^2.1.8
+        specifier: ^2.1.9
         version: 2.1.9(vitest@2.1.9(@types/node@22.19.3)(jsdom@26.1.0))
       eslint:
         specifier: ^9.17.0
@@ -48,7 +48,7 @@ importers:
         specifier: ^6.0.7
         version: 6.4.1(@types/node@22.19.3)
       vitest:
-        specifier: ^2.1.8
+        specifier: ^2.1.9
         version: 2.1.9(@types/node@22.19.3)(jsdom@26.1.0)
 
 packages:
