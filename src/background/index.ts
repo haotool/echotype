@@ -25,7 +25,8 @@ import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
 import { updateBadge, showSuccessBadge, showErrorBadge, initBadge } from './badge';
 import { playStartSound, playSuccessSound, playErrorSound } from './audio';
-import './keepalive'; // Keep service worker alive
+import './keepalive'; // Keep service worker alive via alarms
+import { startHeartbeat, getLastHeartbeat, isServiceWorkerHealthy, getFormattedUptime } from './heartbeat';
 
 // ============================================================================
 // Initialization
@@ -41,11 +42,12 @@ let currentSettings = {
   historySize: 5,
 };
 
-// Initialize settings and badge asynchronously
+// Initialize settings, badge, and heartbeat asynchronously
 (async () => {
   currentSettings = await loadSettings();
   console.log('[EchoType] Settings loaded:', currentSettings);
   await initBadge();
+  await startHeartbeat(); // Start heartbeat tracking
 })();
 
 // Listen for settings changes
@@ -290,6 +292,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     import('./history').then(({ clearHistory }) => {
       clearHistory().then(() => sendResponse({ ok: true }));
     });
+    return true;
+  }
+
+  // Handle heartbeat/health check requests (for developer mode)
+  if (message.type === 'GET_HEALTH') {
+    (async () => {
+      const heartbeat = await getLastHeartbeat();
+      const healthy = await isServiceWorkerHealthy();
+      const uptime = await getFormattedUptime();
+      sendResponse({
+        healthy,
+        heartbeat,
+        uptime,
+        timestamp: Date.now(),
+      });
+    })();
     return true;
   }
 

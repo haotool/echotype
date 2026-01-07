@@ -2,10 +2,12 @@
 
 > Universal Voice Dictation Chrome Extension powered by ChatGPT Whisper
 
-[![Version](https://img.shields.io/badge/Version-0.3.0-brightgreen)](CHANGELOG.md)
+[![CI](https://github.com/azlife-eth/EchoType/actions/workflows/ci.yml/badge.svg)](https://github.com/azlife-eth/EchoType/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/Version-0.5.0-brightgreen)](CHANGELOG.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
 [![Manifest V3](https://img.shields.io/badge/Chrome-MV3-green)](https://developer.chrome.com/docs/extensions/mv3/)
-[![Tests](https://img.shields.io/badge/Tests-86%20passing-success)](tests/)
+[![Tests](https://img.shields.io/badge/Unit%20Tests-86%20passing-success)](tests/unit/)
+[![E2E Tests](https://img.shields.io/badge/E2E%20Tests-25%20passing-success)](tests/e2e/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 ## 📋 Overview
@@ -102,8 +104,8 @@ EchoType/
 │   └── shared/          # Shared utilities & types
 ├── tests/
 │   ├── unit/           # 86 Vitest unit tests
-│   └── e2e/            # 23 Playwright E2E tests
-└── dist/               # Built extension (~22KB)
+│   └── e2e/            # 25 Playwright E2E tests
+└── dist/               # Built extension (~38KB)
 ```
 
 ## 🧪 Testing
@@ -115,7 +117,7 @@ pnpm test
 # Watch mode
 pnpm test:watch
 
-# E2E tests (23 tests, requires build)
+# E2E tests (25 tests, requires build)
 pnpm test:e2e
 ```
 
