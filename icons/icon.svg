@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="micGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle with subtle gradient -->
+  <circle cx="64" cy="64" r="60" fill="url(#waveGradient)" opacity="0.2"/>
+
+  <!-- Sound waves -->
+  <path d="M 24 64 Q 32 54, 40 64 Q 48 74, 56 64"
+        stroke="url(#micGradient)"
+        stroke-width="3"
+        fill="none"
+        opacity="0.4"
+        stroke-linecap="round"/>
+  <path d="M 72 64 Q 80 54, 88 64 Q 96 74, 104 64"
+        stroke="url(#micGradient)"
+        stroke-width="3"
+        fill="none"
+        opacity="0.4"
+        stroke-linecap="round"/>
+
+  <!-- Microphone body -->
+  <rect x="52" y="38" width="24" height="36" rx="12" ry="12"
+        fill="url(#micGradient)"/>
+
+  <!-- Microphone stand -->
+  <path d="M 64 74 L 64 90 M 52 90 L 76 90"
+        stroke="url(#micGradient)"
+        stroke-width="4"
+        stroke-linecap="round"/>
+
+  <!-- Microphone arc -->
+  <path d="M 44 64 Q 44 82, 64 82 Q 84 82, 84 64"
+        stroke="url(#micGradient)"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Inner details -->
+  <circle cx="64" cy="50" r="3" fill="white" opacity="0.6"/>
+  <circle cx="64" cy="60" r="3" fill="white" opacity="0.6"/>
+</svg>

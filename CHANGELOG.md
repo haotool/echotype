@@ -5,6 +5,13 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-01-08
+
+### Changed
+- 🎨 **Modern Extension Icon** - Redesigned icon with gradient purple theme and sound wave elements
+- 🖼️ **SVG Source** - Created scalable vector source (icon.svg) for future icon modifications
+- 🔧 **Icon Generation** - Used rsvg-convert CLI tool for high-quality PNG conversion (16x16, 32x32, 48x48, 128x128)
+
 ## [0.5.0] - 2026-01-08
 
 ### Added
