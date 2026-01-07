@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "EchoType",
+  "version": "0.1.0",
+  "description": "Universal voice dictation via ChatGPT Whisper - dictate anywhere with keyboard shortcuts",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "offscreen",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["src/content/chatgpt/index.ts"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/universal/index.ts"],
+      "run_at": "document_idle",
+      "exclude_matches": [
+        "chrome://*/*",
+        "chrome-extension://*/*",
+        "about:*"
+      ]
+    }
+  ],
+  "options_ui": {
+    "page": "src/options/index.html",
+    "open_in_tab": false
+  },
+  "commands": {
+    "start-dictation": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1",
+        "mac": "Command+Shift+1"
+      },
+      "description": "Start dictation"
+    },
+    "pause-dictation": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+2",
+        "mac": "Command+Shift+2"
+      },
+      "description": "Pause dictation"
+    },
+    "submit-dictation": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+3",
+        "mac": "Command+Shift+3"
+      },
+      "description": "Submit dictation and get result"
+    },
+    "paste-last-result": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+4",
+        "mac": "Command+Shift+4"
+      },
+      "description": "Paste last dictation result"
+    }
+  }
+}

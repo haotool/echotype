@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EchoType 設定</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --bg-card: #1a1a1a;
+      --text: #e5e5e5;
+      --text-muted: #a0a0a0;
+      --accent: #4ade80;
+      --accent-hover: #22c55e;
+      --border: #2a2a2a;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+      margin-right: 16px;
+    }
+
+    .setting-label {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .setting-description {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--border);
+      border-radius: 26px;
+      transition: background 0.2s;
+    }
+
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: var(--accent);
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(22px);
+    }
+
+    .shortcuts {
+      margin-top: 8px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 0.875rem;
+    }
+
+    .shortcut-key {
+      font-family: monospace;
+      background: var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8125rem;
+    }
+
+    .version {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 24px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      color: var(--accent);
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .status.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎤 <span>EchoType</span></h1>
+      <p class="subtitle">透過 ChatGPT 聽寫，在任何地方輸入</p>
+    </header>
+
+    <div class="card">
+      <div class="card-title">自動化設定</div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">完成後自動複製</div>
+          <div class="setting-description">聽寫完成後自動複製到系統剪貼簿</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="autoCopyToClipboard" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">完成後自動貼上</div>
+          <div class="setting-description">聽寫完成後自動貼上到原本的輸入框</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="autoPasteToActiveTab">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">啟動後返回原頁</div>
+          <div class="setting-description">開始聽寫後自動切回原本的分頁</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="returnFocusAfterStart">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="status" id="saveStatus">✓ 已儲存</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">快捷鍵</div>
+      <div class="shortcuts">
+        <div class="shortcut-item">
+          <span>啟動聽寫</span>
+          <span class="shortcut-key">Ctrl+Shift+1</span>
+        </div>
+        <div class="shortcut-item">
+          <span>暫停聽寫</span>
+          <span class="shortcut-key">Ctrl+Shift+2</span>
+        </div>
+        <div class="shortcut-item">
+          <span>完成聽寫</span>
+          <span class="shortcut-key">Ctrl+Shift+3</span>
+        </div>
+        <div class="shortcut-item">
+          <span>貼上結果</span>
+          <span class="shortcut-key">Ctrl+Shift+4</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="version">EchoType v0.1.0</p>
+  </div>
+
+  <script type="module" src="./index.ts"></script>
+</body>
+</html>
