@@ -96,10 +96,20 @@ test.describe('Options Page', () => {
   test('should show customize shortcuts button', async ({ context, extensionId }) => {
     const page = await openOptionsPage(context, extensionId);
 
-    // Check customize button exists
+    // Scroll to keyboard shortcuts section
+    const shortcutsCard = page.locator('.card').filter({ hasText: 'Keyboard Shortcuts' });
+    await shortcutsCard.scrollIntoViewIfNeeded();
+
+    // Check customize button exists (but don't click - it navigates away)
     const customizeBtn = page.locator('#customizeShortcuts');
     await expect(customizeBtn).toBeVisible();
     await expect(customizeBtn).toBeEnabled();
+    
+    // Verify button text
+    await expect(customizeBtn).toContainText('Customize');
+    
+    // Clean up page before next test
+    await page.close();
   });
 
   test('should display history section', async ({ context, extensionId }) => {
