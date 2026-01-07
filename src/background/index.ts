@@ -42,6 +42,9 @@ let currentSettings = {
   historySize: 5,
 };
 
+// Current dictation status (tracked from ChatGPT content script)
+let currentDictationStatus: 'idle' | 'recording' | 'processing' | 'unknown' = 'idle';
+
 // Initialize settings, badge, and heartbeat asynchronously
 (async () => {
   currentSettings = await loadSettings();
@@ -261,13 +264,14 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Handle status changes from ChatGPT content script
   if (message.type === MSG.STATUS_CHANGED) {
     const statusMessage = message as StatusChangedPayload;
-    console.log('[EchoType] Status changed:', statusMessage.status);
+    currentDictationStatus = statusMessage.status as typeof currentDictationStatus;
+    console.log('[EchoType] Status changed:', currentDictationStatus);
     return false;
   }
 
   // Handle status requests from popup
   if (message.type === MSG.GET_STATUS) {
-    sendResponse({ status: 'idle' }); // TODO: track actual status
+    sendResponse({ status: currentDictationStatus });
     return false;
   }
 
