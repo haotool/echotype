@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoType 設定</title>
+  <title>EchoType Settings</title>
   <style>
     :root {
       --bg: #0f0f0f;
@@ -187,6 +187,85 @@
     .status.visible {
       opacity: 1;
     }
+
+    /* History */
+    .history-list {
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .history-empty {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      text-align: center;
+      padding: 16px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-text {
+      flex: 1;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      word-break: break-word;
+      max-height: 60px;
+      overflow: hidden;
+    }
+
+    .history-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .history-copy {
+      background: var(--border);
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .history-copy:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .btn-clear {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-clear:hover:not(:disabled) {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .btn-clear:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -236,7 +315,15 @@
     </div>
 
     <div class="card">
-      <div class="card-title">快捷鍵</div>
+      <div class="card-title">歷史記錄</div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">沒有聽寫記錄</div>
+      </div>
+      <button class="btn-clear" id="clearHistory" disabled>清除全部</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Keyboard Shortcuts</div>
       <div class="shortcuts">
         <div class="shortcut-item">
           <span>啟動聽寫</span>
