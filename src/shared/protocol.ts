@@ -50,6 +50,10 @@ export const MSG = {
   HISTORY_GET: 'HISTORY_GET',
   HISTORY_RESULT: 'HISTORY_RESULT',
   HISTORY_CLEAR: 'HISTORY_CLEAR',
+
+  // Popup
+  GET_STATUS: 'GET_STATUS',
+  GET_HISTORY: 'GET_HISTORY',
 } as const;
 
 export type MessageType = (typeof MSG)[keyof typeof MSG];

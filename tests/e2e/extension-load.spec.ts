@@ -24,7 +24,7 @@ test.describe('Extension Loading', () => {
     expect(sw.url()).toContain('chrome-extension://');
   });
 
-  test('should have manifest v3', async ({ context, extensionId }) => {
+  test('should have manifest v3', async ({ context }) => {
     const page = await context.newPage();
     
     // Navigate to chrome://extensions and check

@@ -7,7 +7,7 @@
 // Dictation Status
 // ============================================================================
 
-export type DictationStatus = 'idle' | 'listening' | 'processing' | 'unknown';
+export type DictationStatus = 'idle' | 'listening' | 'recording' | 'processing' | 'error' | 'unknown';
 
 // ============================================================================
 // Settings
@@ -37,13 +37,15 @@ export const DEFAULT_SETTINGS: EchoTypeSettings = {
 
 export interface HistoryItem {
   /** Unique identifier */
-  id: string;
-  /** Timestamp (HH:MM:SS) */
-  timestamp: string;
+  id?: string;
+  /** Timestamp in milliseconds */
+  timestamp: number;
   /** The captured text */
   text: string;
+  /** Source of the dictation */
+  source?: string;
   /** ISO datetime when created */
-  createdAt: string;
+  createdAt?: string;
 }
 
 // ============================================================================

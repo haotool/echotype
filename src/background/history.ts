@@ -6,7 +6,7 @@
  */
 
 import type { HistoryItem } from '@shared/types';
-import { generateId, nowTimestamp } from '@shared/utils';
+import { generateId } from '@shared/utils';
 import { loadSettings } from './settings';
 
 // ============================================================================
@@ -59,7 +59,7 @@ export async function addToHistory(text: string): Promise<HistoryItem> {
 
   const item: HistoryItem = {
     id: generateId(),
-    timestamp: nowTimestamp(),
+    timestamp: Date.now(),
     text,
     createdAt: new Date().toISOString(),
   };
