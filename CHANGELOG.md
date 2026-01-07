@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - 2026-01-07
 
 ### Added
+
 - **Multi-language Support (i18n)**
   - English (`_locales/en/messages.json`)
   - Traditional Chinese (`_locales/zh_TW/messages.json`)
@@ -28,17 +29,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `formatRelativeTime()` - Localized relative time
 
 ### Changed
+
 - Updated manifest with `default_locale: "en"`
 - Options page now shows actual keyboard shortcuts
 - Popup and Options use i18n for all text
 
 ### Technical
+
 - 86 unit tests passing
 - Build size: ~22KB
 
 ## [0.2.0] - 2026-01-07
 
 ### Added
+
 - **Popup UI** - Modern dark theme popup with status display
   - Live status indicator (Ready/Recording/Processing)
   - Start/Pause/Submit control buttons
@@ -57,12 +61,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PNG icons (16/32/48/128px) with brand color
 
 ### Changed
+
 - Updated Options page design with history section
 - Improved HistoryItem type with numeric timestamp
 
 ## [Unreleased]
 
 ### Planned
+
 - Browser integration testing
 - E2E test coverage
 - Advanced ChatGPT DOM resilience
@@ -70,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-01-07
 
 ### Added
+
 - **Core Architecture**
   - CRXJS Vite Plugin setup with TypeScript
   - Chrome Extension Manifest V3 configuration
@@ -113,6 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Analysis report
 
 ### Technical Details
+
 - **Build Size**: ~20KB (production)
 - **Dependencies**: CRXJS, Vitest, Playwright, TypeScript 5.8
 - **Browser Support**: Chromium-based browsers
@@ -121,11 +129,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-| Version | Date | Description |
-|---------|------|-------------|
-| 0.3.0 | 2026-01-07 | i18n, audio feedback, shortcuts display |
-| 0.2.0 | 2026-01-07 | Popup UI, badge status, history UI |
-| 0.1.0 | 2026-01-07 | Initial MVP release |
+| Version | Date       | Description                             |
+| ------- | ---------- | --------------------------------------- |
+| 0.3.0   | 2026-01-07 | i18n, audio feedback, shortcuts display |
+| 0.2.0   | 2026-01-07 | Popup UI, badge status, history UI      |
+| 0.1.0   | 2026-01-07 | Initial MVP release                     |
 
 [Unreleased]: https://github.com/your-username/EchoType/compare/v0.3.0...HEAD
 [0.3.0]: https://github.com/your-username/EchoType/compare/v0.2.0...v0.3.0

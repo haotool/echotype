@@ -44,9 +44,7 @@
       "js": ["src/content/universal/index.ts"],
       "run_at": "document_idle",
       "exclude_matches": [
-        "chrome://*/*",
-        "chrome-extension://*/*",
-        "about:*"
+        "https://chatgpt.com/*"
       ]
     }
   ],

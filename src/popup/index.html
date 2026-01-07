@@ -1,369 +1,383 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=320">
-  <title data-i18n="popupTitle">EchoType</title>
-  <style>
-    /* Reset & Variables */
-    :root {
-      --bg-primary: #1a1a2e;
-      --bg-secondary: #16213e;
-      --bg-hover: #0f3460;
-      --accent: #e94560;
-      --accent-light: #ff6b6b;
-      --text-primary: #f1f1f1;
-      --text-secondary: #a0a0a0;
-      --text-muted: #666;
-      --success: #4ade80;
-      --warning: #fbbf24;
-      --border: rgba(255,255,255,0.1);
-      --shadow: 0 4px 20px rgba(0,0,0,0.3);
-      --radius: 10px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=320" />
+    <title data-i18n="popupTitle">EchoType</title>
+    <style>
+      /* Reset & Variables */
+      :root {
+        --bg-primary: #1a1a2e;
+        --bg-secondary: #16213e;
+        --bg-hover: #0f3460;
+        --accent: #e94560;
+        --accent-light: #ff6b6b;
+        --text-primary: #f1f1f1;
+        --text-secondary: #a0a0a0;
+        --text-muted: #666;
+        --success: #4ade80;
+        --warning: #fbbf24;
+        --border: rgba(255, 255, 255, 0.1);
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        --radius: 10px;
+      }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
-      color: var(--text-primary);
-      width: 320px;
-      min-height: 200px;
-      overflow: hidden;
-    }
+      body {
+        font-family:
+          'SF Pro Display',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        background: linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
+        color: var(--text-primary);
+        width: 320px;
+        min-height: 200px;
+        overflow: hidden;
+      }
 
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px;
-      border-bottom: 1px solid var(--border);
-    }
+      /* Header */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+      }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
+      .logo-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
 
-    .logo-text {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-    }
+      .logo-text {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+      }
 
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+      .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-    .status-badge.idle {
-      background: rgba(160,160,160,0.2);
-      color: var(--text-secondary);
-    }
+      .status-badge.idle {
+        background: rgba(160, 160, 160, 0.2);
+        color: var(--text-secondary);
+      }
 
-    .status-badge.recording {
-      background: rgba(233,69,96,0.2);
-      color: var(--accent-light);
-      animation: pulse 1.5s ease-in-out infinite;
-    }
+      .status-badge.recording {
+        background: rgba(233, 69, 96, 0.2);
+        color: var(--accent-light);
+        animation: pulse 1.5s ease-in-out infinite;
+      }
 
-    .status-badge.success {
-      background: rgba(74,222,128,0.2);
-      color: var(--success);
-    }
+      .status-badge.success {
+        background: rgba(74, 222, 128, 0.2);
+        color: var(--success);
+      }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
 
-    /* Main Content */
-    .main {
-      padding: 16px;
-    }
+      /* Main Content */
+      .main {
+        padding: 16px;
+      }
 
-    /* Action Buttons */
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+      /* Action Buttons */
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
 
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
 
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-    }
+      .btn-primary {
+        background: var(--accent);
+        color: white;
+      }
 
-    .btn-primary:hover {
-      background: var(--accent-light);
-      transform: translateY(-1px);
-    }
+      .btn-primary:hover {
+        background: var(--accent-light);
+        transform: translateY(-1px);
+      }
 
-    .btn-secondary {
-      background: var(--bg-hover);
-      color: var(--text-primary);
-    }
+      .btn-secondary {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+      }
 
-    .btn-secondary:hover {
-      background: rgba(15,52,96,0.8);
-    }
+      .btn-secondary:hover {
+        background: rgba(15, 52, 96, 0.8);
+      }
 
-    .btn-full {
-      grid-column: span 2;
-    }
+      .btn-full {
+        grid-column: span 2;
+      }
 
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-    .btn-icon {
-      font-size: 16px;
-    }
+      .btn-icon {
+        font-size: 16px;
+      }
 
-    /* Last Result */
-    .result-section {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 12px;
-      border: 1px solid var(--border);
-    }
+      /* Last Result */
+      .result-section {
+        background: var(--bg-secondary);
+        border-radius: var(--radius);
+        padding: 12px;
+        border: 1px solid var(--border);
+      }
 
-    .result-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
+      .result-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
 
-    .result-title {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-secondary);
-    }
+      .result-title {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
+      }
 
-    .result-time {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
+      .result-time {
+        font-size: 10px;
+        color: var(--text-muted);
+      }
 
-    .result-text {
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--text-primary);
-      max-height: 60px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-    }
+      .result-text {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--text-primary);
+        max-height: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
 
-    .result-empty {
-      color: var(--text-muted);
-      font-style: italic;
-      font-size: 12px;
-    }
+      .result-empty {
+        color: var(--text-muted);
+        font-style: italic;
+        font-size: 12px;
+      }
 
-    .copy-btn {
-      margin-top: 10px;
-      width: 100%;
-      padding: 8px;
-      font-size: 12px;
-    }
+      .copy-btn {
+        margin-top: 10px;
+        width: 100%;
+        padding: 8px;
+        font-size: 12px;
+      }
 
-    /* Shortcuts */
-    .shortcuts {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 16px;
-    }
+      /* Shortcuts */
+      .shortcuts {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 16px;
+      }
 
-    .shortcut {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 8px 4px;
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
+      .shortcut {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 4px;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
 
-    .shortcut-key {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--accent);
-      font-family: 'SF Mono', monospace;
-    }
+      .shortcut-key {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--accent);
+        font-family: 'SF Mono', monospace;
+      }
 
-    .shortcut-label {
-      font-size: 9px;
-      color: var(--text-muted);
-    }
+      .shortcut-label {
+        font-size: 9px;
+        color: var(--text-muted);
+      }
 
-    /* Footer */
-    .footer {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      padding: 12px 16px;
-      border-top: 1px solid var(--border);
-    }
+      /* Footer */
+      .footer {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border);
+      }
 
-    .footer-link {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-decoration: none;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
+      .footer-link {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
 
-    .footer-link:hover {
-      color: var(--text-primary);
-    }
+      .footer-link:hover {
+        color: var(--text-primary);
+      }
 
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      padding: 8px 16px;
-      background: var(--success);
-      color: var(--bg-primary);
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        padding: 8px 16px;
+        background: var(--success);
+        color: var(--bg-primary);
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
 
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-  </style>
-</head>
-<body>
-  <header class="header">
-    <div class="logo">
-      <div class="logo-icon">🎤</div>
-      <span class="logo-text">EchoType</span>
-    </div>
-    <div class="status-badge idle" id="status">
-      <span class="status-dot"></span>
-      <span id="status-text" data-i18n="statusReady">Ready</span>
-    </div>
-  </header>
-
-  <main class="main">
-    <div class="actions">
-      <button class="btn btn-primary" id="btn-start">
-        <span class="btn-icon">▶️</span>
-        <span data-i18n="btnStart">Start</span>
-      </button>
-      <button class="btn btn-secondary" id="btn-stop" disabled>
-        <span class="btn-icon">⏸️</span>
-        <span data-i18n="btnPause">Pause</span>
-      </button>
-      <button class="btn btn-secondary btn-full" id="btn-submit">
-        <span class="btn-icon">✅</span>
-        <span data-i18n="btnSubmit">Submit & Capture</span>
-      </button>
-    </div>
-
-    <section class="result-section">
-      <div class="result-header">
-        <span class="result-title" data-i18n="latestResult">Latest Result</span>
-        <span class="result-time" id="result-time"></span>
+      .toast.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">🎤</div>
+        <span class="logo-text">EchoType</span>
       </div>
-      <p class="result-text" id="result-text">
-        <span class="result-empty" data-i18n="noResult">No dictation yet</span>
-      </p>
-      <button class="btn btn-secondary copy-btn" id="btn-copy" disabled>
-        <span class="btn-icon">📋</span>
-        <span data-i18n="btnCopy">Copy to Clipboard</span>
-      </button>
-    </section>
-
-    <div class="shortcuts">
-      <div class="shortcut">
-        <span class="shortcut-key">⌃⇧1</span>
-        <span class="shortcut-label" data-i18n="btnStart">Start</span>
+      <div class="status-badge idle" id="status">
+        <span class="status-dot"></span>
+        <span id="status-text" data-i18n="statusReady">Ready</span>
       </div>
-      <div class="shortcut">
-        <span class="shortcut-key">⌃⇧2</span>
-        <span class="shortcut-label" data-i18n="btnPause">Pause</span>
-      </div>
-      <div class="shortcut">
-        <span class="shortcut-key">⌃⇧3</span>
-        <span class="shortcut-label">Submit</span>
-      </div>
-      <div class="shortcut">
-        <span class="shortcut-key">⌃⇧4</span>
-        <span class="shortcut-label">Paste</span>
-      </div>
-    </div>
-  </main>
+    </header>
 
-  <footer class="footer">
-    <a class="footer-link" id="link-options">⚙️ <span data-i18n="settings">Settings</span></a>
-    <a class="footer-link" id="link-history">📜 <span data-i18n="history">History</span></a>
-  </footer>
+    <main class="main">
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-start">
+          <span class="btn-icon">▶️</span>
+          <span data-i18n="btnStart">Start</span>
+        </button>
+        <button class="btn btn-secondary" id="btn-stop" disabled>
+          <span class="btn-icon">⏸️</span>
+          <span data-i18n="btnPause">Pause</span>
+        </button>
+        <button class="btn btn-secondary btn-full" id="btn-submit">
+          <span class="btn-icon">✅</span>
+          <span data-i18n="btnSubmit">Submit & Capture</span>
+        </button>
+      </div>
 
-  <div class="toast" id="toast" data-i18n="copied">Copied!</div>
+      <section class="result-section">
+        <div class="result-header">
+          <span class="result-title" data-i18n="latestResult">Latest Result</span>
+          <span class="result-time" id="result-time"></span>
+        </div>
+        <p class="result-text" id="result-text">
+          <span class="result-empty" data-i18n="noResult">No dictation yet</span>
+        </p>
+        <button class="btn btn-secondary copy-btn" id="btn-copy" disabled>
+          <span class="btn-icon">📋</span>
+          <span data-i18n="btnCopy">Copy to Clipboard</span>
+        </button>
+      </section>
 
-  <script type="module" src="./index.ts"></script>
-</body>
+      <div class="shortcuts">
+        <div class="shortcut">
+          <span class="shortcut-key">⌃⇧1</span>
+          <span class="shortcut-label" data-i18n="btnStart">Start</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">⌃⇧2</span>
+          <span class="shortcut-label" data-i18n="btnPause">Pause</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">⌃⇧3</span>
+          <span class="shortcut-label">Submit</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">⌃⇧4</span>
+          <span class="shortcut-label">Paste</span>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <a class="footer-link" id="link-options"
+        >⚙️ <span data-i18n="settings">Settings</span></a
+      >
+      <a class="footer-link" id="link-history"
+        >📜 <span data-i18n="history">History</span></a
+      >
+    </footer>
+
+    <div class="toast" id="toast" data-i18n="copied">Copied!</div>
+
+    <script type="module" src="./index.ts"></script>
+  </body>
 </html>

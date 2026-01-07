@@ -8,14 +8,14 @@
 
 ## 👥 Team Codenames
 
-| Codename | Role | Responsibilities |
-|----------|------|------------------|
-| **Echo** | Product Manager | PRD, UX, feature prioritization |
-| **Whisper** | Architect | System design, module decomposition |
-| **Pulse** | Frontend Engineer | UI/UX, Content Scripts |
-| **Signal** | Backend Engineer | Background SW, messaging protocol |
-| **Cipher** | Security Engineer | Permissions, data security |
-| **Spectrum** | QA Engineer | BDD testing, quality assurance |
+| Codename     | Role              | Responsibilities                    |
+| ------------ | ----------------- | ----------------------------------- |
+| **Echo**     | Product Manager   | PRD, UX, feature prioritization     |
+| **Whisper**  | Architect         | System design, module decomposition |
+| **Pulse**    | Frontend Engineer | UI/UX, Content Scripts              |
+| **Signal**   | Backend Engineer  | Background SW, messaging protocol   |
+| **Cipher**   | Security Engineer | Permissions, data security          |
+| **Spectrum** | QA Engineer       | BDD testing, quality assurance      |
 
 ## 🛠️ Tech Stack
 
@@ -98,11 +98,13 @@ test(shared): add unit tests for normalizeText utility
 ## 🔒 Security Boundaries
 
 ### Allowed (Auto-execute)
+
 - File read/write within `src/`, `docs/`, `tests/`
 - Run `pnpm` commands
 - Git operations (stage, commit, push)
 
 ### Requires Confirmation
+
 - Delete files outside `tests/`
 - Modify `manifest.json` permissions
 - External API calls
