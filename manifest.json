@@ -1,8 +1,11 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "0.3.0",
+  "short_name": "EchoType",
+  "version": "0.5.0",
   "description": "__MSG_extDescription__",
+  "author": { "email": "echotype@example.com" },
+  "homepage_url": "https://github.com/user/echotype",
   "default_locale": "en",
   "action": {
     "default_title": "EchoType - Voice Dictation",

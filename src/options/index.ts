@@ -1,21 +1,104 @@
 /**
- * EchoType - Options Page
- * @module options
- *
- * Settings page for the extension with history management.
- * Updated: 2026-01-08T00:25:00+08:00 [context7:chrome/extensions]
+ * EchoType Options Page Controller
+ * Modern settings interface with developer mode
+ * 
+ * @version 2.0.0
+ * @updated 2026-01-08
  */
 
 import type { EchoTypeSettings, HistoryItem } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/types';
-import { MSG, createMessage } from '@shared/protocol';
-import { getMessage, applyI18n, formatRelativeTime } from '@shared/i18n';
+import { MSG } from '@shared/protocol';
 
 // ============================================================================
-// Storage
+// Constants
 // ============================================================================
 
 const STORAGE_KEY = 'echotype_settings';
+const STORAGE_KEY_THEME = 'echotype_theme';
+const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
+
+// ============================================================================
+// DOM Elements
+// ============================================================================
+
+const elements = {
+  // Theme
+  body: document.body,
+  btnTheme: document.getElementById('btn-theme') as HTMLButtonElement,
+  
+  // Settings
+  autoCopyToClipboard: document.getElementById('autoCopyToClipboard') as HTMLInputElement,
+  autoPasteToActiveTab: document.getElementById('autoPasteToActiveTab') as HTMLInputElement,
+  returnFocusAfterStart: document.getElementById('returnFocusAfterStart') as HTMLInputElement,
+  
+  // Shortcuts
+  shortcutsContainer: document.getElementById('shortcutsContainer') as HTMLElement,
+  customizeShortcuts: document.getElementById('customizeShortcuts') as HTMLButtonElement,
+  
+  // History
+  historyList: document.getElementById('historyList') as HTMLElement,
+  clearHistory: document.getElementById('clearHistory') as HTMLButtonElement,
+  
+  // Developer Mode
+  devMode: document.getElementById('devMode') as HTMLInputElement,
+  devSection: document.getElementById('devSection') as HTMLElement,
+  debugExtId: document.getElementById('debug-ext-id') as HTMLElement,
+  debugChatgptTab: document.getElementById('debug-chatgpt-tab') as HTMLElement,
+  debugHealth: document.getElementById('debug-health') as HTMLElement,
+  debugError: document.getElementById('debug-error') as HTMLElement,
+  btnInspectDom: document.getElementById('btn-inspect-dom') as HTMLButtonElement,
+  btnHealthCheck: document.getElementById('btn-health-check') as HTMLButtonElement,
+  btnClearStorage: document.getElementById('btn-clear-storage') as HTMLButtonElement,
+  btnReloadExt: document.getElementById('btn-reload-ext') as HTMLButtonElement,
+  
+  // Toast
+  statusToast: document.getElementById('statusToast') as HTMLElement,
+  toastMessage: document.getElementById('toastMessage') as HTMLElement,
+};
+
+// ============================================================================
+// State
+// ============================================================================
+
+let isDarkTheme = false;
+let isDevMode = false;
+
+// ============================================================================
+// Theme Management
+// ============================================================================
+
+async function loadTheme(): Promise<void> {
+  try {
+    const result = await chrome.storage.local.get(STORAGE_KEY_THEME);
+    isDarkTheme = result[STORAGE_KEY_THEME] === 'dark';
+  } catch {
+    isDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  applyTheme();
+}
+
+function applyTheme(): void {
+  elements.body.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+  updateThemeIcon();
+}
+
+function updateThemeIcon(): void {
+  const icon = isDarkTheme
+    ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
+    : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+  elements.btnTheme.innerHTML = icon;
+}
+
+async function toggleTheme(): Promise<void> {
+  isDarkTheme = !isDarkTheme;
+  applyTheme();
+  await chrome.storage.local.set({ [STORAGE_KEY_THEME]: isDarkTheme ? 'dark' : 'light' });
+}
+
+// ============================================================================
+// Settings Management
+// ============================================================================
 
 async function loadSettings(): Promise<EchoTypeSettings> {
   try {
@@ -28,230 +111,349 @@ async function loadSettings(): Promise<EchoTypeSettings> {
 
 async function saveSettings(settings: EchoTypeSettings): Promise<void> {
   await chrome.storage.sync.set({ [STORAGE_KEY]: settings });
-}
-
-// ============================================================================
-// UI Elements
-// ============================================================================
-
-const elements = {
-  autoCopyToClipboard: document.getElementById(
-    'autoCopyToClipboard'
-  ) as HTMLInputElement,
-  autoPasteToActiveTab: document.getElementById(
-    'autoPasteToActiveTab'
-  ) as HTMLInputElement,
-  returnFocusAfterStart: document.getElementById(
-    'returnFocusAfterStart'
-  ) as HTMLInputElement,
-  saveStatus: document.getElementById('saveStatus') as HTMLElement,
-  historyList: document.getElementById('historyList') as HTMLElement,
-  clearHistory: document.getElementById('clearHistory') as HTMLButtonElement,
-  customizeShortcuts: document.getElementById(
-    'customizeShortcuts'
-  ) as HTMLButtonElement,
-};
-
-// ============================================================================
-// UI Functions
-// ============================================================================
-
-function showSaveStatus(): void {
-  elements.saveStatus.classList.add('visible');
-  setTimeout(() => {
-    elements.saveStatus.classList.remove('visible');
-  }, 1500);
+  showToast('Settings saved');
 }
 
 async function loadUI(): Promise<void> {
   const settings = await loadSettings();
-
+  
   elements.autoCopyToClipboard.checked = settings.autoCopyToClipboard;
   elements.autoPasteToActiveTab.checked = settings.autoPasteToActiveTab;
   elements.returnFocusAfterStart.checked = settings.returnFocusAfterStart;
-
-  // Load history
-  await loadHistoryUI();
   
-  // Load shortcuts
-  await loadShortcutsUI();
+  await loadShortcuts();
+  await loadHistory();
 }
 
-async function handleChange(): Promise<void> {
+async function handleSettingChange(): Promise<void> {
   const settings: EchoTypeSettings = {
     autoCopyToClipboard: elements.autoCopyToClipboard.checked,
     autoPasteToActiveTab: elements.autoPasteToActiveTab.checked,
     returnFocusAfterStart: elements.returnFocusAfterStart.checked,
     historySize: DEFAULT_SETTINGS.historySize,
   };
-
   await saveSettings(settings);
-  showSaveStatus();
 }
 
 // ============================================================================
-// History Functions
+// Shortcuts
 // ============================================================================
 
-/**
- * Escape HTML
- */
-function escapeHtml(text: string): string {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-/**
- * Truncate text
- */
-function truncateText(text: string, maxLength: number = 100): string {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-}
-
-/**
- * Copy text to clipboard
- */
-async function copyToClipboard(text: string): Promise<boolean> {
+async function loadShortcuts(): Promise<void> {
+  if (!chrome.commands?.getAll) return;
+  
   try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    return true;
+    const commands = await chrome.commands.getAll();
+    
+    for (const cmd of commands) {
+      if (!cmd.name) continue;
+      
+      const el = document.getElementById(`shortcut-${cmd.name}`) as HTMLElement;
+      if (el) {
+        if (cmd.shortcut) {
+          el.textContent = formatShortcut(cmd.shortcut);
+          el.classList.remove('not-set');
+        } else {
+          el.textContent = 'Not set';
+          el.classList.add('not-set');
+        }
+      }
+    }
+  } catch (error) {
+    console.error('[EchoType] Failed to load shortcuts:', error);
   }
 }
 
-/**
- * Load and render history
- */
-async function loadHistoryUI(): Promise<void> {
-  try {
-    const response = await chrome.runtime.sendMessage(createMessage.historyGet());
-    const items: HistoryItem[] = response?.items || [];
+function formatShortcut(shortcut: string): string {
+  // Convert Chrome's format to display format
+  return shortcut
+    .replace('Ctrl', '⌃')
+    .replace('Command', '⌘')
+    .replace('Shift', '⇧')
+    .replace('Alt', '⌥')
+    .replace(/\+/g, '');
+}
 
+// ============================================================================
+// History
+// ============================================================================
+
+async function loadHistory(): Promise<void> {
+  try {
+    const response = await chrome.runtime.sendMessage({ type: MSG.HISTORY_GET });
+    const items: HistoryItem[] = response?.items || [];
+    
     renderHistory(items);
     elements.clearHistory.disabled = items.length === 0;
   } catch (error) {
-    console.error('Failed to load history:', error);
-    elements.historyList.innerHTML = `<div class="history-empty">Failed to load</div>`;
+    console.error('[EchoType] Failed to load history:', error);
+    elements.historyList.innerHTML = `
+      <div class="history-empty">
+        <p>Failed to load history</p>
+      </div>
+    `;
   }
 }
 
-/**
- * Render history items
- */
 function renderHistory(items: HistoryItem[]): void {
   if (items.length === 0) {
-    elements.historyList.innerHTML = `<div class="history-empty">${getMessage('historyEmpty')}</div>`;
+    elements.historyList.innerHTML = `
+      <div class="history-empty">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+          <path d="M12 7v5l4 2"/>
+        </svg>
+        <p>No dictation history yet</p>
+      </div>
+    `;
     return;
   }
-
-  elements.historyList.innerHTML = items
-    .map(
-      (item, index) => `
-    <div class="history-item" data-index="${index}">
-      <div class="history-text">${escapeHtml(truncateText(item.text))}</div>
-      <span class="history-time">${formatRelativeTime(item.timestamp)}</span>
-      <button class="history-copy" data-text="${escapeHtml(item.text)}">${getMessage('btnCopy')}</button>
+  
+  elements.historyList.innerHTML = items.map((item, index) => `
+    <div class="history-item" data-id="${item.id}">
+      <div class="history-content">
+        <div class="history-text">${escapeHtml(item.text)}</div>
+        <div class="history-time">${formatTime(item.timestamp)}</div>
+      </div>
+      <div class="history-actions">
+        <button class="btn-copy-small" data-index="${index}">Copy</button>
+      </div>
     </div>
-  `
-    )
-    .join('');
-
+  `).join('');
+  
   // Add copy event listeners
-  elements.historyList.querySelectorAll('.history-copy').forEach((btn) => {
+  elements.historyList.querySelectorAll('.btn-copy-small').forEach((btn) => {
     btn.addEventListener('click', async (e) => {
       const target = e.target as HTMLButtonElement;
-      const text = target.dataset.text || '';
-      const success = await copyToClipboard(text);
-      if (success) {
+      const index = parseInt(target.dataset.index || '0', 10);
+      const item = items[index];
+      
+      if (item) {
+        await copyToClipboard(item.text);
         target.textContent = '✓';
         setTimeout(() => {
-          target.textContent = getMessage('btnCopy');
+          target.textContent = 'Copy';
         }, 1500);
       }
     });
   });
 }
 
-/**
- * Clear all history
- */
-async function handleClearHistory(): Promise<void> {
-  if (!confirm('Are you sure you want to clear all history?')) return;
-
+async function clearHistoryData(): Promise<void> {
+  if (!confirm('Clear all dictation history?')) return;
+  
   try {
-    await chrome.runtime.sendMessage(createMessage.historyClear());
-    await loadHistoryUI();
-    showSaveStatus();
+    await chrome.runtime.sendMessage({ type: MSG.HISTORY_CLEAR });
+    await loadHistory();
+    showToast('History cleared');
   } catch (error) {
-    console.error('Failed to clear history:', error);
+    console.error('[EchoType] Failed to clear history:', error);
+  }
+}
+
+function formatTime(ts: number): string {
+  const date = new Date(ts);
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  
+  if (diff < 60 * 1000) {
+    return 'Just now';
+  }
+  if (diff < 60 * 60 * 1000) {
+    const mins = Math.floor(diff / 60000);
+    return `${mins}m ago`;
+  }
+  if (date.toDateString() === now.toDateString()) {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  }
+  
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function escapeHtml(text: string): string {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
   }
 }
 
 // ============================================================================
-// Shortcuts Functions
+// Developer Mode
 // ============================================================================
 
-/**
- * Load and display current keyboard shortcuts
- */
-async function loadShortcutsUI(): Promise<void> {
+async function loadDevMode(): Promise<void> {
   try {
-    const commands = await chrome.commands.getAll();
+    const result = await chrome.storage.local.get(STORAGE_KEY_DEV_MODE);
+    isDevMode = result[STORAGE_KEY_DEV_MODE] === true;
+    elements.devMode.checked = isDevMode;
     
-    commands.forEach((command) => {
-      if (!command.name) return;
-      
-      const element = document.getElementById(`shortcut-${command.name}`);
-      if (element) {
-        element.textContent = command.shortcut || getMessage('notSet');
-        if (!command.shortcut) {
-          element.classList.add('not-set');
-        }
-      }
-    });
-  } catch (error) {
-    console.error('Failed to load shortcuts:', error);
+    if (isDevMode) {
+      elements.devSection.style.display = 'block';
+      await updateDebugInfo();
+    }
+  } catch {
+    isDevMode = false;
   }
 }
 
-/**
- * Open Chrome's keyboard shortcuts settings page
- */
-function openShortcutsSettings(): void {
-  // Chrome doesn't allow direct navigation to chrome:// URLs
-  // We need to create a new tab with the shortcuts page
-  chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+async function toggleDevMode(): Promise<void> {
+  isDevMode = elements.devMode.checked;
+  await chrome.storage.local.set({ [STORAGE_KEY_DEV_MODE]: isDevMode });
+  
+  if (isDevMode) {
+    elements.devSection.style.display = 'block';
+    await updateDebugInfo();
+    showToast('Developer mode enabled');
+  } else {
+    elements.devSection.style.display = 'none';
+    showToast('Developer mode disabled');
+  }
+}
+
+async function updateDebugInfo(): Promise<void> {
+  // Extension ID
+  elements.debugExtId.textContent = chrome.runtime.id;
+  
+  // Check for ChatGPT tab
+  try {
+    const tabs = await chrome.tabs.query({ url: 'https://chatgpt.com/*' });
+    if (tabs.length > 0) {
+      elements.debugChatgptTab.textContent = `Found (${tabs.length} tab${tabs.length > 1 ? 's' : ''})`;
+      elements.debugChatgptTab.classList.remove('error');
+      elements.debugChatgptTab.classList.add('success');
+    } else {
+      elements.debugChatgptTab.textContent = 'Not found';
+      elements.debugChatgptTab.classList.add('error');
+      elements.debugChatgptTab.classList.remove('success');
+    }
+  } catch {
+    elements.debugChatgptTab.textContent = 'Error';
+    elements.debugChatgptTab.classList.add('error');
+  }
+  
+  // Health check
+  try {
+    const response = await chrome.runtime.sendMessage({ type: MSG.CMD_GET_STATUS });
+    if (response?.status) {
+      elements.debugHealth.textContent = response.status;
+      elements.debugHealth.classList.remove('error');
+      elements.debugHealth.classList.add('success');
+    } else {
+      elements.debugHealth.textContent = 'Unknown';
+      elements.debugHealth.classList.add('error');
+    }
+  } catch (error) {
+    elements.debugHealth.textContent = 'Failed';
+    elements.debugHealth.classList.add('error');
+    elements.debugError.textContent = String(error);
+  }
+}
+
+async function runHealthCheck(): Promise<void> {
+  showToast('Running health check...');
+  await updateDebugInfo();
+  showToast('Health check complete');
+}
+
+async function inspectDom(): Promise<void> {
+  try {
+    const tabs = await chrome.tabs.query({ url: 'https://chatgpt.com/*' });
+    if (tabs.length > 0 && tabs[0].id) {
+      await chrome.tabs.sendMessage(tabs[0].id, { type: 'INSPECT_DOM' });
+      showToast('Check ChatGPT console for DOM inspection');
+    } else {
+      showToast('No ChatGPT tab found');
+    }
+  } catch (error) {
+    showToast('Failed to inspect DOM');
+    console.error('[EchoType] Inspect DOM error:', error);
+  }
+}
+
+async function clearStorage(): Promise<void> {
+  if (!confirm('Clear all extension storage? This will reset all settings.')) return;
+  
+  try {
+    await chrome.storage.local.clear();
+    await chrome.storage.sync.clear();
+    showToast('Storage cleared. Reloading...');
+    setTimeout(() => location.reload(), 1000);
+  } catch (error) {
+    showToast('Failed to clear storage');
+    console.error('[EchoType] Clear storage error:', error);
+  }
+}
+
+function reloadExtension(): void {
+  chrome.runtime.reload();
+}
+
+// ============================================================================
+// Toast
+// ============================================================================
+
+function showToast(message: string): void {
+  elements.toastMessage.textContent = message;
+  elements.statusToast.classList.add('show');
+  setTimeout(() => {
+    elements.statusToast.classList.remove('show');
+  }, 2000);
 }
 
 // ============================================================================
 // Event Listeners
 // ============================================================================
 
-elements.autoCopyToClipboard.addEventListener('change', handleChange);
-elements.autoPasteToActiveTab.addEventListener('change', handleChange);
-elements.returnFocusAfterStart.addEventListener('change', handleChange);
-elements.clearHistory.addEventListener('click', handleClearHistory);
-elements.customizeShortcuts.addEventListener('click', openShortcutsSettings);
-
-// Listen for history updates
-chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === MSG.BROADCAST_RESULT) {
-    loadHistoryUI();
-  }
-});
+function setupEventListeners(): void {
+  // Theme
+  elements.btnTheme.addEventListener('click', toggleTheme);
+  
+  // Settings
+  elements.autoCopyToClipboard.addEventListener('change', handleSettingChange);
+  elements.autoPasteToActiveTab.addEventListener('change', handleSettingChange);
+  elements.returnFocusAfterStart.addEventListener('change', handleSettingChange);
+  
+  // Shortcuts
+  elements.customizeShortcuts.addEventListener('click', () => {
+    chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+  });
+  
+  // History
+  elements.clearHistory.addEventListener('click', clearHistoryData);
+  
+  // Developer Mode
+  elements.devMode.addEventListener('change', toggleDevMode);
+  elements.btnInspectDom?.addEventListener('click', inspectDom);
+  elements.btnHealthCheck?.addEventListener('click', runHealthCheck);
+  elements.btnClearStorage?.addEventListener('click', clearStorage);
+  elements.btnReloadExt?.addEventListener('click', reloadExtension);
+  
+  // Listen for history updates
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === MSG.RESULT_READY || message.type === MSG.BROADCAST_RESULT) {
+      loadHistory();
+    }
+  });
+}
 
 // ============================================================================
-// Initialize
+// Initialization
 // ============================================================================
 
-applyI18n();
-loadUI();
+async function init(): Promise<void> {
+  await loadTheme();
+  await loadUI();
+  await loadDevMode();
+  setupEventListeners();
+}
+
+init().catch(console.error);

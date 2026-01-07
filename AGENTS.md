@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 1.4.0 | Updated: 2026-01-07T22:58:00+08:00
+> Version: 1.5.0 | Updated: 2026-01-08T00:30:00+08:00
 
 ## 🎯 Project Overview
 
@@ -136,6 +136,9 @@ const SELECTORS = {
 - [x] Multi-language support (en, zh_TW)
 - [x] Audio feedback sounds
 - [x] Keyboard shortcuts display
+- [x] Modern UI with design tokens (light/dark mode)
+- [x] Developer mode with debugging tools
+- [x] Multi-language ChatGPT selectors (EN/ZH-TW/ZH-CN)
 
 ## 🔗 References
 

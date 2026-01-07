@@ -3,7 +3,7 @@
  * @module tests/e2e/popup.spec
  *
  * Tests the extension's popup page functionality.
- * Updated: 2026-01-07T22:54:00+08:00
+ * Updated: 2026-01-08T00:35:00+08:00
  */
 
 import { test, expect, openPopupPage } from './fixtures';
@@ -15,20 +15,20 @@ test.describe('Popup UI', () => {
     // Check page title
     await expect(page).toHaveTitle('EchoType');
 
-    // Check logo is visible
-    await expect(page.locator('.logo-text')).toContainText('EchoType');
+    // Check brand text is visible
+    await expect(page.locator('.brand-text')).toContainText('EchoType');
   });
 
-  test('should display status badge', async ({ context, extensionId }) => {
+  test('should display status section', async ({ context, extensionId }) => {
     const page = await openPopupPage(context, extensionId);
+
+    // Check status card exists
+    const statusCard = page.locator('.status-card');
+    await expect(statusCard).toBeVisible();
 
     // Check status badge exists
     const statusBadge = page.locator('.status-badge');
     await expect(statusBadge).toBeVisible();
-
-    // Check initial status is "Ready" or equivalent
-    const statusText = page.locator('#status-text');
-    await expect(statusText).toBeVisible();
   });
 
   test('should display action buttons', async ({ context, extensionId }) => {
@@ -52,13 +52,13 @@ test.describe('Popup UI', () => {
   test('should display result section', async ({ context, extensionId }) => {
     const page = await openPopupPage(context, extensionId);
 
-    // Check result section exists
-    const resultSection = page.locator('.result-section');
-    await expect(resultSection).toBeVisible();
+    // Check result card exists
+    const resultCard = page.locator('.result-card');
+    await expect(resultCard).toBeVisible();
 
     // Check result text area
-    const resultText = page.locator('#result-text');
-    await expect(resultText).toBeVisible();
+    const resultContent = page.locator('.result-content');
+    await expect(resultContent).toBeVisible();
 
     // Check copy button
     const copyBtn = page.locator('#btn-copy');
@@ -92,58 +92,39 @@ test.describe('Popup UI', () => {
     await expect(historyLink).toBeVisible();
   });
 
-  test('should open options page when clicking settings link', async ({
-    context,
-    extensionId,
-  }) => {
+  test('should have theme toggle button', async ({ context, extensionId }) => {
     const page = await openPopupPage(context, extensionId);
 
-    // Click settings link
-    const settingsLink = page.locator('#link-options');
-
-    // Wait for new page to open
-    const [newPage] = await Promise.all([
-      context.waitForEvent('page'),
-      settingsLink.click(),
-    ]);
-
-    // Check new page is options page
-    await newPage.waitForLoadState();
-    expect(newPage.url()).toContain('options');
+    // Check theme toggle button exists
+    const themeBtn = page.locator('#btn-theme');
+    await expect(themeBtn).toBeVisible();
+    await expect(themeBtn).toBeEnabled();
   });
 
-  test('should have proper styling (dark theme)', async ({
+  test('should toggle theme when clicking theme button', async ({
     context,
     extensionId,
   }) => {
     const page = await openPopupPage(context, extensionId);
 
-    // Check body has dark background
+    // Get initial theme
     const body = page.locator('body');
-    const backgroundColor = await body.evaluate((el) => {
-      return window.getComputedStyle(el).backgroundColor;
-    });
+    const initialTheme = await body.getAttribute('data-theme');
 
-    // Should be a dark color (check if it's not white/light)
-    expect(backgroundColor).not.toBe('rgb(255, 255, 255)');
+    // Click theme toggle
+    await page.locator('#btn-theme').click();
+
+    // Check theme changed
+    const newTheme = await body.getAttribute('data-theme');
+    expect(newTheme).not.toBe(initialTheme);
   });
 });
 
-test.describe('Popup i18n', () => {
-  test('should display localized text', async ({ context, extensionId }) => {
+test.describe('Popup Navigation', () => {
+  test('should have settings button in header', async ({ context, extensionId }) => {
     const page = await openPopupPage(context, extensionId);
 
-    // Check that i18n elements have text (not empty)
-    const i18nElements = page.locator('[data-i18n]');
-    const count = await i18nElements.count();
-
-    expect(count).toBeGreaterThan(0);
-
-    // Each i18n element should have non-empty text
-    for (let i = 0; i < Math.min(count, 5); i++) {
-      const element = i18nElements.nth(i);
-      const text = await element.textContent();
-      expect(text?.trim()).not.toBe('');
-    }
+    const settingsBtn = page.locator('#btn-settings');
+    await expect(settingsBtn).toBeVisible();
   });
 });

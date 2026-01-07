@@ -3,7 +3,10 @@
  * @module content/chatgpt/selectors
  *
  * Centralized DOM selectors for ChatGPT interface.
- * These may change when ChatGPT updates their UI.
+ * Supports multiple languages and handles UI changes gracefully.
+ * 
+ * @version 2.0.0
+ * @updated 2026-01-08
  */
 
 import { $ } from '@shared/utils';
@@ -14,29 +17,88 @@ import type { DictationStatus, EchoTypeError } from '@shared/types';
 // ============================================================================
 
 /**
- * ChatGPT DOM selectors using aria-labels for resilience.
- * Chinese labels are used for Traditional Chinese UI.
+ * Multi-language aria-label selectors for dictation buttons.
+ * ChatGPT uses different labels based on user's language setting.
  */
-export const SELECTORS = {
-  /** Start dictation button */
-  startBtn: 'button[aria-label="聽寫按鈕"]',
-  /** Stop dictation button (appears when recording) */
-  stopBtn: 'button[aria-label="停止聽寫"]',
-  /** Submit dictation button */
-  submitBtn: 'button[aria-label="提交聽寫"]',
-  /** ProseMirror composer/textarea */
-  composer: '#prompt-textarea',
+const DICTATION_LABELS = {
+  start: [
+    // Traditional Chinese
+    '聽寫按鈕',
+    '語音輸入',
+    // Simplified Chinese  
+    '听写按钮',
+    '语音输入',
+    // English
+    'Voice input',
+    'Dictation button',
+    'Start voice input',
+    'Record voice',
+  ],
+  stop: [
+    // Traditional Chinese
+    '停止聽寫',
+    '停止錄音',
+    // Simplified Chinese
+    '停止听写',
+    '停止录音',
+    // English
+    'Stop recording',
+    'Stop dictation',
+    'Stop voice input',
+  ],
+  submit: [
+    // Traditional Chinese
+    '提交聽寫',
+    '傳送聽寫',
+    // Simplified Chinese
+    '提交听写',
+    '发送听写',
+    // English
+    'Submit recording',
+    'Submit dictation',
+    'Send voice input',
+  ],
 } as const;
 
 /**
- * Alternative selectors for English UI.
+ * Build selector string from multiple aria-labels
  */
-export const SELECTORS_EN = {
-  startBtn: 'button[aria-label="Voice input"]',
-  stopBtn: 'button[aria-label="Stop recording"]',
-  submitBtn: 'button[aria-label="Submit recording"]',
+function buildAriaLabelSelector(labels: readonly string[]): string {
+  return labels.map(label => `button[aria-label="${label}"]`).join(', ');
+}
+
+/**
+ * ChatGPT DOM selectors with multi-language support.
+ */
+export const SELECTORS = {
+  /** Start dictation button (multiple language variants) */
+  startBtn: buildAriaLabelSelector(DICTATION_LABELS.start),
+  /** Stop dictation button (appears when recording) */
+  stopBtn: buildAriaLabelSelector(DICTATION_LABELS.stop),
+  /** Submit dictation button */
+  submitBtn: buildAriaLabelSelector(DICTATION_LABELS.submit),
+  /** ProseMirror composer/textarea - primary selector */
   composer: '#prompt-textarea',
+  /** Alternative composer selectors */
+  composerAlt: [
+    '#prompt-textarea',
+    '[contenteditable="true"][data-virtualkeyboard]',
+    'textarea[name="prompt-textarea"]',
+    '.ProseMirror[contenteditable="true"]',
+  ],
 } as const;
+
+// ============================================================================
+// Debug Logger
+// ============================================================================
+
+const DEBUG = process.env.NODE_ENV === 'development';
+
+function log(...args: unknown[]): void {
+  if (DEBUG) {
+    console.log('[EchoType:Selectors]', ...args);
+  }
+}
 
 // ============================================================================
 // Element Accessors
@@ -44,12 +106,27 @@ export const SELECTORS_EN = {
 
 /**
  * Get the composer (input) element.
+ * Tries multiple selectors for resilience.
  *
  * @returns The composer element or null
  */
 export function getComposerElement(): HTMLElement | null {
-  const el = $(SELECTORS.composer);
-  return el instanceof HTMLElement ? el : null;
+  // Try primary selector first
+  let el = $(SELECTORS.composer);
+  if (el instanceof HTMLElement) {
+    return el;
+  }
+  
+  // Try alternative selectors
+  for (const selector of SELECTORS.composerAlt) {
+    el = $(selector);
+    if (el instanceof HTMLElement) {
+      log('Found composer with alt selector:', selector);
+      return el;
+    }
+  }
+  
+  return null;
 }
 
 /**
@@ -64,6 +141,34 @@ export function readComposerRawText(): string {
 }
 
 // ============================================================================
+// Button Finders
+// ============================================================================
+
+/**
+ * Find the start dictation button.
+ */
+export function findStartButton(): HTMLButtonElement | null {
+  const el = $(SELECTORS.startBtn);
+  return el instanceof HTMLButtonElement ? el : null;
+}
+
+/**
+ * Find the stop dictation button.
+ */
+export function findStopButton(): HTMLButtonElement | null {
+  const el = $(SELECTORS.stopBtn);
+  return el instanceof HTMLButtonElement ? el : null;
+}
+
+/**
+ * Find the submit dictation button.
+ */
+export function findSubmitButton(): HTMLButtonElement | null {
+  const el = $(SELECTORS.submitBtn);
+  return el instanceof HTMLButtonElement ? el : null;
+}
+
+// ============================================================================
 // Status Detection
 // ============================================================================
 
@@ -73,19 +178,24 @@ export function readComposerRawText(): string {
  * @returns Current status
  */
 export function detectStatus(): DictationStatus {
-  if ($(SELECTORS.stopBtn)) return 'listening';
-  if ($(SELECTORS.startBtn)) return 'idle';
+  if (findStopButton()) return 'listening';
+  if (findStartButton()) return 'idle';
   return 'unknown';
 }
 
 /**
- * Check if a specific selector exists in the DOM.
+ * Check if a specific button type exists in the DOM.
  *
- * @param key - Selector key
- * @returns True if element exists
+ * @param type - Button type to check
+ * @returns True if button exists
  */
-export function selectorExists(key: keyof typeof SELECTORS): boolean {
-  return Boolean($(SELECTORS[key]));
+export function buttonExists(type: 'start' | 'stop' | 'submit'): boolean {
+  switch (type) {
+    case 'start': return Boolean(findStartButton());
+    case 'stop': return Boolean(findStopButton());
+    case 'submit': return Boolean(findSubmitButton());
+    default: return false;
+  }
 }
 
 // ============================================================================
@@ -95,44 +205,80 @@ export function selectorExists(key: keyof typeof SELECTORS): boolean {
 export interface HealthCheckResult {
   healthy: boolean;
   missing: string[];
+  warnings: string[];
   error?: EchoTypeError;
+  debug?: {
+    composerFound: boolean;
+    startBtnFound: boolean;
+    stopBtnFound: boolean;
+    submitBtnFound: boolean;
+  };
 }
 
 /**
  * Perform health check to verify ChatGPT UI is accessible.
  * This should be called before any operation.
  *
- * @returns Health check result
+ * @returns Health check result with detailed diagnostics
  */
 export function performHealthCheck(): HealthCheckResult {
   const missing: string[] = [];
+  const warnings: string[] = [];
+
+  const composerFound = Boolean(getComposerElement());
+  const startBtnFound = Boolean(findStartButton());
+  const stopBtnFound = Boolean(findStopButton());
+  const submitBtnFound = Boolean(findSubmitButton());
 
   // Check composer (required)
-  if (!getComposerElement()) {
+  if (!composerFound) {
     missing.push('composer');
   }
 
-  // Check for at least one dictation button
-  const hasStartBtn = selectorExists('startBtn');
-  const hasStopBtn = selectorExists('stopBtn');
-
-  if (!hasStartBtn && !hasStopBtn) {
-    missing.push('dictation buttons');
+  // Check for dictation buttons
+  // Note: Only start OR stop button needs to be present (not both)
+  // If neither is found, it might mean:
+  // 1. User is not logged in
+  // 2. Voice input is not available in this region
+  // 3. DOM has changed
+  if (!startBtnFound && !stopBtnFound) {
+    // This is a warning, not a critical error
+    // User might need to log in or enable voice input
+    warnings.push('dictation buttons not found (login may be required)');
   }
 
-  const healthy = missing.length === 0;
+  // For MVP, we only require composer to be found
+  // Dictation buttons are optional (user might need to log in)
+  const healthy = composerFound;
 
   return {
     healthy,
     missing,
+    warnings,
     error: healthy
       ? undefined
       : {
           code: 'SELECTOR_NOT_FOUND',
           message: `Missing UI elements: ${missing.join(', ')}`,
-          detail: 'ChatGPT UI may have changed. Please check for extension updates.',
+          detail: missing.includes('composer')
+            ? 'ChatGPT page may not be fully loaded. Please wait and try again.'
+            : 'Voice input may not be available. Please ensure you are logged in to ChatGPT.',
         },
+    debug: {
+      composerFound,
+      startBtnFound,
+      stopBtnFound,
+      submitBtnFound,
+    },
   };
+}
+
+/**
+ * Check if voice input feature is available.
+ * This requires user to be logged in and have voice input enabled.
+ */
+export function isVoiceInputAvailable(): boolean {
+  return Boolean(findStartButton() || findStopButton());
 }
 
 // ============================================================================
@@ -145,11 +291,13 @@ export function performHealthCheck(): HealthCheckResult {
  * @returns True if button was clicked
  */
 export function clickStartButton(): boolean {
-  const el = $(SELECTORS.startBtn);
-  if (el instanceof HTMLElement) {
+  const el = findStartButton();
+  if (el) {
+    log('Clicking start button');
     el.click();
     return true;
   }
+  log('Start button not found');
   return false;
 }
 
@@ -159,11 +307,13 @@ export function clickStartButton(): boolean {
  * @returns True if button was clicked
  */
 export function clickStopButton(): boolean {
-  const el = $(SELECTORS.stopBtn);
-  if (el instanceof HTMLElement) {
+  const el = findStopButton();
+  if (el) {
+    log('Clicking stop button');
     el.click();
     return true;
   }
+  log('Stop button not found');
   return false;
 }
 
@@ -173,10 +323,65 @@ export function clickStopButton(): boolean {
  * @returns True if button was clicked
  */
 export function clickSubmitButton(): boolean {
-  const el = $(SELECTORS.submitBtn);
-  if (el instanceof HTMLElement) {
+  const el = findSubmitButton();
+  if (el) {
+    log('Clicking submit button');
     el.click();
     return true;
   }
+  log('Submit button not found');
   return false;
+}
+
+// ============================================================================
+// DOM Inspector (Development)
+// ============================================================================
+
+/**
+ * Inspect DOM for dictation-related elements.
+ * Useful for debugging selector issues.
+ */
+export function inspectDOM(): void {
+  if (!DEBUG) return;
+  
+  console.group('[EchoType] DOM Inspection');
+  
+  // Find all buttons with aria-label
+  const buttons = document.querySelectorAll('button[aria-label]');
+  console.log('Buttons with aria-label:', buttons.length);
+  buttons.forEach(btn => {
+    const label = btn.getAttribute('aria-label');
+    if (label?.toLowerCase().includes('voice') || 
+        label?.toLowerCase().includes('record') ||
+        label?.toLowerCase().includes('dictation') ||
+        label?.includes('聽寫') ||
+        label?.includes('錄音') ||
+        label?.includes('語音')) {
+      console.log(`  Found: "${label}"`);
+    }
+  });
+  
+  // Check composer
+  const composer = getComposerElement();
+  console.log('Composer found:', Boolean(composer), composer?.tagName, composer?.className);
+  
+  // Check health
+  const health = performHealthCheck();
+  console.log('Health check:', health);
+  
+  console.groupEnd();
+}
+
+// Export for development debugging
+if (DEBUG) {
+  (window as unknown as { __ECHOTYPE_SELECTORS__: unknown }).__ECHOTYPE_SELECTORS__ = {
+    SELECTORS,
+    DICTATION_LABELS,
+    inspectDOM,
+    performHealthCheck,
+    getComposerElement,
+    findStartButton,
+    findStopButton,
+    findSubmitButton,
+  };
 }

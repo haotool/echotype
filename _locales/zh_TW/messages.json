@@ -164,5 +164,69 @@
   "notSet": {
     "message": "未設定",
     "description": "快捷鍵未設定"
+  },
+  "devMode": {
+    "message": "開發者模式",
+    "description": "開發者模式區塊"
+  },
+  "devModeDesc": {
+    "message": "啟用額外的除錯功能",
+    "description": "開發者模式描述"
+  },
+  "debugLogging": {
+    "message": "除錯日誌",
+    "description": "除錯日誌設定"
+  },
+  "debugLoggingDesc": {
+    "message": "在瀏覽器控制台輸出詳細日誌",
+    "description": "除錯日誌描述"
+  },
+  "openSWConsole": {
+    "message": "開啟 Service Worker 控制台",
+    "description": "開啟 SW 控制台按鈕"
+  },
+  "openChatGPT": {
+    "message": "開啟 ChatGPT 分頁",
+    "description": "開啟 ChatGPT 按鈕"
+  },
+  "errorNoChatGPT": {
+    "message": "找不到 ChatGPT",
+    "description": "找不到 ChatGPT 分頁時的錯誤標題"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "請開啟 ChatGPT 並登入以使用語音聽寫功能",
+    "description": "找不到 ChatGPT 分頁時的錯誤描述"
+  },
+  "errorNoVoice": {
+    "message": "語音輸入不可用",
+    "description": "語音輸入不可用時的錯誤標題"
+  },
+  "errorNoVoiceDesc": {
+    "message": "找不到語音輸入按鈕。請確認您已登入 ChatGPT。",
+    "description": "語音輸入不可用時的錯誤描述"
+  },
+  "statusListening": {
+    "message": "聆聽中...",
+    "description": "聆聽狀態"
+  },
+  "statusUnknown": {
+    "message": "檢查中...",
+    "description": "未知狀態"
+  },
+  "startSuccess": {
+    "message": "聽寫已開始",
+    "description": "聽寫開始時的提示"
+  },
+  "submitSuccess": {
+    "message": "已成功擷取！",
+    "description": "擷取成功時的提示"
+  },
+  "copySuccess": {
+    "message": "已複製到剪貼簿",
+    "description": "複製成功時的提示"
+  },
+  "copyFailed": {
+    "message": "複製失敗",
+    "description": "複製失敗時的提示"
   }
 }

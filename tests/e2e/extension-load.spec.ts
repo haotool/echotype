@@ -17,10 +17,13 @@ test.describe('Extension Loading', () => {
 
   test('should have service worker running', async ({ context }) => {
     // MV3 uses service workers instead of background pages
-    const serviceWorkers = context.serviceWorkers();
-    expect(serviceWorkers.length).toBeGreaterThan(0);
+    // Wait for service worker to be available
+    let sw = context.serviceWorkers()[0];
+    if (!sw) {
+      sw = await context.waitForEvent('serviceworker', { timeout: 10000 });
+    }
     
-    const sw = serviceWorkers[0];
+    expect(sw).toBeTruthy();
     expect(sw.url()).toContain('chrome-extension://');
   });
 

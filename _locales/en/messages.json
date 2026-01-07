@@ -164,5 +164,69 @@
   "notSet": {
     "message": "Not set",
     "description": "Shortcut not set"
+  },
+  "devMode": {
+    "message": "Developer Mode",
+    "description": "Developer mode section"
+  },
+  "devModeDesc": {
+    "message": "Enable additional debugging features",
+    "description": "Developer mode description"
+  },
+  "debugLogging": {
+    "message": "Debug Logging",
+    "description": "Debug logging setting"
+  },
+  "debugLoggingDesc": {
+    "message": "Output detailed logs to browser console",
+    "description": "Debug logging description"
+  },
+  "openSWConsole": {
+    "message": "Open Service Worker Console",
+    "description": "Open SW console button"
+  },
+  "openChatGPT": {
+    "message": "Open ChatGPT Tab",
+    "description": "Open ChatGPT button"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT Not Found",
+    "description": "Error title when no ChatGPT tab"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Please open ChatGPT and log in to use voice dictation",
+    "description": "Error description when no ChatGPT tab"
+  },
+  "errorNoVoice": {
+    "message": "Voice Input Unavailable",
+    "description": "Error title when voice input not available"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Voice input button not found. Please ensure you are logged in to ChatGPT.",
+    "description": "Error description when voice input not available"
+  },
+  "statusListening": {
+    "message": "Listening...",
+    "description": "Status when listening"
+  },
+  "statusUnknown": {
+    "message": "Checking...",
+    "description": "Status when unknown"
+  },
+  "startSuccess": {
+    "message": "Dictation started",
+    "description": "Toast when dictation starts"
+  },
+  "submitSuccess": {
+    "message": "Captured successfully!",
+    "description": "Toast when capture succeeds"
+  },
+  "copySuccess": {
+    "message": "Copied to clipboard",
+    "description": "Toast when copy succeeds"
+  },
+  "copyFailed": {
+    "message": "Copy failed",
+    "description": "Toast when copy fails"
   }
 }

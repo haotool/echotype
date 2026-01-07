@@ -25,6 +25,7 @@ import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
 import { updateBadge, showSuccessBadge, showErrorBadge, initBadge } from './badge';
 import { playStartSound, playSuccessSound, playErrorSound } from './audio';
+import './keepalive'; // Keep service worker alive
 
 // ============================================================================
 // Initialization

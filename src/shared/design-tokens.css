@@ -1,0 +1,388 @@
+/**
+ * EchoType Design Tokens
+ * Modern UI Design System with Light/Dark Mode Support
+ * 
+ * @version 1.0.0
+ * @updated 2026-01-08
+ */
+
+/* ============================================================================
+   COLOR PALETTE
+   Based on a professional, minimal aesthetic with accent colors
+   ============================================================================ */
+
+:root {
+  /* === Base Colors === */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  
+  /* === Neutral Scale (Gray) === */
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
+  --gray-400: #a3a3a3;
+  --gray-500: #737373;
+  --gray-600: #525252;
+  --gray-700: #404040;
+  --gray-800: #262626;
+  --gray-900: #171717;
+  --gray-950: #0a0a0a;
+
+  /* === Primary Brand Colors (Emerald/Teal) === */
+  --primary-50: #ecfdf5;
+  --primary-100: #d1fae5;
+  --primary-200: #a7f3d0;
+  --primary-300: #6ee7b7;
+  --primary-400: #34d399;
+  --primary-500: #10b981;
+  --primary-600: #059669;
+  --primary-700: #047857;
+  --primary-800: #065f46;
+  --primary-900: #064e3b;
+
+  /* === Accent Colors (Violet/Purple) === */
+  --accent-50: #f5f3ff;
+  --accent-100: #ede9fe;
+  --accent-200: #ddd6fe;
+  --accent-300: #c4b5fd;
+  --accent-400: #a78bfa;
+  --accent-500: #8b5cf6;
+  --accent-600: #7c3aed;
+  --accent-700: #6d28d9;
+  --accent-800: #5b21b6;
+  --accent-900: #4c1d95;
+
+  /* === Semantic Colors === */
+  --success-50: #f0fdf4;
+  --success-500: #22c55e;
+  --success-600: #16a34a;
+  
+  --warning-50: #fffbeb;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  
+  --error-50: #fef2f2;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+  
+  --info-50: #eff6ff;
+  --info-500: #3b82f6;
+  --info-600: #2563eb;
+
+  /* ============================================================================
+     TYPOGRAPHY
+     ============================================================================ */
+  
+  /* === Font Families === */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, monospace;
+  
+  /* === Font Sizes (rem based) === */
+  --text-xs: 0.6875rem;     /* 11px */
+  --text-sm: 0.8125rem;     /* 13px */
+  --text-base: 0.875rem;    /* 14px */
+  --text-md: 1rem;          /* 16px */
+  --text-lg: 1.125rem;      /* 18px */
+  --text-xl: 1.25rem;       /* 20px */
+  --text-2xl: 1.5rem;       /* 24px */
+  
+  /* === Font Weights === */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* === Line Heights === */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  
+  /* === Letter Spacing === */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+
+  /* ============================================================================
+     SPACING
+     ============================================================================ */
+  
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+
+  /* ============================================================================
+     BORDER RADIUS
+     ============================================================================ */
+  
+  --radius-none: 0;
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-2xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+
+  /* ============================================================================
+     SHADOWS
+     ============================================================================ */
+  
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Colored shadows for glow effects */
+  --shadow-glow-primary: 0 0 20px -5px var(--primary-500);
+  --shadow-glow-accent: 0 0 20px -5px var(--accent-500);
+
+  /* ============================================================================
+     TRANSITIONS
+     ============================================================================ */
+  
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ============================================================================
+     Z-INDEX SCALE
+     ============================================================================ */
+  
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+  --z-tooltip: 60;
+  --z-max: 9999;
+}
+
+/* ============================================================================
+   LIGHT THEME (Default)
+   ============================================================================ */
+
+:root,
+[data-theme="light"] {
+  /* === Backgrounds === */
+  --bg-base: var(--color-white);
+  --bg-subtle: var(--gray-50);
+  --bg-muted: var(--gray-100);
+  --bg-elevated: var(--color-white);
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* === Surfaces === */
+  --surface-1: var(--color-white);
+  --surface-2: var(--gray-50);
+  --surface-3: var(--gray-100);
+  
+  /* === Text === */
+  --text-primary: var(--gray-900);
+  --text-secondary: var(--gray-600);
+  --text-muted: var(--gray-500);
+  --text-disabled: var(--gray-400);
+  --text-inverse: var(--color-white);
+  --text-link: var(--primary-600);
+  
+  /* === Borders === */
+  --border-default: var(--gray-200);
+  --border-muted: var(--gray-100);
+  --border-strong: var(--gray-300);
+  --border-focus: var(--primary-500);
+  
+  /* === Interactive === */
+  --interactive-primary: var(--primary-500);
+  --interactive-primary-hover: var(--primary-600);
+  --interactive-primary-active: var(--primary-700);
+  
+  --interactive-accent: var(--accent-500);
+  --interactive-accent-hover: var(--accent-600);
+  
+  --interactive-secondary: var(--gray-100);
+  --interactive-secondary-hover: var(--gray-200);
+  
+  /* === Status === */
+  --status-recording: var(--error-500);
+  --status-recording-bg: var(--error-50);
+  --status-idle: var(--gray-500);
+  --status-idle-bg: var(--gray-100);
+  --status-success: var(--success-500);
+  --status-success-bg: var(--success-50);
+}
+
+/* ============================================================================
+   DARK THEME
+   ============================================================================ */
+
+[data-theme="dark"] {
+  /* === Backgrounds === */
+  --bg-base: var(--gray-950);
+  --bg-subtle: var(--gray-900);
+  --bg-muted: var(--gray-800);
+  --bg-elevated: var(--gray-900);
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+  
+  /* === Surfaces === */
+  --surface-1: var(--gray-900);
+  --surface-2: var(--gray-800);
+  --surface-3: var(--gray-700);
+  
+  /* === Text === */
+  --text-primary: var(--gray-50);
+  --text-secondary: var(--gray-400);
+  --text-muted: var(--gray-500);
+  --text-disabled: var(--gray-600);
+  --text-inverse: var(--gray-950);
+  --text-link: var(--primary-400);
+  
+  /* === Borders === */
+  --border-default: var(--gray-800);
+  --border-muted: var(--gray-900);
+  --border-strong: var(--gray-700);
+  --border-focus: var(--primary-400);
+  
+  /* === Interactive === */
+  --interactive-primary: var(--primary-500);
+  --interactive-primary-hover: var(--primary-400);
+  --interactive-primary-active: var(--primary-300);
+  
+  --interactive-accent: var(--accent-500);
+  --interactive-accent-hover: var(--accent-400);
+  
+  --interactive-secondary: var(--gray-800);
+  --interactive-secondary-hover: var(--gray-700);
+  
+  /* === Status === */
+  --status-recording: var(--error-500);
+  --status-recording-bg: rgba(239, 68, 68, 0.15);
+  --status-idle: var(--gray-400);
+  --status-idle-bg: var(--gray-800);
+  --status-success: var(--success-500);
+  --status-success-bg: rgba(34, 197, 94, 0.15);
+  
+  /* === Shadows (darker for dark mode) === */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes recording-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-up {
+  animation: slide-up var(--duration-normal) var(--ease-out);
+}
+
+.animate-scale-in {
+  animation: scale-in var(--duration-normal) var(--ease-out);
+}
+
+.animate-recording {
+  animation: recording-pulse 1.5s ease-in-out infinite;
+}

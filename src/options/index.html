@@ -3,86 +3,253 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="optionsTitle">EchoType Settings</title>
+  <title>EchoType Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ============================================================================
+       DESIGN TOKENS
+       ============================================================================ */
     :root {
-      --bg: #0f0f0f;
-      --bg-card: #1a1a1a;
-      --text: #e5e5e5;
-      --text-muted: #a0a0a0;
-      --accent: #4ade80;
-      --accent-hover: #22c55e;
-      --border: #2a2a2a;
-      --radius: 12px;
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+      --gray-950: #0a0a0a;
+      
+      --primary-400: #34d399;
+      --primary-500: #10b981;
+      --primary-600: #059669;
+      
+      --accent-400: #a78bfa;
+      --accent-500: #8b5cf6;
+      
+      --error-500: #ef4444;
+      --error-600: #dc2626;
+      
+      --success-500: #22c55e;
+      --warning-500: #f59e0b;
+      
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-full: 9999px;
+      
+      --duration-fast: 150ms;
+      --duration-normal: 200ms;
+      --ease-out: cubic-bezier(0, 0, 0.2, 1);
     }
 
-    * {
+    /* Light Theme */
+    :root, [data-theme="light"] {
+      --bg-base: #ffffff;
+      --bg-subtle: var(--gray-50);
+      --bg-muted: var(--gray-100);
+      --surface-1: #ffffff;
+      --surface-2: var(--gray-50);
+      
+      --text-primary: var(--gray-900);
+      --text-secondary: var(--gray-600);
+      --text-muted: var(--gray-500);
+      
+      --border-default: var(--gray-200);
+      --border-muted: var(--gray-100);
+      
+      --toggle-bg: var(--gray-200);
+      --toggle-bg-active: var(--primary-500);
+    }
+
+    /* Dark Theme */
+    [data-theme="dark"] {
+      --bg-base: var(--gray-950);
+      --bg-subtle: var(--gray-900);
+      --bg-muted: var(--gray-800);
+      --surface-1: var(--gray-900);
+      --surface-2: var(--gray-800);
+      
+      --text-primary: var(--gray-50);
+      --text-secondary: var(--gray-400);
+      --text-muted: var(--gray-500);
+      
+      --border-default: var(--gray-800);
+      --border-muted: var(--gray-900);
+      
+      --toggle-bg: var(--gray-700);
+      --toggle-bg-active: var(--primary-500);
+    }
+
+    /* ============================================================================
+       RESET & BASE
+       ============================================================================ */
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
     body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 24px;
+      font-family: var(--font-sans);
+      font-size: 14px;
       line-height: 1.5;
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
+    /* ============================================================================
+       LAYOUT
+       ============================================================================ */
     .container {
-      max-width: 480px;
+      max-width: 640px;
       margin: 0 auto;
+      padding: var(--space-6);
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 32px;
+    /* ============================================================================
+       HEADER
+       ============================================================================ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-8);
     }
 
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      background: linear-gradient(135deg, var(--primary-500), var(--accent-500));
+      border-radius: var(--radius-xl);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
-    h1 span {
-      color: var(--accent);
+    .brand-icon svg {
+      width: 24px;
+      height: 24px;
     }
 
-    .subtitle {
+    .brand-info h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-info .version {
+      font-size: 0.75rem;
       color: var(--text-muted);
-      font-size: 0.875rem;
+      font-family: var(--font-mono);
     }
 
+    .header-actions {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-muted);
+      color: var(--text-primary);
+      border-color: var(--border-default);
+    }
+
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ============================================================================
+       CARDS
+       ============================================================================ */
     .card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      border: 1px solid var(--border);
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      margin-bottom: var(--space-4);
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-5);
+      border-bottom: 1px solid var(--border-muted);
     }
 
     .card-title {
-      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.8125rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 16px;
+      letter-spacing: 0.05em;
     }
 
+    .card-title svg {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      padding: var(--space-4) var(--space-5);
+    }
+
+    /* ============================================================================
+       SETTINGS ROWS
+       ============================================================================ */
     .setting-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
+      justify-content: space-between;
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--border-muted);
     }
 
     .setting-row:last-child {
@@ -91,24 +258,25 @@
 
     .setting-info {
       flex: 1;
-      margin-right: 16px;
+      margin-right: var(--space-4);
     }
 
     .setting-label {
       font-weight: 500;
-      margin-bottom: 2px;
+      margin-bottom: var(--space-1);
     }
 
     .setting-description {
       font-size: 0.8125rem;
       color: var(--text-muted);
+      line-height: 1.4;
     }
 
-    /* Toggle switch */
+    /* Toggle Switch */
     .toggle {
       position: relative;
       width: 48px;
-      height: 26px;
+      height: 28px;
       flex-shrink: 0;
     }
 
@@ -122,48 +290,66 @@
       position: absolute;
       cursor: pointer;
       inset: 0;
-      background: var(--border);
-      border-radius: 26px;
-      transition: background 0.2s;
+      background: var(--toggle-bg);
+      border-radius: var(--radius-full);
+      transition: background var(--duration-fast) var(--ease-out);
     }
 
     .toggle-slider::before {
       content: "";
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       left: 3px;
       bottom: 3px;
       background: white;
       border-radius: 50%;
-      transition: transform 0.2s;
+      transition: transform var(--duration-fast) var(--ease-out);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
     .toggle input:checked + .toggle-slider {
-      background: var(--accent);
+      background: var(--toggle-bg-active);
     }
 
     .toggle input:checked + .toggle-slider::before {
-      transform: translateX(22px);
+      transform: translateX(20px);
     }
 
-    .shortcuts {
-      margin-top: 8px;
+    .toggle input:focus + .toggle-slider {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    /* ============================================================================
+       SHORTCUTS
+       ============================================================================ */
+    .shortcuts-grid {
+      display: grid;
+      gap: var(--space-3);
     }
 
     .shortcut-item {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: var(--space-3);
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .shortcut-label {
       font-size: 0.875rem;
     }
 
     .shortcut-key {
-      font-family: monospace;
-      background: var(--border);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.8125rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: var(--space-1) var(--space-2);
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      color: var(--primary-500);
     }
 
     .shortcut-key.not-set {
@@ -171,100 +357,129 @@
       font-style: italic;
     }
 
-    .version {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      margin-top: 24px;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .btn-customize {
+      width: 100%;
+      margin-top: var(--space-4);
+      padding: var(--space-3);
+      background: var(--primary-500);
+      border: none;
+      border-radius: var(--radius-lg);
+      color: white;
+      font-family: inherit;
       font-size: 0.875rem;
-      color: var(--accent);
-      margin-top: 12px;
-      opacity: 0;
-      transition: opacity 0.2s;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out);
     }
 
-    .status.visible {
-      opacity: 1;
+    .btn-customize:hover {
+      background: var(--primary-600);
     }
 
-    /* History */
+    .shortcuts-note {
+      margin-top: var(--space-3);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ============================================================================
+       HISTORY
+       ============================================================================ */
     .history-list {
-      max-height: 240px;
+      max-height: 300px;
       overflow-y: auto;
     }
 
     .history-empty {
-      color: var(--text-muted);
-      font-size: 0.875rem;
+      padding: var(--space-6);
       text-align: center;
-      padding: 16px;
+      color: var(--text-muted);
+    }
+
+    .history-empty svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: var(--space-3);
+      opacity: 0.5;
     }
 
     .history-item {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
+      gap: var(--space-3);
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--border-muted);
+      transition: background var(--duration-fast) var(--ease-out);
     }
 
     .history-item:last-child {
       border-bottom: none;
     }
 
-    .history-text {
+    .history-item:hover {
+      background: var(--bg-subtle);
+    }
+
+    .history-content {
       flex: 1;
+      min-width: 0;
+    }
+
+    .history-text {
       font-size: 0.875rem;
-      line-height: 1.4;
+      line-height: 1.5;
       word-break: break-word;
-      max-height: 60px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
     .history-time {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       color: var(--text-muted);
-      white-space: nowrap;
+      margin-top: var(--space-1);
     }
 
-    .history-copy {
-      background: var(--border);
-      border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      color: var(--text);
+    .history-actions {
+      flex-shrink: 0;
+    }
+
+    .btn-copy-small {
+      padding: var(--space-1) var(--space-2);
+      background: var(--bg-muted);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all var(--duration-fast) var(--ease-out);
     }
 
-    .history-copy:hover {
-      background: var(--accent);
-      color: var(--bg);
+    .btn-copy-small:hover {
+      background: var(--primary-500);
+      border-color: var(--primary-500);
+      color: white;
     }
 
     .btn-clear {
       width: 100%;
-      margin-top: 12px;
-      padding: 10px;
+      padding: var(--space-3);
       background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-muted);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      font-family: inherit;
       font-size: 0.875rem;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all var(--duration-fast) var(--ease-out);
     }
 
     .btn-clear:hover:not(:disabled) {
-      border-color: #ef4444;
-      color: #ef4444;
+      border-color: var(--error-500);
+      color: var(--error-500);
     }
 
     .btn-clear:disabled {
@@ -272,111 +487,354 @@
       cursor: not-allowed;
     }
 
-    .btn-customize {
-      width: 100%;
-      margin-top: 12px;
-      padding: 10px;
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      color: var(--bg);
+    /* ============================================================================
+       DEVELOPER MODE
+       ============================================================================ */
+    .dev-card {
+      border-color: var(--accent-500);
+    }
+
+    .dev-card .card-header {
+      background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), rgba(16, 185, 129, 0.1));
+    }
+
+    .dev-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      background: var(--accent-500);
+      border-radius: var(--radius-full);
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .debug-info {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: var(--space-3);
+      background: var(--bg-muted);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+    }
+
+    .debug-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-1) 0;
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .debug-row:last-child {
+      border-bottom: none;
+    }
+
+    .debug-label {
+      color: var(--text-muted);
+    }
+
+    .debug-value {
+      color: var(--primary-500);
+    }
+
+    .debug-value.error {
+      color: var(--error-500);
+    }
+
+    .debug-value.success {
+      color: var(--success-500);
+    }
+
+    .debug-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+
+    .btn-debug {
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg-muted);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .btn-debug:hover {
+      background: var(--accent-500);
+      border-color: var(--accent-500);
+      color: white;
+    }
+
+    /* ============================================================================
+       STATUS TOAST
+       ============================================================================ */
+    .status-toast {
+      position: fixed;
+      bottom: var(--space-6);
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: var(--gray-900);
+      color: white;
+      border-radius: var(--radius-full);
       font-size: 0.875rem;
       font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
+      opacity: 0;
+      transition: all var(--duration-normal) var(--ease-out);
+      z-index: 100;
     }
 
-    .btn-customize:hover {
-      background: var(--accent-hover);
+    [data-theme="dark"] .status-toast {
+      background: var(--gray-100);
+      color: var(--gray-900);
     }
 
-    .shortcuts-note {
-      margin-top: 8px;
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .status-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .status-toast svg {
+      width: 16px;
+      height: 16px;
+      color: var(--success-500);
+    }
+
+    /* ============================================================================
+       FOOTER
+       ============================================================================ */
+    .footer {
       text-align: center;
+      padding: var(--space-6) 0;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .footer a {
+      color: var(--primary-500);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
-<body>
+<body data-theme="light">
   <div class="container">
-    <header>
-      <h1>🎤 <span>EchoType</span></h1>
-      <p class="subtitle" data-i18n="optionsSubtitle">Dictate anywhere using ChatGPT voice input</p>
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" x2="12" y1="19" y2="22"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>EchoType</h1>
+          <span class="version">v0.5.0</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-theme" title="Toggle theme">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </button>
+      </div>
     </header>
 
-    <div class="card">
-      <div class="card-title" data-i18n="settingsAutomation">Automation Settings</div>
-
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label" data-i18n="autoCopy">Auto Copy</div>
-          <div class="setting-description" data-i18n="autoCopyDesc">Automatically copy result to clipboard after completion</div>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="autoCopyToClipboard" checked>
-          <span class="toggle-slider"></span>
-        </label>
+    <!-- Automation Settings -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          Automation
+        </span>
       </div>
-
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label" data-i18n="autoPaste">Auto Paste</div>
-          <div class="setting-description" data-i18n="autoPasteDesc">Automatically paste result to the original input field</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Auto Copy</div>
+            <div class="setting-description">Automatically copy result to clipboard after dictation</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="autoCopyToClipboard" checked>
+            <span class="toggle-slider"></span>
+          </label>
         </div>
-        <label class="toggle">
-          <input type="checkbox" id="autoPasteToActiveTab">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label" data-i18n="returnFocus">Return Focus</div>
-          <div class="setting-description" data-i18n="returnFocusDesc">Return to original tab after starting dictation</div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Auto Paste</div>
+            <div class="setting-description">Paste result to the focused input field automatically</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="autoPasteToActiveTab">
+            <span class="toggle-slider"></span>
+          </label>
         </div>
-        <label class="toggle">
-          <input type="checkbox" id="returnFocusAfterStart">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
 
-      <div class="status" id="saveStatus">✓ <span data-i18n="saved">Saved</span></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title" data-i18n="historySection">History</div>
-      <div class="history-list" id="historyList">
-        <div class="history-empty" data-i18n="historyEmpty">No dictation history</div>
-      </div>
-      <button class="btn-clear" id="clearHistory" disabled data-i18n="clearAll">Clear All</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title" data-i18n="shortcuts">Keyboard Shortcuts</div>
-      <div class="shortcuts" id="shortcutsContainer">
-        <div class="shortcut-item">
-          <span data-i18n="shortcutStart">Start dictation</span>
-          <span class="shortcut-key" id="shortcut-start-dictation">Ctrl+Shift+1</span>
-        </div>
-        <div class="shortcut-item">
-          <span data-i18n="shortcutPause">Pause dictation</span>
-          <span class="shortcut-key" id="shortcut-pause-dictation">Ctrl+Shift+2</span>
-        </div>
-        <div class="shortcut-item">
-          <span data-i18n="shortcutSubmit">Submit dictation</span>
-          <span class="shortcut-key" id="shortcut-submit-dictation">Ctrl+Shift+3</span>
-        </div>
-        <div class="shortcut-item">
-          <span data-i18n="shortcutPaste">Paste result</span>
-          <span class="shortcut-key" id="shortcut-paste-last-result">Ctrl+Shift+4</span>
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Return Focus</div>
+            <div class="setting-description">Return to original tab after starting dictation</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="returnFocusAfterStart">
+            <span class="toggle-slider"></span>
+          </label>
         </div>
       </div>
-      <button class="btn-customize" id="customizeShortcuts" data-i18n="customizeShortcuts">Customize Shortcuts</button>
-      <p class="shortcuts-note" data-i18n="shortcutsNote">Note: Open Chrome's shortcut settings to customize keyboard shortcuts</p>
-    </div>
+    </section>
 
-    <p class="version">EchoType v0.3.0</p>
+    <!-- Keyboard Shortcuts -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2" ry="2"/>
+            <path d="M6 8h.001"/><path d="M10 8h.001"/><path d="M14 8h.001"/><path d="M18 8h.001"/>
+            <path d="M8 12h.001"/><path d="M12 12h.001"/><path d="M16 12h.001"/>
+            <path d="M7 16h10"/>
+          </svg>
+          Keyboard Shortcuts
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="shortcuts-grid" id="shortcutsContainer">
+          <div class="shortcut-item">
+            <span class="shortcut-label">Start dictation</span>
+            <span class="shortcut-key" id="shortcut-start-dictation">Ctrl+Shift+1</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-label">Pause dictation</span>
+            <span class="shortcut-key" id="shortcut-pause-dictation">Ctrl+Shift+2</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-label">Submit dictation</span>
+            <span class="shortcut-key" id="shortcut-submit-dictation">Ctrl+Shift+3</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-label">Paste last result</span>
+            <span class="shortcut-key" id="shortcut-paste-last-result">Ctrl+Shift+4</span>
+          </div>
+        </div>
+        <button class="btn-customize" id="customizeShortcuts">Customize Shortcuts</button>
+        <p class="shortcuts-note">Opens Chrome's extension shortcuts settings</p>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M12 7v5l4 2"/>
+          </svg>
+          History
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="history-list" id="historyList">
+          <div class="history-empty">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M12 7v5l4 2"/>
+            </svg>
+            <p>No dictation history yet</p>
+          </div>
+        </div>
+        <button class="btn-clear" id="clearHistory" disabled>Clear All History</button>
+      </div>
+    </section>
+
+    <!-- Developer Mode -->
+    <section class="card dev-card" id="devSection" style="display: none;">
+      <div class="card-header">
+        <span class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+          Developer Mode
+        </span>
+        <span class="dev-badge">DEV</span>
+      </div>
+      <div class="card-body">
+        <div class="debug-info" id="debugInfo">
+          <div class="debug-row">
+            <span class="debug-label">Extension ID</span>
+            <span class="debug-value" id="debug-ext-id">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">ChatGPT Tab</span>
+            <span class="debug-value" id="debug-chatgpt-tab">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">Health Check</span>
+            <span class="debug-value" id="debug-health">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">Last Error</span>
+            <span class="debug-value error" id="debug-error">None</span>
+          </div>
+        </div>
+        <div class="debug-actions">
+          <button class="btn-debug" id="btn-inspect-dom">Inspect DOM</button>
+          <button class="btn-debug" id="btn-health-check">Run Health Check</button>
+          <button class="btn-debug" id="btn-clear-storage">Clear Storage</button>
+          <button class="btn-debug" id="btn-reload-ext">Reload Extension</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dev Mode Toggle (Hidden) -->
+    <section class="card">
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Developer Mode</div>
+            <div class="setting-description">Enable advanced debugging tools and diagnostics</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="devMode">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>EchoType v0.5.0 • <a href="https://github.com/user/echotype" target="_blank">GitHub</a></p>
+    </footer>
+  </div>
+
+  <!-- Status Toast -->
+  <div class="status-toast" id="statusToast">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    <span id="toastMessage">Settings saved</span>
   </div>
 
   <script type="module" src="./index.ts"></script>
