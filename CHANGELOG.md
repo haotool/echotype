@@ -8,33 +8,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial project setup with CRXJS Vite Plugin + TypeScript
-- Chrome Extension Manifest V3 configuration
-- BDD specification files (Gherkin format)
-- Keyboard shortcuts for dictation control
-  - `Ctrl+Shift+1` - Start dictation
-  - `Ctrl+Shift+2` - Pause dictation
-  - `Ctrl+Shift+3` - Submit and get result
-  - `Ctrl+Shift+4` - Paste last result
-
-### Modules
-- **shared/**: types.ts, protocol.ts, utils.ts
-- **background/**: Service Worker with tab management, settings, history
-- **content/chatgpt/**: Dictation control, stable capture, baseline diff, robust clear
-- **content/universal/**: Universal paste support for all websites
-- **offscreen/**: Clipboard operations via Offscreen API
-- **options/**: Settings page with toggle switches
-
-### Testing
-- 61 unit tests with Vitest
-- 100% TypeScript strict mode compliance
+- Popup UI for quick access
+- Badge status indicators
+- History UI display
 
 ## [0.1.0] - 2026-01-07
 
 ### Added
-- Initial release
-- Complete modular architecture from original demo.js
-- Full keyboard shortcut support
-- Auto-copy to clipboard option
-- History tracking (last 5 results)
-- Options page for customization
+- **Core Architecture**
+  - CRXJS Vite Plugin setup with TypeScript
+  - Chrome Extension Manifest V3 configuration
+  - Modular project structure
+
+- **Dictation Control (ChatGPT)**
+  - `capture.ts` - Stable text capture with change detection
+  - `clear.ts` - Robust clearing with verification (4 retries)
+  - `diff.ts` - Baseline diff to extract only new text
+  - `selectors.ts` - Resilient DOM selectors
+  - `controller.ts` - Start/Pause/Submit orchestration
+
+- **Background Service Worker**
+  - Command routing (Ctrl+Shift+1/2/3/4)
+  - Tab management for ChatGPT
+  - Settings persistence (chrome.storage.sync)
+  - History management (last 5 results)
+
+- **Universal Content Script**
+  - Paste results to any webpage
+  - Smart element detection (input/textarea/contenteditable)
+
+- **Offscreen Document**
+  - Clipboard write via Offscreen API (MV3 compliant)
+
+- **Options Page**
+  - Auto Copy toggle
+  - Auto Paste toggle
+  - Return Focus toggle
+  - Keyboard shortcuts reference
+
+- **Testing**
+  - 75 unit tests (Vitest)
+  - E2E test framework (Playwright)
+  - BDD feature specifications (Gherkin)
+
+- **Documentation**
+  - README.md with installation guide
+  - AGENTS.md team configuration
+  - BDD feature files
+  - Analysis report
+
+### Technical Details
+- **Build Size**: ~20KB (production)
+- **Dependencies**: CRXJS, Vitest, Playwright, TypeScript 5.8
+- **Browser Support**: Chromium-based browsers
+
+---
+
+## Version History
+
+| Version | Date | Description |
+|---------|------|-------------|
+| 0.1.0 | 2026-01-07 | Initial MVP release |
+
+[Unreleased]: https://github.com/your-username/EchoType/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/your-username/EchoType/releases/tag/v0.1.0
