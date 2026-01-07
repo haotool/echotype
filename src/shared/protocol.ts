@@ -282,4 +282,12 @@ export const createMessage = {
     type: MSG.OFFSCREEN_CLIPBOARD_WRITE,
     text,
   }),
+
+  historyGet: (): HistoryGetPayload => ({
+    type: MSG.HISTORY_GET,
+  }),
+
+  historyClear: (): HistoryClearPayload => ({
+    type: MSG.HISTORY_CLEAR,
+  }),
 };

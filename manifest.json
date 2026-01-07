@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "EchoType",
+  "name": "__MSG_extName__",
   "version": "0.2.0",
-  "description": "Universal voice dictation via ChatGPT Whisper - dictate anywhere with keyboard shortcuts",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "action": {
     "default_title": "EchoType - Voice Dictation",
     "default_popup": "src/popup/index.html",

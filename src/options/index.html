@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoType Settings</title>
+  <title data-i18n="optionsTitle">EchoType Settings</title>
   <style>
     :root {
       --bg: #0f0f0f;
@@ -272,16 +272,16 @@
   <div class="container">
     <header>
       <h1>🎤 <span>EchoType</span></h1>
-      <p class="subtitle">透過 ChatGPT 聽寫，在任何地方輸入</p>
+      <p class="subtitle" data-i18n="optionsSubtitle">Dictate anywhere using ChatGPT voice input</p>
     </header>
 
     <div class="card">
-      <div class="card-title">自動化設定</div>
+      <div class="card-title" data-i18n="settingsAutomation">Automation Settings</div>
 
       <div class="setting-row">
         <div class="setting-info">
-          <div class="setting-label">完成後自動複製</div>
-          <div class="setting-description">聽寫完成後自動複製到系統剪貼簿</div>
+          <div class="setting-label" data-i18n="autoCopy">Auto Copy</div>
+          <div class="setting-description" data-i18n="autoCopyDesc">Automatically copy result to clipboard after completion</div>
         </div>
         <label class="toggle">
           <input type="checkbox" id="autoCopyToClipboard" checked>
@@ -291,8 +291,8 @@
 
       <div class="setting-row">
         <div class="setting-info">
-          <div class="setting-label">完成後自動貼上</div>
-          <div class="setting-description">聽寫完成後自動貼上到原本的輸入框</div>
+          <div class="setting-label" data-i18n="autoPaste">Auto Paste</div>
+          <div class="setting-description" data-i18n="autoPasteDesc">Automatically paste result to the original input field</div>
         </div>
         <label class="toggle">
           <input type="checkbox" id="autoPasteToActiveTab">
@@ -302,8 +302,8 @@
 
       <div class="setting-row">
         <div class="setting-info">
-          <div class="setting-label">啟動後返回原頁</div>
-          <div class="setting-description">開始聽寫後自動切回原本的分頁</div>
+          <div class="setting-label" data-i18n="returnFocus">Return Focus</div>
+          <div class="setting-description" data-i18n="returnFocusDesc">Return to original tab after starting dictation</div>
         </div>
         <label class="toggle">
           <input type="checkbox" id="returnFocusAfterStart">
@@ -311,34 +311,34 @@
         </label>
       </div>
 
-      <div class="status" id="saveStatus">✓ 已儲存</div>
+      <div class="status" id="saveStatus">✓ <span data-i18n="saved">Saved</span></div>
     </div>
 
     <div class="card">
-      <div class="card-title">歷史記錄</div>
+      <div class="card-title" data-i18n="historySection">History</div>
       <div class="history-list" id="historyList">
-        <div class="history-empty">沒有聽寫記錄</div>
+        <div class="history-empty" data-i18n="historyEmpty">No dictation history</div>
       </div>
-      <button class="btn-clear" id="clearHistory" disabled>清除全部</button>
+      <button class="btn-clear" id="clearHistory" disabled data-i18n="clearAll">Clear All</button>
     </div>
 
     <div class="card">
-      <div class="card-title">Keyboard Shortcuts</div>
+      <div class="card-title" data-i18n="shortcuts">Keyboard Shortcuts</div>
       <div class="shortcuts">
         <div class="shortcut-item">
-          <span>啟動聽寫</span>
+          <span data-i18n="shortcutStart">Start dictation</span>
           <span class="shortcut-key">Ctrl+Shift+1</span>
         </div>
         <div class="shortcut-item">
-          <span>暫停聽寫</span>
+          <span data-i18n="shortcutPause">Pause dictation</span>
           <span class="shortcut-key">Ctrl+Shift+2</span>
         </div>
         <div class="shortcut-item">
-          <span>完成聽寫</span>
+          <span data-i18n="shortcutSubmit">Submit dictation</span>
           <span class="shortcut-key">Ctrl+Shift+3</span>
         </div>
         <div class="shortcut-item">
-          <span>貼上結果</span>
+          <span data-i18n="shortcutPaste">Paste result</span>
           <span class="shortcut-key">Ctrl+Shift+4</span>
         </div>
       </div>

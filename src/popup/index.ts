@@ -1,20 +1,14 @@
 /**
  * Popup UI Controller
  * @module src/popup/index
- * 
+ *
  * Handles the extension popup UI interactions and state display.
- * Updated: 2026-01-07T22:29:00+08:00 [context7:chrome/extensions]
+ * Updated: 2026-01-08T00:20:00+08:00 [context7:chrome/extensions]
  */
 
 import type { HistoryItem, DictationStatus } from '../shared/types';
-import { MSG } from '../shared/protocol';
-
-// Message type aliases for cleaner code
-const CMD_START = MSG.CMD_START;
-const CMD_PAUSE = MSG.CMD_PAUSE;
-const CMD_SUBMIT = MSG.CMD_SUBMIT;
-const MSG_GET_STATUS = MSG.GET_STATUS;
-const MSG_GET_HISTORY = MSG.GET_HISTORY;
+import { MSG, createMessage } from '../shared/protocol';
+import { getMessage, applyI18n, formatRelativeTime } from '../shared/i18n';
 
 // DOM Elements
 const statusBadge = document.getElementById('status') as HTMLElement;
@@ -38,22 +32,24 @@ let lastResult: HistoryItem | null = null;
  * Update UI based on current status
  */
 function updateStatusUI(status: DictationStatus): void {
-  // Update badge
-  statusBadge.className = 'status-badge ' + status;
-  
-  // Update status text
-  const statusLabels: Record<DictationStatus, string> = {
-    idle: 'Ready',
-    listening: 'Listening',
-    recording: 'Recording',
-    processing: 'Processing',
-    error: 'Error',
-    unknown: 'Unknown',
+  // Map status to CSS class
+  const cssClass =
+    status === 'listening' ? 'recording' : status === 'idle' ? 'idle' : 'idle';
+  statusBadge.className = 'status-badge ' + cssClass;
+
+  // Update status text with i18n
+  const statusKeys: Record<DictationStatus, string> = {
+    idle: 'statusReady',
+    listening: 'statusRecording',
+    recording: 'statusRecording',
+    processing: 'statusProcessing',
+    error: 'statusError',
+    unknown: 'statusReady',
   };
-  statusText.textContent = statusLabels[status];
-  
+  statusText.textContent = getMessage(statusKeys[status]);
+
   // Update button states
-  const isRecording = status === 'recording' || status === 'listening';
+  const isRecording = status === 'listening';
   btnStart.disabled = isRecording || status === 'processing';
   btnStop.disabled = !isRecording;
   btnSubmit.disabled = !isRecording;
@@ -64,27 +60,16 @@ function updateStatusUI(status: DictationStatus): void {
  */
 function updateResultUI(item: HistoryItem | null): void {
   lastResult = item;
-  
+
   if (item) {
     resultText.innerHTML = escapeHtml(item.text);
-    resultTime.textContent = formatTime(item.timestamp);
+    resultTime.textContent = formatRelativeTime(item.timestamp);
     btnCopy.disabled = false;
   } else {
-    resultText.innerHTML = '<span class="result-empty">No dictation yet</span>';
+    resultText.innerHTML = `<span class="result-empty">${getMessage('noResult')}</span>`;
     resultTime.textContent = '';
     btnCopy.disabled = true;
   }
-}
-
-/**
- * Format timestamp to readable time
- */
-function formatTime(ts: number | string): string {
-  const date = typeof ts === 'number' ? new Date(ts) : new Date(ts);
-  return date.toLocaleTimeString('zh-TW', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 }
 
 /**
@@ -110,7 +95,7 @@ function showToast(message: string): void {
 /**
  * Send message to background service worker
  */
-async function sendMessage<T>(message: { type: string; payload?: unknown }): Promise<T> {
+async function sendMessage<T>(message: unknown): Promise<T> {
   return chrome.runtime.sendMessage(message);
 }
 
@@ -120,19 +105,19 @@ async function sendMessage<T>(message: { type: string; payload?: unknown }): Pro
 async function loadInitialState(): Promise<void> {
   try {
     // Get current status
-    const statusResponse = await sendMessage<{ status: DictationStatus }>({ 
-      type: MSG_GET_STATUS 
-    });
+    const statusResponse = await sendMessage<{ status: DictationStatus }>(
+      createMessage.cmdGetStatus()
+    );
     if (statusResponse?.status) {
       updateStatusUI(statusResponse.status);
     }
-    
+
     // Get last history item
-    const historyResponse = await sendMessage<{ history: HistoryItem[] }>({ 
-      type: MSG_GET_HISTORY 
-    });
-    if (historyResponse?.history?.length > 0) {
-      updateResultUI(historyResponse.history[0]);
+    const historyResponse = await sendMessage<{ items: HistoryItem[] }>(
+      createMessage.historyGet()
+    );
+    if (historyResponse?.items?.length > 0) {
+      updateResultUI(historyResponse.items[0]);
     }
   } catch (error) {
     console.error('Failed to load initial state:', error);
@@ -161,8 +146,8 @@ async function copyToClipboard(text: string): Promise<boolean> {
 // Event Listeners
 btnStart.addEventListener('click', async () => {
   try {
-    await sendMessage({ type: CMD_START });
-    updateStatusUI('recording');
+    await sendMessage(createMessage.cmdStart());
+    updateStatusUI('listening');
   } catch (error) {
     console.error('Start failed:', error);
   }
@@ -170,7 +155,7 @@ btnStart.addEventListener('click', async () => {
 
 btnStop.addEventListener('click', async () => {
   try {
-    await sendMessage({ type: CMD_PAUSE });
+    await sendMessage(createMessage.cmdPause());
     updateStatusUI('idle');
   } catch (error) {
     console.error('Pause failed:', error);
@@ -180,7 +165,7 @@ btnStop.addEventListener('click', async () => {
 btnSubmit.addEventListener('click', async () => {
   try {
     updateStatusUI('processing');
-    await sendMessage({ type: CMD_SUBMIT });
+    await sendMessage(createMessage.cmdSubmit());
     // Result will come via message listener
   } catch (error) {
     console.error('Submit failed:', error);
@@ -192,7 +177,7 @@ btnCopy.addEventListener('click', async () => {
   if (lastResult) {
     const success = await copyToClipboard(lastResult.text);
     if (success) {
-      showToast('Copied!');
+      showToast(getMessage('copied'));
     }
   }
 });
@@ -202,25 +187,21 @@ linkOptions.addEventListener('click', () => {
 });
 
 linkHistory.addEventListener('click', () => {
-  // TODO: Open history page or show history panel
   chrome.runtime.openOptionsPage();
 });
 
 // Listen for status updates from background
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === 'STATUS_CHANGED') {
-    updateStatusUI(message.payload.status);
+  if (message.type === MSG.STATUS_CHANGED) {
+    updateStatusUI(message.status);
   }
-  if (message.type === 'RESULT_READY') {
+  if (message.type === MSG.BROADCAST_RESULT) {
     updateStatusUI('idle');
-    updateResultUI({
-      text: message.payload.addedText,
-      timestamp: Date.now(),
-      source: 'chatgpt',
-    });
-    showToast('Dictation captured!');
+    updateResultUI(message.historyItem);
+    showToast(getMessage('copied'));
   }
 });
 
 // Initialize
+applyI18n();
 loadInitialState();

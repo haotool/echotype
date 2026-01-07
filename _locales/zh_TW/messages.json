@@ -1,0 +1,156 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "擴充套件名稱"
+  },
+  "extDescription": {
+    "message": "透過 ChatGPT Whisper 進行全網頁語音聽寫 - 使用快捷鍵隨處輸入",
+    "description": "擴充套件描述"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Popup 標題"
+  },
+  "statusReady": {
+    "message": "待命",
+    "description": "待命狀態"
+  },
+  "statusRecording": {
+    "message": "錄音中",
+    "description": "錄音狀態"
+  },
+  "statusProcessing": {
+    "message": "處理中",
+    "description": "處理狀態"
+  },
+  "statusError": {
+    "message": "錯誤",
+    "description": "錯誤狀態"
+  },
+  "btnStart": {
+    "message": "開始",
+    "description": "開始按鈕"
+  },
+  "btnPause": {
+    "message": "暫停",
+    "description": "暫停按鈕"
+  },
+  "btnSubmit": {
+    "message": "提交並擷取",
+    "description": "提交按鈕"
+  },
+  "btnCopy": {
+    "message": "複製到剪貼簿",
+    "description": "複製按鈕"
+  },
+  "latestResult": {
+    "message": "最近結果",
+    "description": "最近結果區塊標題"
+  },
+  "noResult": {
+    "message": "尚無聽寫記錄",
+    "description": "無結果訊息"
+  },
+  "settings": {
+    "message": "設定",
+    "description": "設定連結"
+  },
+  "history": {
+    "message": "歷史記錄",
+    "description": "歷史記錄連結"
+  },
+  "optionsTitle": {
+    "message": "EchoType 設定",
+    "description": "設定頁標題"
+  },
+  "optionsSubtitle": {
+    "message": "透過 ChatGPT 聽寫，在任何地方輸入",
+    "description": "設定頁副標題"
+  },
+  "settingsAutomation": {
+    "message": "自動化設定",
+    "description": "自動化設定區塊"
+  },
+  "autoCopy": {
+    "message": "完成後自動複製",
+    "description": "自動複製設定標籤"
+  },
+  "autoCopyDesc": {
+    "message": "聽寫完成後自動複製到系統剪貼簿",
+    "description": "自動複製描述"
+  },
+  "autoPaste": {
+    "message": "完成後自動貼上",
+    "description": "自動貼上設定標籤"
+  },
+  "autoPasteDesc": {
+    "message": "聽寫完成後自動貼上到原本的輸入框",
+    "description": "自動貼上描述"
+  },
+  "returnFocus": {
+    "message": "啟動後返回原頁",
+    "description": "返回焦點設定標籤"
+  },
+  "returnFocusDesc": {
+    "message": "開始聽寫後自動切回原本的分頁",
+    "description": "返回焦點描述"
+  },
+  "historySection": {
+    "message": "歷史記錄",
+    "description": "歷史記錄區塊標題"
+  },
+  "historyEmpty": {
+    "message": "沒有聽寫記錄",
+    "description": "空歷史訊息"
+  },
+  "clearAll": {
+    "message": "清除全部",
+    "description": "清除全部按鈕"
+  },
+  "shortcuts": {
+    "message": "快捷鍵",
+    "description": "快捷鍵區塊標題"
+  },
+  "shortcutStart": {
+    "message": "啟動聽寫",
+    "description": "啟動快捷鍵標籤"
+  },
+  "shortcutPause": {
+    "message": "暫停聽寫",
+    "description": "暫停快捷鍵標籤"
+  },
+  "shortcutSubmit": {
+    "message": "完成聽寫",
+    "description": "完成快捷鍵標籤"
+  },
+  "shortcutPaste": {
+    "message": "貼上結果",
+    "description": "貼上快捷鍵標籤"
+  },
+  "saved": {
+    "message": "已儲存",
+    "description": "已儲存確認"
+  },
+  "copied": {
+    "message": "已複製！",
+    "description": "已複製確認"
+  },
+  "justNow": {
+    "message": "剛才",
+    "description": "時間：剛才"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ 分鐘前",
+    "description": "時間：X 分鐘前",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "昨天",
+    "description": "時間：昨天"
+  }
+}

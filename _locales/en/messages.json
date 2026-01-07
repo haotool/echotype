@@ -1,0 +1,156 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Universal voice dictation via ChatGPT Whisper - dictate anywhere with keyboard shortcuts",
+    "description": "Extension description"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Popup title"
+  },
+  "statusReady": {
+    "message": "Ready",
+    "description": "Status when ready"
+  },
+  "statusRecording": {
+    "message": "Recording",
+    "description": "Status when recording"
+  },
+  "statusProcessing": {
+    "message": "Processing",
+    "description": "Status when processing"
+  },
+  "statusError": {
+    "message": "Error",
+    "description": "Status when error"
+  },
+  "btnStart": {
+    "message": "Start",
+    "description": "Start button"
+  },
+  "btnPause": {
+    "message": "Pause",
+    "description": "Pause button"
+  },
+  "btnSubmit": {
+    "message": "Submit & Capture",
+    "description": "Submit button"
+  },
+  "btnCopy": {
+    "message": "Copy to Clipboard",
+    "description": "Copy button"
+  },
+  "latestResult": {
+    "message": "Latest Result",
+    "description": "Latest result section title"
+  },
+  "noResult": {
+    "message": "No dictation yet",
+    "description": "No result message"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings link"
+  },
+  "history": {
+    "message": "History",
+    "description": "History link"
+  },
+  "optionsTitle": {
+    "message": "EchoType Settings",
+    "description": "Options page title"
+  },
+  "optionsSubtitle": {
+    "message": "Dictate anywhere using ChatGPT voice input",
+    "description": "Options page subtitle"
+  },
+  "settingsAutomation": {
+    "message": "Automation Settings",
+    "description": "Automation settings section"
+  },
+  "autoCopy": {
+    "message": "Auto Copy",
+    "description": "Auto copy setting label"
+  },
+  "autoCopyDesc": {
+    "message": "Automatically copy result to clipboard after completion",
+    "description": "Auto copy description"
+  },
+  "autoPaste": {
+    "message": "Auto Paste",
+    "description": "Auto paste setting label"
+  },
+  "autoPasteDesc": {
+    "message": "Automatically paste result to the original input field",
+    "description": "Auto paste description"
+  },
+  "returnFocus": {
+    "message": "Return Focus",
+    "description": "Return focus setting label"
+  },
+  "returnFocusDesc": {
+    "message": "Return to original tab after starting dictation",
+    "description": "Return focus description"
+  },
+  "historySection": {
+    "message": "History",
+    "description": "History section title"
+  },
+  "historyEmpty": {
+    "message": "No dictation history",
+    "description": "Empty history message"
+  },
+  "clearAll": {
+    "message": "Clear All",
+    "description": "Clear all button"
+  },
+  "shortcuts": {
+    "message": "Keyboard Shortcuts",
+    "description": "Shortcuts section title"
+  },
+  "shortcutStart": {
+    "message": "Start dictation",
+    "description": "Start shortcut label"
+  },
+  "shortcutPause": {
+    "message": "Pause dictation",
+    "description": "Pause shortcut label"
+  },
+  "shortcutSubmit": {
+    "message": "Submit dictation",
+    "description": "Submit shortcut label"
+  },
+  "shortcutPaste": {
+    "message": "Paste result",
+    "description": "Paste shortcut label"
+  },
+  "saved": {
+    "message": "Saved",
+    "description": "Saved confirmation"
+  },
+  "copied": {
+    "message": "Copied!",
+    "description": "Copied confirmation"
+  },
+  "justNow": {
+    "message": "Just now",
+    "description": "Time: just now"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ minutes ago",
+    "description": "Time: X minutes ago",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Yesterday",
+    "description": "Time: yesterday"
+  }
+}

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=320">
-  <title>EchoType</title>
+  <title data-i18n="popupTitle">EchoType</title>
   <style>
     /* Reset & Variables */
     :root {
@@ -303,7 +303,7 @@
     </div>
     <div class="status-badge idle" id="status">
       <span class="status-dot"></span>
-      <span id="status-text">Ready</span>
+      <span id="status-text" data-i18n="statusReady">Ready</span>
     </div>
   </header>
 
@@ -311,40 +311,40 @@
     <div class="actions">
       <button class="btn btn-primary" id="btn-start">
         <span class="btn-icon">▶️</span>
-        Start
+        <span data-i18n="btnStart">Start</span>
       </button>
       <button class="btn btn-secondary" id="btn-stop" disabled>
         <span class="btn-icon">⏸️</span>
-        Pause
+        <span data-i18n="btnPause">Pause</span>
       </button>
       <button class="btn btn-secondary btn-full" id="btn-submit">
         <span class="btn-icon">✅</span>
-        Submit & Capture
+        <span data-i18n="btnSubmit">Submit & Capture</span>
       </button>
     </div>
 
     <section class="result-section">
       <div class="result-header">
-        <span class="result-title">Latest Result</span>
+        <span class="result-title" data-i18n="latestResult">Latest Result</span>
         <span class="result-time" id="result-time"></span>
       </div>
       <p class="result-text" id="result-text">
-        <span class="result-empty">No dictation yet</span>
+        <span class="result-empty" data-i18n="noResult">No dictation yet</span>
       </p>
       <button class="btn btn-secondary copy-btn" id="btn-copy" disabled>
         <span class="btn-icon">📋</span>
-        Copy to Clipboard
+        <span data-i18n="btnCopy">Copy to Clipboard</span>
       </button>
     </section>
 
     <div class="shortcuts">
       <div class="shortcut">
         <span class="shortcut-key">⌃⇧1</span>
-        <span class="shortcut-label">Start</span>
+        <span class="shortcut-label" data-i18n="btnStart">Start</span>
       </div>
       <div class="shortcut">
         <span class="shortcut-key">⌃⇧2</span>
-        <span class="shortcut-label">Pause</span>
+        <span class="shortcut-label" data-i18n="btnPause">Pause</span>
       </div>
       <div class="shortcut">
         <span class="shortcut-key">⌃⇧3</span>
@@ -358,11 +358,11 @@
   </main>
 
   <footer class="footer">
-    <a class="footer-link" id="link-options">⚙️ Settings</a>
-    <a class="footer-link" id="link-history">📜 History</a>
+    <a class="footer-link" id="link-options">⚙️ <span data-i18n="settings">Settings</span></a>
+    <a class="footer-link" id="link-history">📜 <span data-i18n="history">History</span></a>
   </footer>
 
-  <div class="toast" id="toast">Copied!</div>
+  <div class="toast" id="toast" data-i18n="copied">Copied!</div>
 
   <script type="module" src="./index.ts"></script>
 </body>
