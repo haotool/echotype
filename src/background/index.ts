@@ -23,6 +23,7 @@ import {
 } from './tab-manager';
 import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
+import { updateBadge, showSuccessBadge, showErrorBadge, initBadge } from './badge';
 
 // ============================================================================
 // Initialization
@@ -38,10 +39,11 @@ let currentSettings = {
   historySize: 5,
 };
 
-// Initialize settings asynchronously
+// Initialize settings and badge asynchronously
 (async () => {
   currentSettings = await loadSettings();
   console.log('[EchoType] Settings loaded:', currentSettings);
+  await initBadge();
 })();
 
 // Listen for settings changes
@@ -77,6 +79,7 @@ async function handleStartDictation(): Promise<void> {
 
   if (result?.ok) {
     console.log('[EchoType] Dictation started');
+    await updateBadge('recording');
 
     // Return to previous tab if setting enabled
     if (currentSettings.returnFocusAfterStart) {
@@ -84,6 +87,7 @@ async function handleStartDictation(): Promise<void> {
     }
   } else {
     console.error('[EchoType] Failed to start dictation:', result?.error);
+    await showErrorBadge();
   }
 }
 
@@ -99,6 +103,7 @@ async function handlePauseDictation(): Promise<void> {
 
   if (result?.ok) {
     console.log('[EchoType] Dictation paused');
+    await updateBadge('idle');
   }
 }
 
@@ -107,6 +112,7 @@ async function handlePauseDictation(): Promise<void> {
  */
 async function handleSubmitDictation(): Promise<void> {
   console.log('[EchoType] Submit dictation command');
+  await updateBadge('processing');
 
   const result = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
     createMessage.cmdSubmit(true)
@@ -119,6 +125,7 @@ async function handleSubmitDictation(): Promise<void> {
 
   if (result.type === MSG.ERROR) {
     console.error('[EchoType] Dictation error:', result.error);
+    await showErrorBadge();
     return;
   }
 
@@ -131,10 +138,11 @@ async function handleSubmitDictation(): Promise<void> {
       clearOk: clear.ok,
     });
 
-    // Only process if we have added text
-    if (addedText) {
-      // Add to history
-      const historyItem = await addToHistory(addedText);
+// Only process if we have added text
+      if (addedText) {
+        // Add to history
+        const historyItem = await addToHistory(addedText);
+        await showSuccessBadge();
 
       // Auto-copy to clipboard if enabled
       if (currentSettings.autoCopyToClipboard) {
@@ -249,7 +257,21 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return false;
   }
 
-  // Handle history requests
+  // Handle status requests from popup
+  if (message.type === MSG.GET_STATUS) {
+    sendResponse({ status: 'idle' }); // TODO: track actual status
+    return false;
+  }
+
+  // Handle history requests from popup
+  if (message.type === MSG.GET_HISTORY) {
+    loadHistory().then((items) => {
+      sendResponse({ history: items });
+    });
+    return true;
+  }
+
+  // Handle history requests (legacy)
   if (message.type === MSG.HISTORY_GET) {
     loadHistory().then((items) => {
       sendResponse({ type: MSG.HISTORY_RESULT, items });
