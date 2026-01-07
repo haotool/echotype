@@ -56,6 +56,15 @@ export const test = base.extend<{
 export const expect = test.expect;
 
 /**
+ * Helper to navigate to extension popup page
+ */
+export async function openPopupPage(context: BrowserContext, extensionId: string) {
+  const page = await context.newPage();
+  await page.goto(`chrome-extension://${extensionId}/src/popup/index.html`);
+  return page;
+}
+
+/**
  * Helper to navigate to extension options page
  */
 export async function openOptionsPage(context: BrowserContext, extensionId: string) {

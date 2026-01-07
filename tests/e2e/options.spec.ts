@@ -79,15 +79,49 @@ test.describe('Options Page', () => {
 
   test('should show keyboard shortcuts section', async ({ context, extensionId }) => {
     const page = await openOptionsPage(context, extensionId);
-    
+
     // Check shortcuts section exists
-    const shortcutsSection = page.locator('text=Keyboard Shortcuts');
+    const shortcutsSection = page.locator('.card-title:has-text("Keyboard")');
     await expect(shortcutsSection).toBeVisible();
-    
-    // Check individual shortcuts are displayed
-    await expect(page.locator('text=Ctrl+Shift+1')).toBeVisible();
-    await expect(page.locator('text=Ctrl+Shift+2')).toBeVisible();
-    await expect(page.locator('text=Ctrl+Shift+3')).toBeVisible();
-    await expect(page.locator('text=Ctrl+Shift+4')).toBeVisible();
+
+    // Check shortcut items are displayed
+    const shortcutItems = page.locator('.shortcut-item');
+    await expect(shortcutItems).toHaveCount(4);
+
+    // Check individual shortcuts labels
+    await expect(page.locator('[data-i18n="shortcutStart"]')).toBeVisible();
+    await expect(page.locator('[data-i18n="shortcutPause"]')).toBeVisible();
+    await expect(page.locator('[data-i18n="shortcutSubmit"]')).toBeVisible();
+    await expect(page.locator('[data-i18n="shortcutPaste"]')).toBeVisible();
+  });
+
+  test('should show customize shortcuts button', async ({ context, extensionId }) => {
+    const page = await openOptionsPage(context, extensionId);
+
+    // Check customize button exists
+    const customizeBtn = page.locator('#customizeShortcuts');
+    await expect(customizeBtn).toBeVisible();
+    await expect(customizeBtn).toBeEnabled();
+  });
+
+  test('should display history section', async ({ context, extensionId }) => {
+    const page = await openOptionsPage(context, extensionId);
+
+    // Check history section exists
+    const historySection = page.locator('#historyList');
+    await expect(historySection).toBeVisible();
+
+    // Check clear button exists
+    const clearBtn = page.locator('#clearHistory');
+    await expect(clearBtn).toBeVisible();
+  });
+
+  test('should display version number', async ({ context, extensionId }) => {
+    const page = await openOptionsPage(context, extensionId);
+
+    // Check version is displayed
+    const versionText = page.locator('.version');
+    await expect(versionText).toBeVisible();
+    await expect(versionText).toContainText('v0.3.0');
   });
 });
