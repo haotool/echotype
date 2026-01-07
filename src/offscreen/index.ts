@@ -2,8 +2,9 @@
  * EchoType - Offscreen Document
  * @module offscreen
  *
- * Handles clipboard operations for the extension.
+ * Handles clipboard operations and audio playback for the extension.
  * MV3 Service Workers don't have DOM access.
+ * Updated: 2026-01-07T22:40:00+08:00
  */
 
 import { MSG } from '@shared/protocol';
@@ -17,6 +18,50 @@ import type {
 // ============================================================================
 
 console.log('[EchoType] Offscreen document loaded');
+
+// Audio context for sound generation
+let audioContext: AudioContext | null = null;
+
+function getAudioContext(): AudioContext {
+  if (!audioContext) {
+    audioContext = new AudioContext();
+  }
+  return audioContext;
+}
+
+// ============================================================================
+// Audio Operations
+// ============================================================================
+
+/**
+ * Play a simple beep sound using Web Audio API
+ */
+function playBeep(
+  frequency: number,
+  duration: number,
+  type: OscillatorType = 'sine'
+): void {
+  try {
+    const ctx = getAudioContext();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+    
+    // Fade out to avoid click
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + duration / 1000);
+  } catch (error) {
+    console.error('[EchoType] Audio playback error:', error);
+  }
+}
 
 // ============================================================================
 // Clipboard Operations
@@ -78,6 +123,14 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     });
 
     return true; // Keep channel open for async response
+  }
+
+  // Handle sound playback request
+  if (message.type === MSG.OFFSCREEN_PLAY_SOUND) {
+    const { frequency, duration, type } = message.data;
+    playBeep(frequency, duration, type);
+    sendResponse({ ok: true });
+    return false;
   }
 
   // Handle ping (for existence check)

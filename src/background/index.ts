@@ -24,6 +24,7 @@ import {
 import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
 import { updateBadge, showSuccessBadge, showErrorBadge, initBadge } from './badge';
+import { playStartSound, playSuccessSound, playErrorSound } from './audio';
 
 // ============================================================================
 // Initialization
@@ -80,6 +81,7 @@ async function handleStartDictation(): Promise<void> {
   if (result?.ok) {
     console.log('[EchoType] Dictation started');
     await updateBadge('recording');
+    await playStartSound();
 
     // Return to previous tab if setting enabled
     if (currentSettings.returnFocusAfterStart) {
@@ -88,6 +90,7 @@ async function handleStartDictation(): Promise<void> {
   } else {
     console.error('[EchoType] Failed to start dictation:', result?.error);
     await showErrorBadge();
+    await playErrorSound();
   }
 }
 
@@ -126,6 +129,7 @@ async function handleSubmitDictation(): Promise<void> {
   if (result.type === MSG.ERROR) {
     console.error('[EchoType] Dictation error:', result.error);
     await showErrorBadge();
+    await playErrorSound();
     return;
   }
 
@@ -143,6 +147,7 @@ async function handleSubmitDictation(): Promise<void> {
         // Add to history
         const historyItem = await addToHistory(addedText);
         await showSuccessBadge();
+        await playSuccessSound();
 
       // Auto-copy to clipboard if enabled
       if (currentSettings.autoCopyToClipboard) {
