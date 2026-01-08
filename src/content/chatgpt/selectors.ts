@@ -266,6 +266,7 @@ export function performHealthCheck(): HealthCheckResult {
   const startBtnFound = Boolean(findStartButton());
   const stopBtnFound = Boolean(findStopButton());
   const submitBtnFound = Boolean(findSubmitButton());
+  const dictationControlsFound = stopBtnFound || submitBtnFound;
 
   // Check composer (required)
   if (!composerFound) {
@@ -284,9 +285,14 @@ export function performHealthCheck(): HealthCheckResult {
     warnings.push('dictation buttons not found (login may be required)');
   }
 
-  // For MVP, we only require composer to be found
-  // Dictation buttons are optional (user might need to log in)
-  const healthy = composerFound;
+  // If dictation is active, composer may be replaced by waveform canvas.
+  // Consider health OK when dictation controls are present.
+  if (!composerFound && dictationControlsFound) {
+    warnings.push('composer hidden during dictation');
+  }
+
+  // For MVP, we require composer unless dictation controls indicate active dictation
+  const healthy = composerFound || dictationControlsFound;
 
   return {
     healthy,
@@ -330,6 +336,10 @@ export function isVoiceInputAvailable(): boolean {
 export function clickStartButton(): boolean {
   const el = findStartButton();
   if (el) {
+    if (el.disabled || el.getAttribute('aria-disabled') === 'true') {
+      log('Start button is disabled');
+      return false;
+    }
     log('Clicking start button');
     el.click();
     return true;
@@ -346,6 +356,10 @@ export function clickStartButton(): boolean {
 export function clickStopButton(): boolean {
   const el = findStopButton();
   if (el) {
+    if (el.disabled || el.getAttribute('aria-disabled') === 'true') {
+      log('Stop button is disabled');
+      return false;
+    }
     log('Clicking stop button');
     el.click();
     return true;
@@ -362,6 +376,10 @@ export function clickStopButton(): boolean {
 export function clickSubmitButton(): boolean {
   const el = findSubmitButton();
   if (el) {
+    if (el.disabled || el.getAttribute('aria-disabled') === 'true') {
+      log('Submit button is disabled');
+      return false;
+    }
     log('Clicking submit button');
     el.click();
     return true;

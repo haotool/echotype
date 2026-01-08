@@ -19,6 +19,7 @@ import type { ResultReadyPayload, ErrorPayload, StatusChangedPayload } from '@sh
 import {
   detectStatus,
   performHealthCheck,
+  buttonExists,
   clickStartButton,
   clickStopButton,
   clickSubmitButton,
@@ -146,11 +147,16 @@ export function pauseDictation(): { ok: boolean } {
 export async function submitDictation(): Promise<ResultReadyPayload | ErrorPayload> {
   // Health check
   let health = performHealthCheck();
+  const submitAvailable = buttonExists('submit') || buttonExists('stop');
   if (!health.healthy && health.missing.includes('composer')) {
-    await waitForComposer();
-    health = performHealthCheck();
+    // During active dictation, the composer can be replaced by a waveform canvas.
+    // Allow submit to proceed if dictation controls are present.
+    if (!submitAvailable) {
+      await waitForComposer();
+      health = performHealthCheck();
+    }
   }
-  if (!health.healthy) {
+  if (!health.healthy && !submitAvailable) {
     return createMessage.error(health.error!);
   }
 

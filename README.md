@@ -3,7 +3,7 @@
 > Universal Voice Dictation Chrome Extension powered by ChatGPT Whisper
 
 [![CI](https://github.com/azlife-eth/EchoType/actions/workflows/ci.yml/badge.svg)](https://github.com/azlife-eth/EchoType/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/Version-0.5.0-brightgreen)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.5.2-brightgreen)](CHANGELOG.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
 [![Manifest V3](https://img.shields.io/badge/Chrome-MV3-green)](https://developer.chrome.com/docs/extensions/mv3/)
 [![Tests](https://img.shields.io/badge/Unit%20Tests-86%20passing-success)](tests/unit/)
