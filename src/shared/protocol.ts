@@ -55,6 +55,11 @@ export const MSG = {
   // Popup
   GET_STATUS: 'GET_STATUS',
   GET_HISTORY: 'GET_HISTORY',
+
+  // Developer tools
+  INSPECT_DOM: 'INSPECT_DOM',
+  DEV_FORWARD: 'DEV_FORWARD',
+  DEV_HANDSHAKE: 'DEV_HANDSHAKE',
 } as const;
 
 export type MessageType = (typeof MSG)[keyof typeof MSG];
@@ -85,6 +90,18 @@ export interface CmdGetStatusPayload {
   type: typeof MSG.CMD_GET_STATUS;
 }
 
+export interface InspectDomPayload {
+  type: typeof MSG.INSPECT_DOM;
+}
+
+export interface DevHandshakePayload {
+  type: typeof MSG.DEV_HANDSHAKE;
+}
+
+export interface DevForwardPayload {
+  type: typeof MSG.DEV_FORWARD;
+  message: { type: string; [key: string]: unknown };
+}
 // --- Results ---
 
 export interface ResultReadyPayload {
@@ -171,7 +188,9 @@ export type CommandMessage =
   | CmdStartPayload
   | CmdPausePayload
   | CmdSubmitPayload
-  | CmdGetStatusPayload;
+  | CmdGetStatusPayload
+  | InspectDomPayload
+  | DevForwardPayload;
 
 export type ResultMessage =
   | ResultReadyPayload
@@ -208,7 +227,9 @@ export function isCommandMessage(msg: AnyMessage): msg is CommandMessage {
     msg.type === MSG.CMD_START ||
     msg.type === MSG.CMD_PAUSE ||
     msg.type === MSG.CMD_SUBMIT ||
-    msg.type === MSG.CMD_GET_STATUS
+    msg.type === MSG.CMD_GET_STATUS ||
+    msg.type === MSG.INSPECT_DOM ||
+    msg.type === MSG.DEV_FORWARD
   );
 }
 
@@ -241,6 +262,19 @@ export const createMessage = {
 
   cmdGetStatus: (): CmdGetStatusPayload => ({
     type: MSG.CMD_GET_STATUS,
+  }),
+
+  inspectDom: (): InspectDomPayload => ({
+    type: MSG.INSPECT_DOM,
+  }),
+
+  devHandshake: (): DevHandshakePayload => ({
+    type: MSG.DEV_HANDSHAKE,
+  }),
+
+  devForward: (message: { type: string; [key: string]: unknown }): DevForwardPayload => ({
+    type: MSG.DEV_FORWARD,
+    message,
   }),
 
   resultReady: (

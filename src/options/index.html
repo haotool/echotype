@@ -790,8 +790,28 @@
             <span class="debug-value" id="debug-chatgpt-tab">—</span>
           </div>
           <div class="debug-row">
+            <span class="debug-label">ChatGPT URL</span>
+            <span class="debug-value" id="debug-chatgpt-url">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">Content Script</span>
+            <span class="debug-value" id="debug-content-script">—</span>
+          </div>
+          <div class="debug-row">
             <span class="debug-label">Health Check</span>
             <span class="debug-value" id="debug-health">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">Service Worker</span>
+            <span class="debug-value" id="debug-sw-health">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">Uptime</span>
+            <span class="debug-value" id="debug-uptime">—</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">Heartbeat</span>
+            <span class="debug-value" id="debug-heartbeat">—</span>
           </div>
           <div class="debug-row">
             <span class="debug-label">Last Error</span>
@@ -800,6 +820,7 @@
         </div>
         <div class="debug-actions">
           <button class="btn-debug" id="btn-inspect-dom">Inspect DOM</button>
+          <button class="btn-debug" id="btn-handshake">Check Content Script</button>
           <button class="btn-debug" id="btn-health-check">Run Health Check</button>
           <button class="btn-debug" id="btn-clear-storage">Clear Storage</button>
           <button class="btn-debug" id="btn-reload-ext">Reload Extension</button>

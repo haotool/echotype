@@ -20,6 +20,7 @@ import {
   sendToChatGPTTab,
   returnToPreviousTab,
   getCurrentTab,
+  waitForTabComplete,
 } from './tab-manager';
 import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
@@ -33,6 +34,53 @@ import { startHeartbeat, getLastHeartbeat, isServiceWorkerHealthy, getFormattedU
 // ============================================================================
 
 console.log('[EchoType] Background service worker started');
+
+const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
+const CHATGPT_MATCH = 'https://chatgpt.com/*';
+
+function getChatGPTContentScriptFile(): string | null {
+  const manifest = chrome.runtime.getManifest();
+  const scripts = manifest.content_scripts ?? [];
+  const entry = scripts.find((script) => script.matches?.includes(CHATGPT_MATCH));
+  return entry?.js?.[0] ?? null;
+}
+
+async function isChatGPTContentScriptReady(tabId: number): Promise<boolean> {
+  try {
+    const result = await chrome.scripting.executeScript({
+      target: { tabId },
+      func: () => Boolean((window as { __ECHOTYPE_CONTENT_SCRIPT_LOADED__?: boolean }).__ECHOTYPE_CONTENT_SCRIPT_LOADED__),
+    });
+    return Boolean(result[0]?.result);
+  } catch (error) {
+    console.warn('[EchoType] Content script probe failed:', error);
+    return false;
+  }
+}
+
+async function ensureChatGPTContentScript(tabId: number): Promise<boolean> {
+  const file = getChatGPTContentScriptFile();
+  if (!file) {
+    console.warn('[EchoType] No ChatGPT content script entry in manifest');
+    return false;
+  }
+
+  try {
+    const ready = await isChatGPTContentScriptReady(tabId);
+    if (ready) {
+      return true;
+    }
+
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: [file],
+    });
+    return true;
+  } catch (error) {
+    console.error('[EchoType] Failed to inject content script:', error);
+    return false;
+  }
+}
 
 // Current settings (loaded async)
 let currentSettings = {
@@ -311,6 +359,56 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         uptime,
         timestamp: Date.now(),
       });
+    })();
+    return true;
+  }
+
+  // Dev-only forwarder (options -> background -> ChatGPT content script)
+  if (message.type === MSG.DEV_FORWARD) {
+    (async () => {
+      const result = await chrome.storage.local.get(STORAGE_KEY_DEV_MODE);
+      if (result[STORAGE_KEY_DEV_MODE] !== true) {
+        sendResponse({ ok: false, error: 'dev-mode-disabled' });
+        return;
+      }
+
+      const payload = message.message;
+      if (
+        !payload ||
+        (payload.type !== MSG.INSPECT_DOM && payload.type !== MSG.DEV_HANDSHAKE)
+      ) {
+        sendResponse({ ok: false, error: 'unsupported-dev-message' });
+        return;
+      }
+
+      const tabInfo = await ensureChatGPTTab(false);
+      if (!tabInfo) {
+        sendResponse({ ok: false, error: 'no-chatgpt-tab' });
+        return;
+      }
+
+      const ready = await waitForTabComplete(tabInfo.tabId);
+      if (ready) {
+        await ensureChatGPTContentScript(tabInfo.tabId);
+      }
+
+      try {
+        const response = await chrome.tabs.sendMessage(tabInfo.tabId, payload);
+        sendResponse({ ok: true, tabId: tabInfo.tabId, response });
+      } catch (error) {
+        const readyRetry = ready || (await waitForTabComplete(tabInfo.tabId));
+        if (!readyRetry) {
+          sendResponse({ ok: false, error: 'chatgpt-tab-not-ready' });
+          return;
+        }
+        await ensureChatGPTContentScript(tabInfo.tabId);
+        try {
+          const response = await chrome.tabs.sendMessage(tabInfo.tabId, payload);
+          sendResponse({ ok: true, tabId: tabInfo.tabId, response });
+        } catch (retryError) {
+          sendResponse({ ok: false, error: String(retryError) });
+        }
+      }
     })();
     return true;
   }

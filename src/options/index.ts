@@ -8,7 +8,7 @@
 
 import type { EchoTypeSettings, HistoryItem } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/types';
-import { MSG } from '@shared/protocol';
+import { MSG, createMessage } from '@shared/protocol';
 
 // ============================================================================
 // Constants
@@ -45,9 +45,15 @@ const elements = {
   devSection: document.getElementById('devSection') as HTMLElement,
   debugExtId: document.getElementById('debug-ext-id') as HTMLElement,
   debugChatgptTab: document.getElementById('debug-chatgpt-tab') as HTMLElement,
+  debugChatgptUrl: document.getElementById('debug-chatgpt-url') as HTMLElement,
+  debugContentScript: document.getElementById('debug-content-script') as HTMLElement,
   debugHealth: document.getElementById('debug-health') as HTMLElement,
+  debugSwHealth: document.getElementById('debug-sw-health') as HTMLElement,
+  debugUptime: document.getElementById('debug-uptime') as HTMLElement,
+  debugHeartbeat: document.getElementById('debug-heartbeat') as HTMLElement,
   debugError: document.getElementById('debug-error') as HTMLElement,
   btnInspectDom: document.getElementById('btn-inspect-dom') as HTMLButtonElement,
+  btnHandshake: document.getElementById('btn-handshake') as HTMLButtonElement,
   btnHealthCheck: document.getElementById('btn-health-check') as HTMLButtonElement,
   btnClearStorage: document.getElementById('btn-clear-storage') as HTMLButtonElement,
   btnReloadExt: document.getElementById('btn-reload-ext') as HTMLButtonElement,
@@ -330,19 +336,22 @@ async function updateDebugInfo(): Promise<void> {
       elements.debugChatgptTab.textContent = `Found (${tabs.length} tab${tabs.length > 1 ? 's' : ''})`;
       elements.debugChatgptTab.classList.remove('error');
       elements.debugChatgptTab.classList.add('success');
+      elements.debugChatgptUrl.textContent = tabs[0].url || 'Unknown';
     } else {
       elements.debugChatgptTab.textContent = 'Not found';
       elements.debugChatgptTab.classList.add('error');
       elements.debugChatgptTab.classList.remove('success');
+      elements.debugChatgptUrl.textContent = '—';
     }
   } catch {
     elements.debugChatgptTab.textContent = 'Error';
     elements.debugChatgptTab.classList.add('error');
+    elements.debugChatgptUrl.textContent = '—';
   }
   
   // Health check
   try {
-    const response = await chrome.runtime.sendMessage({ type: MSG.CMD_GET_STATUS });
+    const response = await chrome.runtime.sendMessage({ type: MSG.GET_STATUS });
     if (response?.status) {
       elements.debugHealth.textContent = response.status;
       elements.debugHealth.classList.remove('error');
@@ -356,6 +365,35 @@ async function updateDebugInfo(): Promise<void> {
     elements.debugHealth.classList.add('error');
     elements.debugError.textContent = String(error);
   }
+
+  // Service worker health
+  try {
+    const response = await chrome.runtime.sendMessage({ type: 'GET_HEALTH' });
+    if (response?.healthy === true) {
+      elements.debugSwHealth.textContent = 'Healthy';
+      elements.debugSwHealth.classList.remove('error');
+      elements.debugSwHealth.classList.add('success');
+    } else {
+      elements.debugSwHealth.textContent = 'Unhealthy';
+      elements.debugSwHealth.classList.add('error');
+    }
+
+    elements.debugUptime.textContent = response?.uptime || 'Unknown';
+
+    if (response?.heartbeat?.timestamp) {
+      const ageMs = Date.now() - response.heartbeat.timestamp;
+      const ageSeconds = Math.max(0, Math.floor(ageMs / 1000));
+      elements.debugHeartbeat.textContent = `${ageSeconds}s ago (#${response.heartbeat.heartbeatCount ?? 0})`;
+    } else {
+      elements.debugHeartbeat.textContent = 'Unknown';
+    }
+  } catch (error) {
+    elements.debugSwHealth.textContent = 'Failed';
+    elements.debugSwHealth.classList.add('error');
+    elements.debugUptime.textContent = 'Unknown';
+    elements.debugHeartbeat.textContent = 'Unknown';
+    elements.debugError.textContent = String(error);
+  }
 }
 
 async function runHealthCheck(): Promise<void> {
@@ -366,16 +404,48 @@ async function runHealthCheck(): Promise<void> {
 
 async function inspectDom(): Promise<void> {
   try {
-    const tabs = await chrome.tabs.query({ url: 'https://chatgpt.com/*' });
-    if (tabs.length > 0 && tabs[0].id) {
-      await chrome.tabs.sendMessage(tabs[0].id, { type: 'INSPECT_DOM' });
+    const response = await chrome.runtime.sendMessage(
+      createMessage.devForward({ type: MSG.INSPECT_DOM })
+    );
+    if (response?.ok) {
       showToast('Check ChatGPT console for DOM inspection');
+      elements.debugError.textContent = 'None';
     } else {
-      showToast('No ChatGPT tab found');
+      const error = response?.error ?? 'unknown';
+      showToast(`Inspect DOM failed: ${error}`);
+      elements.debugError.textContent = String(error);
     }
   } catch (error) {
     showToast('Failed to inspect DOM');
     console.error('[EchoType] Inspect DOM error:', error);
+    elements.debugError.textContent = String(error);
+  }
+}
+
+async function runHandshake(): Promise<void> {
+  try {
+    const response = await chrome.runtime.sendMessage(
+      createMessage.devForward({ type: MSG.DEV_HANDSHAKE })
+    );
+    if (response?.ok && response?.response?.ok) {
+      const readyState = response.response.readyState || 'unknown';
+      elements.debugContentScript.textContent = `OK (${readyState})`;
+      elements.debugContentScript.classList.remove('error');
+      elements.debugContentScript.classList.add('success');
+      elements.debugError.textContent = 'None';
+      showToast('Content script is active');
+    } else {
+      const error = response?.error ?? 'no-response';
+      elements.debugContentScript.textContent = `Failed (${error})`;
+      elements.debugContentScript.classList.add('error');
+      elements.debugError.textContent = String(error);
+      showToast(`Handshake failed: ${error}`);
+    }
+  } catch (error) {
+    elements.debugContentScript.textContent = 'Failed';
+    elements.debugContentScript.classList.add('error');
+    elements.debugError.textContent = String(error);
+    showToast('Handshake failed');
   }
 }
 
@@ -433,6 +503,7 @@ function setupEventListeners(): void {
   // Developer Mode
   elements.devMode.addEventListener('change', toggleDevMode);
   elements.btnInspectDom?.addEventListener('click', inspectDom);
+  elements.btnHandshake?.addEventListener('click', runHandshake);
   elements.btnHealthCheck?.addEventListener('click', runHealthCheck);
   elements.btnClearStorage?.addEventListener('click', clearStorage);
   elements.btnReloadExt?.addEventListener('click', reloadExtension);
