@@ -5,6 +5,25 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-01-09
+
+### 🚀 Major Upgrades
+- **Vite 7** - Upgraded from Vite 6.4.1 to 7.3.1
+  - Faster builds with improved performance
+  - Better tree-shaking and code splitting
+  - Preparation for future Rolldown migration
+- **@types/chrome** - Upgraded from 0.0.287 to 0.1.32
+  - Fixed TypeScript errors with stricter type definitions
+  - Added explicit type assertions for storage API results
+- **eslint-config-prettier** - Upgraded from 9.1.2 to 10.1.8
+
+### 🔧 Technical Improvements
+- Improved TypeScript type safety in storage operations
+- Simplified tab change info type signature
+- All 88 unit tests and 26 E2E tests passing
+
+---
+
 ## [0.8.0] - 2026-01-09
 
 ### 🐛 Critical Bug Fixes
