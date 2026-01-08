@@ -22,6 +22,7 @@ import {
   clickStartButton,
   clickStopButton,
   clickSubmitButton,
+  waitForComposer,
 } from './selectors';
 import { readComposerText, captureAfterSubmit, cancelCapture } from './capture';
 import { computeAddedText } from './diff';
@@ -90,7 +91,11 @@ export async function startDictation(): Promise<{
   baseline: string;
 }> {
   // Health check
-  const health = performHealthCheck();
+  let health = performHealthCheck();
+  if (!health.healthy && health.missing.includes('composer')) {
+    await waitForComposer();
+    health = performHealthCheck();
+  }
   if (!health.healthy) {
     return { ok: false, error: health.error, baseline: '' };
   }
@@ -140,7 +145,11 @@ export function pauseDictation(): { ok: boolean } {
  */
 export async function submitDictation(): Promise<ResultReadyPayload | ErrorPayload> {
   // Health check
-  const health = performHealthCheck();
+  let health = performHealthCheck();
+  if (!health.healthy && health.missing.includes('composer')) {
+    await waitForComposer();
+    health = performHealthCheck();
+  }
   if (!health.healthy) {
     return createMessage.error(health.error!);
   }

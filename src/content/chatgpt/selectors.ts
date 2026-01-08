@@ -82,9 +82,13 @@ export const SELECTORS = {
   /** Alternative composer selectors */
   composerAlt: [
     '#prompt-textarea',
+    '[data-testid="prompt-textarea"]',
+    '[data-testid="prompt-textarea"] [contenteditable="true"]',
     '[contenteditable="true"][data-virtualkeyboard]',
     'textarea[name="prompt-textarea"]',
+    'textarea[data-testid="prompt-textarea"]',
     '.ProseMirror[contenteditable="true"]',
+    'div[role="textbox"][contenteditable="true"]',
   ],
 } as const;
 
@@ -137,7 +141,40 @@ export function getComposerElement(): HTMLElement | null {
 export function readComposerRawText(): string {
   const el = getComposerElement();
   if (!el) return '';
+  if (el instanceof HTMLTextAreaElement) {
+    return el.value || '';
+  }
   return el.innerText || el.textContent || '';
+}
+
+/**
+ * Wait for the composer element to appear.
+ *
+ * @param timeoutMs - Timeout in milliseconds
+ * @returns True if composer is found before timeout
+ */
+export async function waitForComposer(timeoutMs = 3000): Promise<boolean> {
+  if (getComposerElement()) return true;
+
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      observer.disconnect();
+      resolve(false);
+    }, timeoutMs);
+
+    const observer = new MutationObserver(() => {
+      if (getComposerElement()) {
+        clearTimeout(timeout);
+        observer.disconnect();
+        resolve(true);
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  });
 }
 
 // ============================================================================
@@ -341,8 +378,8 @@ export function clickSubmitButton(): boolean {
  * Inspect DOM for dictation-related elements.
  * Useful for debugging selector issues.
  */
-export function inspectDOM(): void {
-  if (!DEBUG) return;
+export function inspectDOM(force = false): void {
+  if (!DEBUG && !force) return;
   
   console.group('[EchoType] DOM Inspection');
   
