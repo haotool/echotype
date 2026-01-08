@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 3.4.0 | Updated: 2026-01-09T02:13:00+08:00
+> Version: 3.5.0 | Updated: 2026-01-09T02:17:00+08:00
 
 ## 🎯 Project Overview
 
