@@ -5,6 +5,23 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.4] - 2026-01-09
+
+### 🧪 Test Coverage Improvements
+- **Unit Tests** - Increased from 88 to 99 tests
+- **Coverage** - Improved from 59% to 80.76%
+- Added tests for DOM utilities (`$`, `exists`, `safeClick`)
+- Added tests for `applyI18n` function (i18n-placeholder, i18n-title)
+
+### 📊 Metrics
+- 99 unit tests passing
+- 26 E2E tests passing
+- 80.76% statement coverage
+- 91.30% branch coverage
+- 90.69% function coverage
+
+---
+
 ## [0.8.3] - 2026-01-09
 
 ### 🚀 Dependency Upgrades

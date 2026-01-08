@@ -15,6 +15,9 @@ import {
   debounce,
   isNonEmptyString,
   assert,
+  $,
+  exists,
+  safeClick,
 } from '@shared/utils';
 
 describe('normalizeText', () => {
@@ -218,5 +221,78 @@ describe('assert', () => {
     expect(() => assert(false, 'test message')).toThrow(
       'Assertion failed: test message'
     );
+  });
+});
+
+describe('DOM utilities', () => {
+  // Note: These tests require a DOM environment (jsdom)
+  describe('$', () => {
+    beforeEach(() => {
+      document.body.innerHTML = '<div id="test"><span class="child">Hello</span></div>';
+    });
+
+    afterEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    it('should query elements from document', () => {
+      const el = $('#test');
+      expect(el).not.toBeNull();
+      expect(el?.id).toBe('test');
+    });
+
+    it('should query elements from a root element', () => {
+      const root = document.getElementById('test');
+      const el = $('.child', root!);
+      expect(el).not.toBeNull();
+      expect(el?.textContent).toBe('Hello');
+    });
+
+    it('should return null for non-existent elements', () => {
+      const el = $('#non-existent');
+      expect(el).toBeNull();
+    });
+  });
+
+  describe('exists', () => {
+    beforeEach(() => {
+      document.body.innerHTML = '<div id="test"></div>';
+    });
+
+    afterEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    it('should return true for existing elements', () => {
+      expect(exists('#test')).toBe(true);
+    });
+
+    it('should return false for non-existing elements', () => {
+      expect(exists('#non-existent')).toBe(false);
+    });
+  });
+
+  describe('safeClick', () => {
+    beforeEach(() => {
+      document.body.innerHTML = '<button id="btn">Click me</button>';
+    });
+
+    afterEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    it('should click an existing element', () => {
+      const clicked = vi.fn();
+      document.getElementById('btn')!.addEventListener('click', clicked);
+
+      const result = safeClick('#btn');
+      expect(result).toBe(true);
+      expect(clicked).toHaveBeenCalled();
+    });
+
+    it('should return false for non-existing elements', () => {
+      const result = safeClick('#non-existent');
+      expect(result).toBe(false);
+    });
   });
 });

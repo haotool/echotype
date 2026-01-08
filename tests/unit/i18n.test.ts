@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { getMessage, getUILanguage, formatRelativeTime } from '../../src/shared/i18n';
+import { getMessage, getUILanguage, formatRelativeTime, applyI18n } from '../../src/shared/i18n';
 
 describe('i18n utilities', () => {
   describe('getMessage', () => {
@@ -128,6 +128,72 @@ describe('i18n utilities', () => {
       const now = Date.now();
       const result = formatRelativeTime(now - 3 * 24 * 60 * 60 * 1000); // 3 days ago
       expect(result).toBe('3d ago');
+    });
+  });
+
+  describe('applyI18n', () => {
+    beforeEach(() => {
+      vi.stubGlobal('chrome', {
+        i18n: {
+          getMessage: vi.fn((key: string) => {
+            const messages: Record<string, string> = {
+              btnStart: 'Start Recording',
+              btnPause: 'Stop Recording',
+              placeholder: 'Enter text here',
+              tooltip: 'Click to start',
+            };
+            return messages[key] || key;
+          }),
+        },
+      });
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      document.body.innerHTML = '';
+    });
+
+    it('should apply i18n to elements with data-i18n attribute', () => {
+      document.body.innerHTML = `
+        <span data-i18n="btnStart">Default</span>
+        <button data-i18n="btnPause">Default</button>
+      `;
+
+      applyI18n();
+
+      expect(document.querySelector('[data-i18n="btnStart"]')?.textContent).toBe('Start Recording');
+      expect(document.querySelector('[data-i18n="btnPause"]')?.textContent).toBe('Stop Recording');
+    });
+
+    it('should apply i18n to placeholder attributes', () => {
+      document.body.innerHTML = `
+        <input type="text" data-i18n-placeholder="placeholder" placeholder="Default">
+      `;
+
+      applyI18n();
+
+      const input = document.querySelector('input') as HTMLInputElement;
+      expect(input.placeholder).toBe('Enter text here');
+    });
+
+    it('should apply i18n to title attributes', () => {
+      document.body.innerHTML = `
+        <button data-i18n-title="tooltip" title="Default">Button</button>
+      `;
+
+      applyI18n();
+
+      const button = document.querySelector('button');
+      expect(button?.getAttribute('title')).toBe('Click to start');
+    });
+
+    it('should handle non-input elements for placeholder gracefully', () => {
+      document.body.innerHTML = `
+        <div data-i18n-placeholder="placeholder">Not an input</div>
+      `;
+
+      // Should not throw
+      expect(() => applyI18n()).not.toThrow();
     });
   });
 });

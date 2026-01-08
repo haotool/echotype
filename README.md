@@ -3,13 +3,13 @@
 > Universal Voice Dictation Chrome Extension powered by ChatGPT Whisper
 
 [![CI](https://github.com/haotool/echotype/actions/workflows/ci.yml/badge.svg)](https://github.com/haotool/echotype/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/Version-0.8.3-brightgreen)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.8.4-brightgreen)](CHANGELOG.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF)](https://vite.dev/)
 [![Manifest V3](https://img.shields.io/badge/Chrome-MV3-green)](https://developer.chrome.com/docs/extensions/mv3/)
-[![Tests](https://img.shields.io/badge/Unit%20Tests-88%20passing-success)](tests/unit/)
+[![Tests](https://img.shields.io/badge/Unit%20Tests-99%20passing-success)](tests/unit/)
 [![E2E Tests](https://img.shields.io/badge/E2E%20Tests-26%20passing-success)](tests/e2e/)
-[![Coverage](https://img.shields.io/badge/Coverage-75%25-yellow)](coverage/)
+[![Coverage](https://img.shields.io/badge/Coverage-80%25-brightgreen)](coverage/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 ## 📋 Overview
