@@ -88,9 +88,9 @@ test.describe('Options Page', () => {
     const shortcutsCard = page.locator('.card').filter({ hasText: 'Keyboard Shortcuts' });
     await expect(shortcutsCard).toBeVisible();
 
-    // Check shortcut items are displayed
+    // Check shortcut items are displayed (3 shortcuts: toggle, cancel, paste)
     const shortcutItems = page.locator('.shortcut-item');
-    await expect(shortcutItems).toHaveCount(4);
+    await expect(shortcutItems).toHaveCount(3);
   });
 
   test('should show customize shortcuts button', async ({ context, extensionId }) => {
