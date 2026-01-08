@@ -158,7 +158,11 @@ pnpm format
 
 ## 📝 License
 
-MIT © 2026 EchoType
+[MIT](LICENSE) © 2026 [haotool](https://github.com/haotool)
+
+## ⚠️ Disclaimer
+
+This project is **NOT** affiliated with OpenAI or ChatGPT. See [DISCLAIMER.md](DISCLAIMER.md) for details.
 
 ---
 
