@@ -44,10 +44,9 @@ const elements = {
   errorTitle: document.getElementById('error-title') as HTMLElement,
   errorMessage: document.getElementById('error-message') as HTMLElement,
   
-  // Actions
-  btnStart: document.getElementById('btn-start') as HTMLButtonElement,
-  btnStop: document.getElementById('btn-stop') as HTMLButtonElement,
-  btnSubmit: document.getElementById('btn-submit') as HTMLButtonElement,
+  // Actions (new toggle/cancel design)
+  btnToggle: document.getElementById('btn-toggle') as HTMLButtonElement,
+  btnCancel: document.getElementById('btn-cancel') as HTMLButtonElement,
   btnCopy: document.getElementById('btn-copy') as HTMLButtonElement,
   
   // Result
@@ -141,17 +140,42 @@ function updateStatusUI(status: DictationStatus): void {
   const isActive = status === 'recording' || status === 'listening';
   elements.waveform.classList.toggle('active', isActive);
   
-  // Update button states
+  // Determine if recording
   const isRecording = status === 'recording' || status === 'listening';
-  elements.btnStart.disabled = isRecording || status === 'processing';
-  elements.btnStop.disabled = !isRecording;
-  elements.btnSubmit.disabled = !isRecording;
+  const isProcessing = status === 'processing';
   
-  // Update start button style for recording state
+  // Update toggle button based on state
   if (isRecording) {
-    elements.btnStart.classList.add('btn-recording');
+    // Recording state: Show "Submit" (green)
+    elements.btnToggle.classList.remove('btn-record-ready');
+    elements.btnToggle.classList.add('btn-submit-ready');
+    elements.btnToggle.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span class="btn-text">Submit</span>
+    `;
+    elements.btnToggle.disabled = false;
+    
+    // Show cancel button
+    elements.btnCancel.style.display = 'inline-flex';
+    elements.btnCancel.disabled = false;
   } else {
-    elements.btnStart.classList.remove('btn-recording');
+    // Idle state: Show "Record" (red)
+    elements.btnToggle.classList.remove('btn-submit-ready');
+    elements.btnToggle.classList.add('btn-record-ready');
+    elements.btnToggle.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" x2="12" y1="19" y2="22"/>
+      </svg>
+      <span class="btn-text">Record</span>
+    `;
+    elements.btnToggle.disabled = isProcessing;
+    
+    // Hide cancel button
+    elements.btnCancel.style.display = 'none';
   }
   
   // Hide error card on successful status
@@ -264,6 +288,7 @@ async function loadInitialState(): Promise<void> {
       type: MSG.CMD_GET_STATUS,
     });
     if (statusResponse?.status) {
+      currentStatus = statusResponse.status;
       updateStatusUI(statusResponse.status);
     }
 
@@ -284,51 +309,58 @@ async function loadInitialState(): Promise<void> {
 // Event Handlers
 // ============================================================================
 
+// Track current status for toggle logic
+let currentStatus: DictationStatus = 'idle';
+
 function setupEventListeners(): void {
   // Theme toggle
   elements.btnTheme.addEventListener('click', toggleTheme);
   
-  // Start dictation
-  elements.btnStart.addEventListener('click', async () => {
-    try {
-      hideError();
-      const response = await sendMessage<{ ok: boolean; error?: { message: string } }>(
-        createMessage.cmdStart()
-      );
-      if (!response?.ok && response?.error) {
-        showError('Start Failed', response.error.message);
+  // Toggle button: Start if idle, Submit if recording
+  elements.btnToggle.addEventListener('click', async () => {
+    const isRecording = currentStatus === 'recording' || currentStatus === 'listening';
+    
+    if (isRecording) {
+      // Submit dictation
+      try {
+        updateStatusUI('processing');
+        const response = await sendMessage<{ type: string; addedText?: string; error?: { message: string } }>(
+          createMessage.cmdSubmit()
+        );
+        if (response?.type === MSG.RESULT_READY && response.addedText) {
+          showToast('Captured successfully!');
+        } else if (response?.error) {
+          showError('Submit Failed', response.error.message);
+        }
+      } catch (error) {
+        console.error('[EchoType] Submit failed:', error);
+        showToast('Submit failed');
       }
-    } catch (error) {
-      console.error('[EchoType] Start failed:', error);
-      showError('Start Failed', 'Unable to start dictation. Is ChatGPT open?');
+    } else {
+      // Start dictation
+      try {
+        hideError();
+        const response = await sendMessage<{ ok: boolean; error?: { message: string } }>(
+          createMessage.cmdStart()
+        );
+        if (!response?.ok && response?.error) {
+          showError('Start Failed', response.error.message);
+        }
+      } catch (error) {
+        console.error('[EchoType] Start failed:', error);
+        showError('Start Failed', 'Unable to start dictation. Is ChatGPT open?');
+      }
     }
   });
   
-  // Stop/Pause dictation
-  elements.btnStop.addEventListener('click', async () => {
+  // Cancel button: Stop recording and clear
+  elements.btnCancel.addEventListener('click', async () => {
     try {
       await sendMessage(createMessage.cmdPause());
+      showToast('Cancelled');
     } catch (error) {
-      console.error('[EchoType] Pause failed:', error);
-      showToast('Pause failed');
-    }
-  });
-  
-  // Submit dictation
-  elements.btnSubmit.addEventListener('click', async () => {
-    try {
-      updateStatusUI('processing');
-      const response = await sendMessage<{ type: string; addedText?: string; error?: { message: string } }>(
-        createMessage.cmdSubmit()
-      );
-      if (response?.type === MSG.RESULT_READY && response.addedText) {
-        showToast('Captured successfully!');
-      } else if (response?.error) {
-        showError('Submit Failed', response.error.message);
-      }
-    } catch (error) {
-      console.error('[EchoType] Submit failed:', error);
-      showToast('Submit failed');
+      console.error('[EchoType] Cancel failed:', error);
+      showToast('Cancel failed');
     }
   });
   
@@ -363,6 +395,7 @@ function setupEventListeners(): void {
 function setupMessageListener(): void {
   chrome.runtime.onMessage.addListener((message) => {
     if (message.type === MSG.STATUS_CHANGED) {
+      currentStatus = message.status;
       updateStatusUI(message.status);
     }
     if (message.type === MSG.BROADCAST_RESULT || message.type === MSG.RESULT_READY) {

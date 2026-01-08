@@ -122,14 +122,23 @@ export async function startDictation(): Promise<{
 }
 
 /**
- * Pause/stop dictation.
+ * Cancel dictation and clear input.
+ * Stops recording and cancels any pending capture.
  *
  * @returns Success status
  */
-export function pauseDictation(): { ok: boolean } {
+export function cancelDictation(): { ok: boolean } {
   const clicked = clickStopButton();
   cancelCapture(); // Cancel any pending capture
   return { ok: clicked };
+}
+
+/**
+ * Pause/stop dictation (alias for cancelDictation).
+ * @deprecated Use cancelDictation instead
+ */
+export function pauseDictation(): { ok: boolean } {
+  return cancelDictation();
 }
 
 /**

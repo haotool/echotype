@@ -111,21 +111,29 @@
     "message": "快捷鍵",
     "description": "快捷鍵區塊標題"
   },
-  "shortcutStart": {
-    "message": "啟動聽寫",
-    "description": "啟動快捷鍵標籤"
+  "shortcutToggle": {
+    "message": "切換聽寫",
+    "description": "切換快捷鍵標籤"
   },
-  "shortcutPause": {
-    "message": "暫停聽寫",
-    "description": "暫停快捷鍵標籤"
-  },
-  "shortcutSubmit": {
-    "message": "完成聽寫",
-    "description": "完成快捷鍵標籤"
+  "shortcutCancel": {
+    "message": "取消聽寫",
+    "description": "取消快捷鍵標籤"
   },
   "shortcutPaste": {
     "message": "貼上結果",
     "description": "貼上快捷鍵標籤"
+  },
+  "btnRecord": {
+    "message": "錄音",
+    "description": "錄音按鈕文字"
+  },
+  "btnCancel": {
+    "message": "取消",
+    "description": "取消按鈕文字"
+  },
+  "cancelSuccess": {
+    "message": "已取消",
+    "description": "取消成功時的提示"
   },
   "saved": {
     "message": "已儲存",

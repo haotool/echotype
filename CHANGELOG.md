@@ -5,6 +5,29 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-01-09
+
+### Changed
+- 🎯 **Simplified Keyboard Shortcuts** - Reduced from 4 to 3 commands:
+  - `toggle-dictation` (Alt+Shift+S): Start if idle, Submit if recording
+  - `cancel-dictation` (Alt+Shift+C): Cancel recording and clear input
+  - `paste-last-result` (Alt+Shift+P): Paste last result (unchanged)
+- 🎨 **Redesigned Popup UI** - Single toggle button replaces Start/Pause/Submit
+  - Red "Record" button when idle
+  - Green "Submit" button when recording
+  - Cancel button appears only during recording
+- 🔧 **Enhanced Selector Stability** - SVG href fragments prioritized over aria-labels
+- 📡 **Fixed State Sync Bug** - Status changes now properly forwarded to popup
+
+### Added
+- `cancelDictation()` function in controller (alias for pauseDictation)
+- SVG-based button detection for ChatGPT interface stability
+- New i18n messages for toggle/cancel commands
+
+### Fixed
+- Popup UI getting stuck in old state after dictation submission
+- Status not updating in popup when recording starts/stops
+
 ## [0.5.2] - 2026-01-08
 
 ### Fixed

@@ -341,6 +341,10 @@
         margin-bottom: var(--space-4);
       }
 
+      .actions-toggle {
+        grid-template-columns: 1fr auto;
+      }
+
       .btn {
         display: inline-flex;
         align-items: center;
@@ -390,6 +394,44 @@
         opacity: 0.5;
         cursor: not-allowed;
         transform: none;
+      }
+
+      /* Toggle button - main action button */
+      .btn-toggle {
+        flex: 1;
+        padding: var(--space-4);
+        font-size: 1rem;
+      }
+
+      /* Record ready state (red) */
+      .btn-record-ready {
+        background: var(--error-500);
+        color: white;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+      }
+
+      .btn-record-ready:hover:not(:disabled) {
+        background: var(--error-600);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      }
+
+      /* Submit ready state (green) */
+      .btn-submit-ready {
+        background: var(--btn-primary-bg);
+        color: white;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+      }
+
+      .btn-submit-ready:hover:not(:disabled) {
+        background: var(--btn-primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+      }
+
+      /* Cancel button */
+      #btn-cancel {
+        padding: var(--space-3) var(--space-4);
       }
 
       .btn-recording {
@@ -470,6 +512,10 @@
         grid-template-columns: repeat(4, 1fr);
         gap: var(--space-2);
         padding: 0 var(--space-4) var(--space-4);
+      }
+
+      .shortcuts-compact {
+        grid-template-columns: repeat(3, 1fr);
       }
 
       .shortcut {
@@ -675,24 +721,21 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="actions">
-      <button class="btn btn-primary" id="btn-start">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="5 3 19 12 5 21 5 3"/>
+    <div class="actions actions-toggle">
+      <button class="btn btn-toggle btn-record-ready" id="btn-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon-mic">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" x2="12" y1="19" y2="22"/>
         </svg>
-        Start
+        <span class="btn-text">Record</span>
       </button>
-      <button class="btn btn-secondary" id="btn-stop" disabled>
+      <button class="btn btn-secondary" id="btn-cancel" style="display: none;">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/>
+          <line x1="18" x2="6" y1="6" y2="18"/>
+          <line x1="6" x2="18" y1="6" y2="18"/>
         </svg>
-        Pause
-      </button>
-      <button class="btn btn-secondary btn-full" id="btn-submit" disabled>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        Submit & Capture
+        Cancel
       </button>
     </div>
 
@@ -717,21 +760,17 @@
     </div>
 
     <!-- Shortcuts -->
-    <div class="shortcuts">
+    <div class="shortcuts shortcuts-compact">
       <div class="shortcut">
-        <span class="shortcut-key">⌃⇧1</span>
-        <span class="shortcut-label">Start</span>
+        <span class="shortcut-key">⌥⇧S</span>
+        <span class="shortcut-label">Toggle</span>
       </div>
       <div class="shortcut">
-        <span class="shortcut-key">⌃⇧2</span>
-        <span class="shortcut-label">Pause</span>
+        <span class="shortcut-key">⌥⇧C</span>
+        <span class="shortcut-label">Cancel</span>
       </div>
       <div class="shortcut">
-        <span class="shortcut-key">⌃⇧3</span>
-        <span class="shortcut-label">Submit</span>
-      </div>
-      <div class="shortcut">
-        <span class="shortcut-key">⌃⇧4</span>
+        <span class="shortcut-key">⌥⇧P</span>
         <span class="shortcut-label">Paste</span>
       </div>
     </div>

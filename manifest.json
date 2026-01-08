@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "EchoType",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "__MSG_extDescription__",
   "author": { "email": "echotype@example.com" },
   "homepage_url": "https://github.com/user/echotype",
@@ -61,31 +61,24 @@
     "open_in_tab": false
   },
   "commands": {
-    "start-dictation": {
+    "toggle-dictation": {
       "suggested_key": {
-        "default": "Ctrl+Shift+1",
-        "mac": "Command+Shift+1"
+        "default": "Alt+Shift+S",
+        "mac": "Alt+Shift+S"
       },
-      "description": "Start dictation"
+      "description": "Toggle dictation (Start/Submit)"
     },
-    "pause-dictation": {
+    "cancel-dictation": {
       "suggested_key": {
-        "default": "Ctrl+Shift+2",
-        "mac": "Command+Shift+2"
+        "default": "Alt+Shift+C",
+        "mac": "Alt+Shift+C"
       },
-      "description": "Pause dictation"
-    },
-    "submit-dictation": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+3",
-        "mac": "Command+Shift+3"
-      },
-      "description": "Submit dictation and get result"
+      "description": "Cancel dictation and clear input"
     },
     "paste-last-result": {
       "suggested_key": {
-        "default": "Ctrl+Shift+4",
-        "mac": "Command+Shift+4"
+        "default": "Alt+Shift+P",
+        "mac": "Alt+Shift+P"
       },
       "description": "Paste last dictation result"
     }

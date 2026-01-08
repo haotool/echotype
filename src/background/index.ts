@@ -91,7 +91,7 @@ let currentSettings = {
 };
 
 // Current dictation status (tracked from ChatGPT content script)
-let currentDictationStatus: 'idle' | 'recording' | 'processing' | 'unknown' = 'idle';
+let currentDictationStatus: 'idle' | 'listening' | 'recording' | 'processing' | 'unknown' = 'idle';
 
 // Initialize settings, badge, and heartbeat asynchronously
 (async () => {
@@ -176,10 +176,11 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
 }
 
 /**
- * Handle the pause-dictation command.
+ * Handle the cancel-dictation command (formerly pause).
+ * Cancels recording and clears the input.
  */
-async function handlePauseDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
-  console.log('[EchoType] Pause dictation command');
+async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
+  console.log('[EchoType] Cancel dictation command');
 
   const tabInfo = await ensureChatGPTTab(false);
   if (!tabInfo) {
@@ -362,19 +363,26 @@ async function broadcastResult(text: string, historyItem: HistoryItem): Promise<
 
 /**
  * Listen for keyboard commands.
+ * 
+ * Commands:
+ * - toggle-dictation: Start if idle, Submit if recording
+ * - cancel-dictation: Cancel recording and clear input
+ * - paste-last-result: Paste last result to active tab
  */
 chrome.commands.onCommand.addListener(async (command) => {
   console.log('[EchoType] Command received:', command);
 
   switch (command) {
-    case 'start-dictation':
-      await handleStartDictation();
+    case 'toggle-dictation':
+      // Toggle: Start if idle, Submit if recording
+      if (currentDictationStatus === 'recording' || currentDictationStatus === 'listening') {
+        await handleSubmitDictation();
+      } else {
+        await handleStartDictation();
+      }
       break;
-    case 'pause-dictation':
-      await handlePauseDictation();
-      break;
-    case 'submit-dictation':
-      await handleSubmitDictation();
+    case 'cancel-dictation':
+      await handleCancelDictation();
       break;
     case 'paste-last-result':
       await handlePasteLastResult();
@@ -401,7 +409,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   if (message.type === MSG.CMD_PAUSE) {
     (async () => {
-      const result = await handlePauseDictation();
+      const result = await handleCancelDictation();
       sendResponse(result);
     })();
     return true;
@@ -420,6 +428,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const statusMessage = message as StatusChangedPayload;
     currentDictationStatus = statusMessage.status as typeof currentDictationStatus;
     console.log('[EchoType] Status changed:', currentDictationStatus);
+    
+    // Forward status change to popup (fixes state sync bug)
+    chrome.runtime.sendMessage(statusMessage).catch(() => {
+      // Popup may not be open, ignore error
+    });
     return false;
   }
 

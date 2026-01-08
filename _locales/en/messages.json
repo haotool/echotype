@@ -111,21 +111,29 @@
     "message": "Keyboard Shortcuts",
     "description": "Shortcuts section title"
   },
-  "shortcutStart": {
-    "message": "Start dictation",
-    "description": "Start shortcut label"
+  "shortcutToggle": {
+    "message": "Toggle dictation",
+    "description": "Toggle shortcut label"
   },
-  "shortcutPause": {
-    "message": "Pause dictation",
-    "description": "Pause shortcut label"
-  },
-  "shortcutSubmit": {
-    "message": "Submit dictation",
-    "description": "Submit shortcut label"
+  "shortcutCancel": {
+    "message": "Cancel dictation",
+    "description": "Cancel shortcut label"
   },
   "shortcutPaste": {
     "message": "Paste result",
     "description": "Paste shortcut label"
+  },
+  "btnRecord": {
+    "message": "Record",
+    "description": "Record button text"
+  },
+  "btnCancel": {
+    "message": "Cancel",
+    "description": "Cancel button text"
+  },
+  "cancelSuccess": {
+    "message": "Cancelled",
+    "description": "Toast when cancel succeeds"
   },
   "saved": {
     "message": "Saved",

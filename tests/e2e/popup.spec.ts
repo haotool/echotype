@@ -3,7 +3,7 @@
  * @module tests/e2e/popup.spec
  *
  * Tests the extension's popup page functionality.
- * Updated: 2026-01-08T00:35:00+08:00
+ * Updated: 2026-01-09T00:15:00+08:00
  */
 
 import { test, expect, openPopupPage } from './fixtures';
@@ -34,19 +34,20 @@ test.describe('Popup UI', () => {
   test('should display action buttons', async ({ context, extensionId }) => {
     const page = await openPopupPage(context, extensionId);
 
-    // Check Start button
-    const startBtn = page.locator('#btn-start');
-    await expect(startBtn).toBeVisible();
-    await expect(startBtn).toBeEnabled();
+    // Check Toggle button (main action button)
+    const toggleBtn = page.locator('#btn-toggle');
+    await expect(toggleBtn).toBeVisible();
+    await expect(toggleBtn).toBeEnabled();
+    
+    // Toggle button should show "Record" in idle state
+    await expect(toggleBtn).toContainText('Record');
+    
+    // Toggle button should have record-ready style (red)
+    await expect(toggleBtn).toHaveClass(/btn-record-ready/);
 
-    // Check Stop button (should be disabled initially)
-    const stopBtn = page.locator('#btn-stop');
-    await expect(stopBtn).toBeVisible();
-    await expect(stopBtn).toBeDisabled();
-
-    // Check Submit button
-    const submitBtn = page.locator('#btn-submit');
-    await expect(submitBtn).toBeVisible();
+    // Check Cancel button (should be hidden initially)
+    const cancelBtn = page.locator('#btn-cancel');
+    await expect(cancelBtn).toBeHidden();
   });
 
   test('should display result section', async ({ context, extensionId }) => {

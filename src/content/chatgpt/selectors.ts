@@ -5,8 +5,11 @@
  * Centralized DOM selectors for ChatGPT interface.
  * Supports multiple languages and handles UI changes gracefully.
  * 
- * @version 2.0.0
- * @updated 2026-01-08
+ * Strategy: SVG href fragments are prioritized for stability,
+ * with aria-label as fallback for accessibility.
+ * 
+ * @version 3.0.0
+ * @updated 2026-01-09
  */
 
 import { $ } from '@shared/utils';
@@ -17,8 +20,24 @@ import type { DictationStatus, EchoTypeError } from '@shared/types';
 // ============================================================================
 
 /**
+ * SVG href fragments for dictation buttons.
+ * These are more stable than aria-labels as they reference specific icon IDs.
+ * 
+ * Note: These values should be updated if ChatGPT changes their icon system.
+ */
+const SVG_HREFS = {
+  // Start dictation button icon (microphone)
+  start: ['#29f921', '#microphone', '#mic-icon'],
+  // Stop/Cancel dictation button icon (stop/pause)
+  stop: ['#85f94b', '#stop-icon', '#pause-icon'],
+  // Submit dictation button icon (send/check)
+  submit: ['#fa1dbd', '#send-icon', '#check-icon'],
+} as const;
+
+/**
  * Multi-language aria-label selectors for dictation buttons.
  * ChatGPT uses different labels based on user's language setting.
+ * Used as fallback when SVG selectors don't match.
  */
 const DICTATION_LABELS = {
   start: [
@@ -61,22 +80,47 @@ const DICTATION_LABELS = {
 } as const;
 
 /**
- * Build selector string from multiple aria-labels
+ * Build selector string prioritizing SVG href, with aria-label fallback.
+ * 
+ * @param svgHrefs - SVG href fragments to match
+ * @param ariaLabels - Aria-label values as fallback
+ * @returns Combined CSS selector string
  */
-function buildAriaLabelSelector(labels: readonly string[]): string {
+function buildButtonSelector(
+  svgHrefs: readonly string[],
+  ariaLabels: readonly string[]
+): string {
+  // SVG href selectors (priority)
+  const svgSelectors = svgHrefs.map(
+    href => `button:has(svg use[href*="${href}"])`
+  );
+  
+  // Aria-label selectors (fallback)
+  const ariaSelectors = ariaLabels.map(
+    label => `button[aria-label="${label}"]`
+  );
+  
+  return [...svgSelectors, ...ariaSelectors].join(', ');
+}
+
+/**
+ * Build selector string from multiple aria-labels only
+ * @deprecated Use buildButtonSelector for better stability
+ */
+export function buildAriaLabelSelector(labels: readonly string[]): string {
   return labels.map(label => `button[aria-label="${label}"]`).join(', ');
 }
 
 /**
- * ChatGPT DOM selectors with multi-language support.
+ * ChatGPT DOM selectors with SVG priority and multi-language fallback.
  */
 export const SELECTORS = {
-  /** Start dictation button (multiple language variants) */
-  startBtn: buildAriaLabelSelector(DICTATION_LABELS.start),
+  /** Start dictation button (SVG priority, aria-label fallback) */
+  startBtn: buildButtonSelector(SVG_HREFS.start, DICTATION_LABELS.start),
   /** Stop dictation button (appears when recording) */
-  stopBtn: buildAriaLabelSelector(DICTATION_LABELS.stop),
+  stopBtn: buildButtonSelector(SVG_HREFS.stop, DICTATION_LABELS.stop),
   /** Submit dictation button */
-  submitBtn: buildAriaLabelSelector(DICTATION_LABELS.submit),
+  submitBtn: buildButtonSelector(SVG_HREFS.submit, DICTATION_LABELS.submit),
   /** ProseMirror composer/textarea - primary selector */
   composer: '#prompt-textarea',
   /** Alternative composer selectors */

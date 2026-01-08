@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 1.5.0 | Updated: 2026-01-08T00:30:00+08:00
+> Version: 1.6.0 | Updated: 2026-01-09T00:20:00+08:00
 
 ## 🎯 Project Overview
 
@@ -112,33 +112,43 @@ test(shared): add unit tests for normalizeText utility
 ## 📋 Key Selectors (ChatGPT DOM)
 
 ```typescript
-// Subject to change - use health checks
+// SVG href priority with aria-label fallback
 const SELECTORS = {
-  startBtn: 'button[aria-label="聽寫按鈕"]',
-  stopBtn: 'button[aria-label="停止聽寫"]',
-  submitBtn: 'button[aria-label="提交聽寫"]',
+  startBtn: 'button:has(svg use[href*="#29f921"]), button[aria-label="聽寫按鈕"]',
+  stopBtn: 'button:has(svg use[href*="#85f94b"]), button[aria-label="停止聽寫"]',
+  submitBtn: 'button:has(svg use[href*="#fa1dbd"]), button[aria-label="提交聽寫"]',
   composer: '#prompt-textarea',
 };
 ```
 
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action | Description |
+|----------|--------|-------------|
+| `Alt+Shift+S` | Toggle | Start if idle, Submit if recording |
+| `Alt+Shift+C` | Cancel | Cancel recording and clear input |
+| `Alt+Shift+P` | Paste | Paste last dictation result |
+
 ## 🎯 MVP Acceptance Criteria
 
-- [x] Keyboard shortcuts configured (Ctrl+Shift+1/2/3/4)
+- [x] Keyboard shortcuts configured (Alt+Shift+S/C/P)
 - [x] Baseline diff captures only new text
 - [x] Robust clear with verification (4 retries)
 - [x] Auto-copy to clipboard via Offscreen API
 - [x] History: last 5 results management
 - [x] Options: toggle auto-copy, auto-paste, return focus
 - [x] Build passes with no errors
-- [x] 86 unit tests pass
+- [x] 88 unit tests pass
 - [x] E2E test framework configured (Playwright)
-- [x] E2E testing framework with 23 tests
+- [x] E2E testing framework with 26 tests
 - [x] Multi-language support (en, zh_TW)
 - [x] Audio feedback sounds
 - [x] Keyboard shortcuts display
 - [x] Modern UI with design tokens (light/dark mode)
 - [x] Developer mode with debugging tools
 - [x] Multi-language ChatGPT selectors (EN/ZH-TW/ZH-CN)
+- [x] SVG-based button detection for stability
+- [x] Toggle-based UI with single main action button
 
 ## 🔗 References
 
