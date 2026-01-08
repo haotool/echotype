@@ -197,6 +197,46 @@ export function getChatGPTTabInfo(): ChatGPTTabInfo | null {
 }
 
 /**
+ * Wait for a tab to finish loading.
+ *
+ * @param tabId - Tab ID to wait for
+ * @param timeoutMs - Timeout in milliseconds
+ * @returns True if tab completed, false on timeout
+ */
+export async function waitForTabComplete(
+  tabId: number,
+  timeoutMs = 5000
+): Promise<boolean> {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    if (tab.status === 'complete') {
+      return true;
+    }
+  } catch (error) {
+    console.warn('[EchoType] Failed to read tab status:', error);
+    return false;
+  }
+
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      chrome.tabs.onUpdated.removeListener(listener);
+      resolve(false);
+    }, timeoutMs);
+
+    const listener = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      if (updatedTabId !== tabId) return;
+      if (changeInfo.status !== 'complete') return;
+
+      clearTimeout(timeout);
+      chrome.tabs.onUpdated.removeListener(listener);
+      resolve(true);
+    };
+
+    chrome.tabs.onUpdated.addListener(listener);
+  });
+}
+
+/**
  * Send a message to the ChatGPT tab.
  *
  * @param message - Message to send
