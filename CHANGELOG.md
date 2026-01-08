@@ -5,6 +5,175 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-01-09
+
+### 🐛 Critical Bug Fixes
+- **State Reset Bug** - Fixed dictation state not resetting after submit, which caused the extension to be stuck in "recording" state
+- **Tab Connection** - Improved ChatGPT tab connection reliability with retry logic and exponential backoff
+- **Content Script Injection** - Enhanced content script injection with validation and recovery
+
+### ✨ New Features
+- **Login Detection** - Added automatic detection of ChatGPT login status with user-friendly error messages
+- **Voice Input Availability Check** - Validates that voice dictation feature is available before attempting to start
+
+### 🔒 Security & Legal
+- **Comprehensive Disclaimer** - Added detailed disclaimer and legal notices to PRIVACY.md
+- **Takedown Request Process** - Added clear process for takedown requests
+
+### 🔧 Improvements
+- **Tab Manager** - Added tab validation, refresh capability, and improved state management
+- **Error Messages** - More descriptive error messages for common failure scenarios
+- **Logging** - Enhanced debug logging for troubleshooting
+
+### 📝 Metadata
+- **GitHub Account** - Updated to `haotool` organization
+- **Contact Email** - Updated to `haotool.org@gmail.com`
+- **Version** - Bumped to 0.8.0
+
+---
+
+## [0.7.0] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Hindi (hi) - हिन्दी
+  - Czech (cs) - Čeština
+  - Greek (el) - Ελληνικά
+  - Swedish (sv) - Svenska
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Hindi, Czech, Greek, Swedish ChatGPT UI
+
+### Changed
+- 📦 Version bump to 0.7.0
+- 🌏 Now supports **25 languages** total
+
+---
+
+## [0.6.9] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Polish (pl) - Polski
+  - Dutch (nl) - Nederlands
+  - Ukrainian (uk) - Українська
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Polish, Dutch, Ukrainian ChatGPT UI
+
+### Changed
+- 📦 Version bump to 0.6.9
+- 🌏 Now supports 21 languages total
+
+---
+
+## [0.6.8] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Hebrew (he) - עברית (RTL)
+  - Persian (fa) - فارسی (RTL)
+  - Turkish (tr) - Türkçe
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Hebrew, Persian, Turkish ChatGPT UI
+
+### Changed
+- 📦 Version bump to 0.6.8
+- 🌏 Now supports 18 languages total
+
+---
+
+## [0.6.7] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Vietnamese (vi) - Tiếng Việt
+  - Thai (th) - ภาษาไทย
+  - Indonesian (id) - Bahasa Indonesia
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Vietnamese, Thai, Indonesian ChatGPT UI
+
+### Changed
+- 📦 Version bump to 0.6.7
+- 🌏 Now supports 15 languages total
+
+---
+
+## [0.6.6] - 2026-01-09
+
+### Added
+- 🌍 **RTL (Right-to-Left) Support** - Full RTL layout support for:
+  - Arabic (ar)
+  - Hebrew (he) - prepared
+  - Persian (fa) - prepared
+- 📄 **Updated Store Description** - Multi-language store descriptions for Chrome Web Store
+
+### Changed
+- 📦 Version bump to 0.6.6
+- 🎨 Enhanced CSS with RTL-aware utility classes
+
+---
+
+## [0.6.5] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Russian (ru) - Русский
+  - Simplified Chinese (zh_CN) - 简体中文
+  - Arabic (ar) - العربية
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Russian, Simplified Chinese, and Arabic ChatGPT UI
+
+### Changed
+- 📦 Version bump to 0.6.5
+
+---
+
+## [0.6.4] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Portuguese (pt) - Português
+  - Italian (it) - Italiano
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Portuguese and Italian ChatGPT UI
+- 🚀 **GitHub Actions Release Workflow** - Automated release creation on tag push
+
+### Changed
+- 📦 Version bump to 0.6.4
+
+---
+
+## [0.6.3] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - French (fr) - Français
+  - Spanish (es) - Español
+- 🔍 **Extended Selector Coverage** - Added aria-labels for French and Spanish ChatGPT UI
+
+### Changed
+- 📦 Version bump to 0.6.3
+
+---
+
+## [0.6.2] - 2026-01-09
+
+### Added
+- 🌐 **Multi-language Support Expansion** - Full i18n for:
+  - Japanese (ja) - 日本語
+  - Korean (ko) - 한국어
+  - German (de) - Deutsch
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Japanese, Korean, German, French, Spanish
+
+### Changed
+- 📦 Version bump to 0.6.2
+
+---
+
+## [0.6.1] - 2026-01-09
+
+### Added
+- 🌐 **Japanese Language Support** - Full i18n for Japanese (ja) locale
+- 🔍 **Extended Selector Coverage** - Added aria-labels for Japanese, Korean, German, French, Spanish
+
+### Changed
+- 📦 Version bump to 0.6.1
+
+---
+
 ## [0.6.0] - 2026-01-09
 
 ### Changed

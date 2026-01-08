@@ -1,0 +1,240 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Nombre de la extensión"
+  },
+  "extDescription": {
+    "message": "Dictado de voz universal vía ChatGPT Whisper - dicta en cualquier lugar con atajos de teclado",
+    "description": "Descripción de la extensión"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Título del popup"
+  },
+  "statusReady": {
+    "message": "Listo",
+    "description": "Estado listo"
+  },
+  "statusRecording": {
+    "message": "Grabando",
+    "description": "Estado grabando"
+  },
+  "statusProcessing": {
+    "message": "Procesando",
+    "description": "Estado procesando"
+  },
+  "statusError": {
+    "message": "Error",
+    "description": "Estado error"
+  },
+  "btnStart": {
+    "message": "Iniciar",
+    "description": "Botón iniciar"
+  },
+  "btnPause": {
+    "message": "Pausar",
+    "description": "Botón pausar"
+  },
+  "btnSubmit": {
+    "message": "Enviar y Capturar",
+    "description": "Botón enviar"
+  },
+  "btnCopy": {
+    "message": "Copiar al Portapapeles",
+    "description": "Botón copiar"
+  },
+  "latestResult": {
+    "message": "Último Resultado",
+    "description": "Título de la sección último resultado"
+  },
+  "noResult": {
+    "message": "Sin dictado aún",
+    "description": "Mensaje sin resultado"
+  },
+  "settings": {
+    "message": "Configuración",
+    "description": "Enlace configuración"
+  },
+  "history": {
+    "message": "Historial",
+    "description": "Enlace historial"
+  },
+  "optionsTitle": {
+    "message": "Configuración de EchoType",
+    "description": "Título de la página de opciones"
+  },
+  "optionsSubtitle": {
+    "message": "Dicta en cualquier lugar usando la entrada de voz de ChatGPT",
+    "description": "Subtítulo de la página de opciones"
+  },
+  "settingsAutomation": {
+    "message": "Configuración de Automatización",
+    "description": "Sección configuración de automatización"
+  },
+  "autoCopy": {
+    "message": "Copia Automática",
+    "description": "Etiqueta copia automática"
+  },
+  "autoCopyDesc": {
+    "message": "Copiar automáticamente el resultado al portapapeles después de completar",
+    "description": "Descripción copia automática"
+  },
+  "autoPaste": {
+    "message": "Pegado Automático",
+    "description": "Etiqueta pegado automático"
+  },
+  "autoPasteDesc": {
+    "message": "Pegar automáticamente el resultado en el campo de entrada original",
+    "description": "Descripción pegado automático"
+  },
+  "returnFocus": {
+    "message": "Retornar Foco",
+    "description": "Etiqueta retornar foco"
+  },
+  "returnFocusDesc": {
+    "message": "Volver a la pestaña original después de iniciar el dictado",
+    "description": "Descripción retornar foco"
+  },
+  "historySection": {
+    "message": "Historial",
+    "description": "Título de la sección historial"
+  },
+  "historyEmpty": {
+    "message": "Sin historial de dictado",
+    "description": "Mensaje historial vacío"
+  },
+  "clearAll": {
+    "message": "Borrar Todo",
+    "description": "Botón borrar todo"
+  },
+  "shortcuts": {
+    "message": "Atajos de Teclado",
+    "description": "Título de la sección atajos"
+  },
+  "shortcutToggle": {
+    "message": "Alternar dictado",
+    "description": "Etiqueta atajo alternar"
+  },
+  "shortcutCancel": {
+    "message": "Cancelar dictado",
+    "description": "Etiqueta atajo cancelar"
+  },
+  "shortcutPaste": {
+    "message": "Pegar resultado",
+    "description": "Etiqueta atajo pegar"
+  },
+  "btnRecord": {
+    "message": "Grabar",
+    "description": "Texto botón grabar"
+  },
+  "btnCancel": {
+    "message": "Cancelar",
+    "description": "Texto botón cancelar"
+  },
+  "cancelSuccess": {
+    "message": "Cancelado",
+    "description": "Toast cancelación exitosa"
+  },
+  "saved": {
+    "message": "Guardado",
+    "description": "Confirmación guardado"
+  },
+  "copied": {
+    "message": "¡Copiado!",
+    "description": "Confirmación copiado"
+  },
+  "justNow": {
+    "message": "Ahora mismo",
+    "description": "Tiempo: ahora mismo"
+  },
+  "minutesAgo": {
+    "message": "Hace $COUNT$ minutos",
+    "description": "Tiempo: hace X minutos",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Ayer",
+    "description": "Tiempo: ayer"
+  },
+  "customizeShortcuts": {
+    "message": "Personalizar Atajos",
+    "description": "Botón personalizar atajos"
+  },
+  "shortcutsNote": {
+    "message": "Nota: Abre la configuración de atajos de Chrome para personalizar los atajos de teclado",
+    "description": "Nota sobre personalización de atajos"
+  },
+  "notSet": {
+    "message": "No configurado",
+    "description": "Atajo no configurado"
+  },
+  "devMode": {
+    "message": "Modo Desarrollador",
+    "description": "Sección modo desarrollador"
+  },
+  "devModeDesc": {
+    "message": "Habilitar funciones de depuración adicionales",
+    "description": "Descripción modo desarrollador"
+  },
+  "debugLogging": {
+    "message": "Registro de Depuración",
+    "description": "Configuración registro de depuración"
+  },
+  "debugLoggingDesc": {
+    "message": "Mostrar registros detallados en la consola del navegador",
+    "description": "Descripción registro de depuración"
+  },
+  "openSWConsole": {
+    "message": "Abrir Consola Service Worker",
+    "description": "Botón abrir consola SW"
+  },
+  "openChatGPT": {
+    "message": "Abrir Pestaña ChatGPT",
+    "description": "Botón abrir ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT No Encontrado",
+    "description": "Título error sin ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Por favor abre ChatGPT e inicia sesión para usar el dictado de voz",
+    "description": "Descripción error sin ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Entrada de Voz No Disponible",
+    "description": "Título error entrada de voz no disponible"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Botón de entrada de voz no encontrado. Por favor asegúrate de haber iniciado sesión en ChatGPT.",
+    "description": "Descripción error entrada de voz no disponible"
+  },
+  "statusListening": {
+    "message": "Escuchando...",
+    "description": "Estado escuchando"
+  },
+  "statusUnknown": {
+    "message": "Verificando...",
+    "description": "Estado desconocido"
+  },
+  "startSuccess": {
+    "message": "Dictado iniciado",
+    "description": "Toast dictado iniciado"
+  },
+  "submitSuccess": {
+    "message": "¡Capturado exitosamente!",
+    "description": "Toast captura exitosa"
+  },
+  "copySuccess": {
+    "message": "Copiado al portapapeles",
+    "description": "Toast copia exitosa"
+  },
+  "copyFailed": {
+    "message": "Error al copiar",
+    "description": "Toast error al copiar"
+  }
+}

@@ -4,6 +4,8 @@
  *
  * Manages the ChatGPT tab for dictation operations.
  * Handles tab creation, focus, and lifecycle.
+ * 
+ * @version 2.0.0 - Enhanced robustness for tab management
  */
 
 import type { ChatGPTTabInfo } from '@shared/types';
@@ -14,6 +16,13 @@ import type { ChatGPTTabInfo } from '@shared/types';
 
 const CHATGPT_URL = 'https://chatgpt.com/?temporary-chat=true';
 const CHATGPT_PATTERN = 'https://chatgpt.com/*';
+
+/** Maximum retries for tab operations */
+const MAX_RETRIES = 3;
+/** Delay between retries in ms */
+const RETRY_DELAY = 500;
+/** Timeout for tab complete in ms */
+const TAB_COMPLETE_TIMEOUT = 10000;
 
 // ============================================================================
 // State
@@ -100,6 +109,7 @@ export async function createChatGPTTab(
 /**
  * Ensure a ChatGPT tab exists and is ready.
  * Creates one if it doesn't exist.
+ * Includes validation and recovery logic.
  *
  * @param makeActive - Whether to make the tab active
  * @returns ChatGPT tab info
@@ -107,15 +117,43 @@ export async function createChatGPTTab(
 export async function ensureChatGPTTab(
   makeActive = true
 ): Promise<ChatGPTTabInfo | null> {
+  // First, check if we have a cached tab that's still valid
+  if (state.chatgptTab) {
+    const valid = await isTabValid(state.chatgptTab.tabId);
+    if (!valid) {
+      console.log('[EchoType] Cached ChatGPT tab is no longer valid, clearing');
+      state.chatgptTab = null;
+    }
+  }
+
   // Try to find existing tab
   let tabInfo = await findChatGPTTab();
 
   // Create if not found
   if (!tabInfo) {
+    console.log('[EchoType] No ChatGPT tab found, creating new one');
     tabInfo = await createChatGPTTab(makeActive);
+    
+    if (tabInfo) {
+      // Wait for the new tab to fully load
+      console.log('[EchoType] Waiting for new tab to load...');
+      const loaded = await waitForTabComplete(tabInfo.tabId);
+      if (!loaded) {
+        console.warn('[EchoType] Tab did not complete loading in time');
+      }
+      
+      // Add a small delay for DOM to be ready
+      await delay(500);
+    }
   } else if (makeActive) {
     // Activate existing tab
     await activateChatGPTTab(tabInfo);
+    
+    // Ensure tab is fully loaded
+    const loaded = await waitForTabComplete(tabInfo.tabId, 3000);
+    if (!loaded) {
+      console.log('[EchoType] Existing tab may still be loading');
+    }
   }
 
   // Update state
@@ -205,7 +243,7 @@ export function getChatGPTTabInfo(): ChatGPTTabInfo | null {
  */
 export async function waitForTabComplete(
   tabId: number,
-  timeoutMs = 5000
+  timeoutMs = TAB_COMPLETE_TIMEOUT
 ): Promise<boolean> {
   try {
     const tab = await chrome.tabs.get(tabId);
@@ -237,27 +275,94 @@ export async function waitForTabComplete(
 }
 
 /**
- * Send a message to the ChatGPT tab.
+ * Wait for a short delay (humanized timing).
+ * @param ms - Delay in milliseconds
+ */
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Verify that a tab is still valid and accessible.
+ * @param tabId - Tab ID to verify
+ * @returns True if tab exists and is accessible
+ */
+export async function isTabValid(tabId: number): Promise<boolean> {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    return Boolean(tab && !tab.discarded && tab.url?.startsWith('https://chatgpt.com'));
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Refresh a tab if it's stale or has an error.
+ * @param tabId - Tab ID to refresh
+ */
+export async function refreshTabIfNeeded(tabId: number): Promise<boolean> {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    
+    // Check if tab needs refresh (error page, stale, etc.)
+    if (tab.url && !tab.url.startsWith('https://chatgpt.com')) {
+      await chrome.tabs.update(tabId, { url: CHATGPT_URL });
+      return await waitForTabComplete(tabId);
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('[EchoType] Failed to refresh tab:', error);
+    return false;
+  }
+}
+
+/**
+ * Send a message to the ChatGPT tab with retry logic.
  *
  * @param message - Message to send
+ * @param retries - Number of retries (default: MAX_RETRIES)
  * @returns Response from content script
  */
-export async function sendToChatGPTTab<T>(message: unknown): Promise<T | null> {
+export async function sendToChatGPTTab<T>(
+  message: unknown,
+  retries = MAX_RETRIES
+): Promise<T | null> {
   if (!state.chatgptTab) {
     console.error('[EchoType] No ChatGPT tab available');
     return null;
   }
 
-  try {
-    const response = await chrome.tabs.sendMessage(
-      state.chatgptTab.tabId,
-      message
-    );
-    return response as T;
-  } catch (error) {
-    console.error('[EchoType] Error sending message to ChatGPT tab:', error);
-    return null;
+  const tabId = state.chatgptTab.tabId;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      // Verify tab is still valid
+      const valid = await isTabValid(tabId);
+      if (!valid) {
+        console.warn(`[EchoType] Tab ${tabId} is no longer valid, clearing state`);
+        state.chatgptTab = null;
+        return null;
+      }
+
+      const response = await chrome.tabs.sendMessage(tabId, message);
+      return response as T;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
+      // Check if it's a connection error that might be recoverable
+      if (errorMessage.includes('Receiving end does not exist') && attempt < retries) {
+        console.warn(`[EchoType] Connection failed, retrying (${attempt + 1}/${retries})...`);
+        await delay(RETRY_DELAY * (attempt + 1)); // Exponential backoff
+        continue;
+      }
+
+      console.error('[EchoType] Error sending message to ChatGPT tab:', error);
+      return null;
+    }
   }
+
+  return null;
 }
 
 // ============================================================================

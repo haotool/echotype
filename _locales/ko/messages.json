@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "확장 프로그램 이름"
+  },
+  "extDescription": {
+    "message": "ChatGPT Whisper를 통한 음성 입력 - 키보드 단축키로 어디서나 입력",
+    "description": "확장 프로그램 설명"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "팝업 제목"
+  },
+  "statusReady": {
+    "message": "준비 완료",
+    "description": "준비 상태"
+  },
+  "statusRecording": {
+    "message": "녹음 중",
+    "description": "녹음 상태"
+  },
+  "statusProcessing": {
+    "message": "처리 중",
+    "description": "처리 상태"
+  },
+  "statusError": {
+    "message": "오류",
+    "description": "오류 상태"
+  },
+  "btnStart": {
+    "message": "녹음",
+    "description": "시작 버튼"
+  },
+  "btnCancel": {
+    "message": "취소",
+    "description": "취소 버튼"
+  },
+  "btnSubmit": {
+    "message": "제출",
+    "description": "제출 버튼"
+  },
+  "btnCopy": {
+    "message": "클립보드에 복사",
+    "description": "복사 버튼"
+  },
+  "latestResult": {
+    "message": "최근 결과",
+    "description": "최근 결과 섹션 제목"
+  },
+  "noResult": {
+    "message": "아직 입력이 없습니다",
+    "description": "결과 없음 메시지"
+  },
+  "settings": {
+    "message": "설정",
+    "description": "설정 링크"
+  },
+  "history": {
+    "message": "기록",
+    "description": "기록 링크"
+  },
+  "optionsTitle": {
+    "message": "EchoType 설정",
+    "description": "설정 페이지 제목"
+  },
+  "optionsSubtitle": {
+    "message": "ChatGPT 음성 입력으로 어디서나 입력",
+    "description": "설정 페이지 부제목"
+  },
+  "settingsAutomation": {
+    "message": "자동화 설정",
+    "description": "자동화 설정 섹션"
+  },
+  "autoCopy": {
+    "message": "자동 복사",
+    "description": "자동 복사 설정 레이블"
+  },
+  "autoCopyDesc": {
+    "message": "완료 후 자동으로 클립보드에 복사",
+    "description": "자동 복사 설명"
+  },
+  "autoPaste": {
+    "message": "자동 붙여넣기",
+    "description": "자동 붙여넣기 설정 레이블"
+  },
+  "autoPasteDesc": {
+    "message": "완료 후 자동으로 원래 입력 필드에 붙여넣기",
+    "description": "자동 붙여넣기 설명"
+  },
+  "returnFocus": {
+    "message": "포커스 복원",
+    "description": "포커스 복원 설정 레이블"
+  },
+  "returnFocusDesc": {
+    "message": "녹음 시작 후 원래 탭으로 돌아가기",
+    "description": "포커스 복원 설명"
+  },
+  "historySection": {
+    "message": "기록",
+    "description": "기록 섹션 제목"
+  },
+  "historyEmpty": {
+    "message": "기록이 없습니다",
+    "description": "기록 없음 메시지"
+  },
+  "clearAll": {
+    "message": "모두 지우기",
+    "description": "모두 지우기 버튼"
+  },
+  "shortcuts": {
+    "message": "키보드 단축키",
+    "description": "단축키 섹션 제목"
+  },
+  "shortcutToggle": {
+    "message": "전환",
+    "description": "전환 단축키 레이블"
+  },
+  "shortcutCancel": {
+    "message": "취소",
+    "description": "취소 단축키 레이블"
+  },
+  "shortcutPaste": {
+    "message": "붙여넣기",
+    "description": "붙여넣기 단축키 레이블"
+  },
+  "saved": {
+    "message": "저장됨",
+    "description": "저장 확인"
+  },
+  "copied": {
+    "message": "복사됨!",
+    "description": "복사 확인"
+  },
+  "justNow": {
+    "message": "방금",
+    "description": "시간: 방금"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$분 전",
+    "description": "시간: X분 전",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "어제",
+    "description": "시간: 어제"
+  },
+  "customizeShortcuts": {
+    "message": "단축키 사용자 지정",
+    "description": "단축키 사용자 지정 버튼"
+  },
+  "shortcutsNote": {
+    "message": "팁: 위 버튼을 클릭하여 Chrome 설정에서 단축키를 사용자 지정",
+    "description": "단축키 사용자 지정 팁"
+  },
+  "notSet": {
+    "message": "설정 안 됨",
+    "description": "단축키 설정 안 됨"
+  },
+  "devMode": {
+    "message": "개발자 모드",
+    "description": "개발자 모드 섹션"
+  },
+  "devModeDesc": {
+    "message": "추가 디버그 기능 활성화",
+    "description": "개발자 모드 설명"
+  },
+  "debugLogging": {
+    "message": "디버그 로그",
+    "description": "디버그 로그 설정"
+  },
+  "debugLoggingDesc": {
+    "message": "브라우저 콘솔에 자세한 로그 출력",
+    "description": "디버그 로그 설명"
+  },
+  "openSWConsole": {
+    "message": "Service Worker 콘솔 열기",
+    "description": "SW 콘솔 열기 버튼"
+  },
+  "openChatGPT": {
+    "message": "ChatGPT 탭 열기",
+    "description": "ChatGPT 열기 버튼"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT를 찾을 수 없습니다",
+    "description": "ChatGPT 탭을 찾을 수 없을 때 오류 제목"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "음성 입력을 사용하려면 ChatGPT를 열고 로그인하세요",
+    "description": "ChatGPT 탭을 찾을 수 없을 때 오류 설명"
+  },
+  "errorNoVoice": {
+    "message": "음성 입력을 사용할 수 없습니다",
+    "description": "음성 입력을 사용할 수 없을 때 오류 제목"
+  },
+  "errorNoVoiceDesc": {
+    "message": "음성 입력 버튼을 찾을 수 없습니다. ChatGPT에 로그인되어 있는지 확인하세요.",
+    "description": "음성 입력을 사용할 수 없을 때 오류 설명"
+  },
+  "statusListening": {
+    "message": "듣는 중...",
+    "description": "듣는 상태"
+  },
+  "statusUnknown": {
+    "message": "확인 중...",
+    "description": "알 수 없는 상태"
+  },
+  "startSuccess": {
+    "message": "녹음이 시작되었습니다",
+    "description": "녹음 시작 시 토스트"
+  },
+  "submitSuccess": {
+    "message": "성공적으로 캡처되었습니다!",
+    "description": "캡처 성공 시 토스트"
+  },
+  "copySuccess": {
+    "message": "클립보드에 복사되었습니다",
+    "description": "복사 성공 시 토스트"
+  },
+  "copyFailed": {
+    "message": "복사 실패",
+    "description": "복사 실패 시 토스트"
+  },
+  "cancelSuccess": {
+    "message": "녹음이 취소되었습니다",
+    "description": "녹음 취소 시 토스트"
+  },
+  "cancelFailed": {
+    "message": "취소 실패",
+    "description": "취소 실패 시 토스트"
+  }
+}

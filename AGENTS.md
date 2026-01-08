@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 1.6.0 | Updated: 2026-01-09T00:20:00+08:00
+> Version: 2.7.0 | Updated: 2026-01-09T02:30:00+08:00
 
 ## 🎯 Project Overview
 
@@ -141,7 +141,8 @@ const SELECTORS = {
 - [x] 88 unit tests pass
 - [x] E2E test framework configured (Playwright)
 - [x] E2E testing framework with 26 tests
-- [x] Multi-language support (en, zh_TW)
+- [x] Multi-language support (25 languages: en, zh_TW, zh_CN, ja, ko, de, fr, es, pt, it, ru, ar, vi, th, id, he, fa, tr, pl, nl, uk, hi, cs, el, sv)
+- [x] RTL (Right-to-Left) layout support for Arabic
 - [x] Audio feedback sounds
 - [x] Keyboard shortcuts display
 - [x] Modern UI with design tokens (light/dark mode)

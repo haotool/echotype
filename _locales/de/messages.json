@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Erweiterungsname"
+  },
+  "extDescription": {
+    "message": "Universelle Spracheingabe über ChatGPT Whisper - Diktieren Sie überall mit Tastenkombinationen",
+    "description": "Erweiterungsbeschreibung"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Popup-Titel"
+  },
+  "statusReady": {
+    "message": "Bereit",
+    "description": "Bereit-Status"
+  },
+  "statusRecording": {
+    "message": "Aufnahme",
+    "description": "Aufnahme-Status"
+  },
+  "statusProcessing": {
+    "message": "Verarbeitung",
+    "description": "Verarbeitungs-Status"
+  },
+  "statusError": {
+    "message": "Fehler",
+    "description": "Fehler-Status"
+  },
+  "btnStart": {
+    "message": "Aufnahme",
+    "description": "Start-Button"
+  },
+  "btnCancel": {
+    "message": "Abbrechen",
+    "description": "Abbrechen-Button"
+  },
+  "btnSubmit": {
+    "message": "Senden",
+    "description": "Senden-Button"
+  },
+  "btnCopy": {
+    "message": "In Zwischenablage kopieren",
+    "description": "Kopieren-Button"
+  },
+  "latestResult": {
+    "message": "Letztes Ergebnis",
+    "description": "Titel des letzten Ergebnisbereichs"
+  },
+  "noResult": {
+    "message": "Noch keine Eingabe",
+    "description": "Keine Ergebnis-Nachricht"
+  },
+  "settings": {
+    "message": "Einstellungen",
+    "description": "Einstellungen-Link"
+  },
+  "history": {
+    "message": "Verlauf",
+    "description": "Verlauf-Link"
+  },
+  "optionsTitle": {
+    "message": "EchoType Einstellungen",
+    "description": "Einstellungsseiten-Titel"
+  },
+  "optionsSubtitle": {
+    "message": "Diktieren Sie überall mit ChatGPT-Spracheingabe",
+    "description": "Einstellungsseiten-Untertitel"
+  },
+  "settingsAutomation": {
+    "message": "Automatisierungseinstellungen",
+    "description": "Automatisierungseinstellungen-Bereich"
+  },
+  "autoCopy": {
+    "message": "Automatisch kopieren",
+    "description": "Automatisch kopieren Einstellungslabel"
+  },
+  "autoCopyDesc": {
+    "message": "Nach Abschluss automatisch in die Zwischenablage kopieren",
+    "description": "Automatisch kopieren Beschreibung"
+  },
+  "autoPaste": {
+    "message": "Automatisch einfügen",
+    "description": "Automatisch einfügen Einstellungslabel"
+  },
+  "autoPasteDesc": {
+    "message": "Nach Abschluss automatisch in das ursprüngliche Eingabefeld einfügen",
+    "description": "Automatisch einfügen Beschreibung"
+  },
+  "returnFocus": {
+    "message": "Fokus zurücksetzen",
+    "description": "Fokus zurücksetzen Einstellungslabel"
+  },
+  "returnFocusDesc": {
+    "message": "Nach Start der Aufnahme zum ursprünglichen Tab zurückkehren",
+    "description": "Fokus zurücksetzen Beschreibung"
+  },
+  "historySection": {
+    "message": "Verlauf",
+    "description": "Verlauf-Bereichstitel"
+  },
+  "historyEmpty": {
+    "message": "Kein Verlauf",
+    "description": "Kein Verlauf-Nachricht"
+  },
+  "clearAll": {
+    "message": "Alles löschen",
+    "description": "Alles löschen Button"
+  },
+  "shortcuts": {
+    "message": "Tastenkombinationen",
+    "description": "Tastenkombinationen-Bereichstitel"
+  },
+  "shortcutToggle": {
+    "message": "Umschalten",
+    "description": "Umschalten-Tastenkombination Label"
+  },
+  "shortcutCancel": {
+    "message": "Abbrechen",
+    "description": "Abbrechen-Tastenkombination Label"
+  },
+  "shortcutPaste": {
+    "message": "Einfügen",
+    "description": "Einfügen-Tastenkombination Label"
+  },
+  "saved": {
+    "message": "Gespeichert",
+    "description": "Gespeichert-Bestätigung"
+  },
+  "copied": {
+    "message": "Kopiert!",
+    "description": "Kopiert-Bestätigung"
+  },
+  "justNow": {
+    "message": "Gerade eben",
+    "description": "Zeit: Gerade eben"
+  },
+  "minutesAgo": {
+    "message": "Vor $COUNT$ Minuten",
+    "description": "Zeit: Vor X Minuten",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Gestern",
+    "description": "Zeit: Gestern"
+  },
+  "customizeShortcuts": {
+    "message": "Tastenkombinationen anpassen",
+    "description": "Tastenkombinationen anpassen Button"
+  },
+  "shortcutsNote": {
+    "message": "Tipp: Klicken Sie auf die Schaltfläche oben, um Tastenkombinationen in den Chrome-Einstellungen anzupassen",
+    "description": "Tastenkombinationen anpassen Tipp"
+  },
+  "notSet": {
+    "message": "Nicht festgelegt",
+    "description": "Tastenkombination nicht festgelegt"
+  },
+  "devMode": {
+    "message": "Entwicklermodus",
+    "description": "Entwicklermodus-Bereich"
+  },
+  "devModeDesc": {
+    "message": "Zusätzliche Debug-Funktionen aktivieren",
+    "description": "Entwicklermodus Beschreibung"
+  },
+  "debugLogging": {
+    "message": "Debug-Protokollierung",
+    "description": "Debug-Protokollierung Einstellung"
+  },
+  "debugLoggingDesc": {
+    "message": "Detaillierte Protokolle in der Browserkonsole ausgeben",
+    "description": "Debug-Protokollierung Beschreibung"
+  },
+  "openSWConsole": {
+    "message": "Service Worker-Konsole öffnen",
+    "description": "SW-Konsole öffnen Button"
+  },
+  "openChatGPT": {
+    "message": "ChatGPT-Tab öffnen",
+    "description": "ChatGPT öffnen Button"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT nicht gefunden",
+    "description": "Fehlertitel wenn ChatGPT-Tab nicht gefunden"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Bitte öffnen Sie ChatGPT und melden Sie sich an, um die Spracheingabe zu verwenden",
+    "description": "Fehlerbeschreibung wenn ChatGPT-Tab nicht gefunden"
+  },
+  "errorNoVoice": {
+    "message": "Spracheingabe nicht verfügbar",
+    "description": "Fehlertitel wenn Spracheingabe nicht verfügbar"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Spracheingabe-Button nicht gefunden. Bitte stellen Sie sicher, dass Sie bei ChatGPT angemeldet sind.",
+    "description": "Fehlerbeschreibung wenn Spracheingabe nicht verfügbar"
+  },
+  "statusListening": {
+    "message": "Hört zu...",
+    "description": "Zuhören-Status"
+  },
+  "statusUnknown": {
+    "message": "Überprüfung...",
+    "description": "Unbekannter Status"
+  },
+  "startSuccess": {
+    "message": "Aufnahme gestartet",
+    "description": "Toast bei Aufnahmestart"
+  },
+  "submitSuccess": {
+    "message": "Erfolgreich erfasst!",
+    "description": "Toast bei erfolgreichem Erfassen"
+  },
+  "copySuccess": {
+    "message": "In Zwischenablage kopiert",
+    "description": "Toast bei erfolgreichem Kopieren"
+  },
+  "copyFailed": {
+    "message": "Kopieren fehlgeschlagen",
+    "description": "Toast bei fehlgeschlagenem Kopieren"
+  },
+  "cancelSuccess": {
+    "message": "Aufnahme abgebrochen",
+    "description": "Toast bei Aufnahmeabbruch"
+  },
+  "cancelFailed": {
+    "message": "Abbrechen fehlgeschlagen",
+    "description": "Toast bei fehlgeschlagenem Abbrechen"
+  }
+}

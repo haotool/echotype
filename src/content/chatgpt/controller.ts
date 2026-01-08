@@ -24,6 +24,8 @@ import {
   clickStopButton,
   clickSubmitButton,
   waitForComposer,
+  checkLoginStatus,
+  isVoiceInputAvailable,
 } from './selectors';
 import { readComposerText, captureAfterSubmit, cancelCapture } from './capture';
 import { computeAddedText } from './diff';
@@ -80,9 +82,10 @@ export function checkStatusChange(): StatusChangedPayload | null {
 /**
  * Start dictation.
  *
- * 1. Perform health check
- * 2. Snapshot baseline text
- * 3. Click start button
+ * 1. Check login status
+ * 2. Perform health check
+ * 3. Snapshot baseline text
+ * 4. Click start button
  *
  * @returns Success status and optional error
  */
@@ -91,6 +94,35 @@ export async function startDictation(): Promise<{
   error?: EchoTypeError;
   baseline: string;
 }> {
+  // Check login status first
+  const loginStatus = checkLoginStatus();
+  if (!loginStatus.loggedIn) {
+    console.warn('[EchoType] User not logged in:', loginStatus.reason);
+    return {
+      ok: false,
+      error: {
+        code: 'NOT_LOGGED_IN',
+        message: 'Please log in to ChatGPT to use voice dictation.',
+        detail: 'Voice dictation requires an active ChatGPT session. Please log in and try again.',
+      },
+      baseline: '',
+    };
+  }
+
+  // Check if voice input is available
+  if (!isVoiceInputAvailable()) {
+    console.warn('[EchoType] Voice input not available');
+    return {
+      ok: false,
+      error: {
+        code: 'VOICE_INPUT_UNAVAILABLE',
+        message: 'Voice input is not available.',
+        detail: 'The voice dictation button was not found. This feature may not be available in your region or browser.',
+      },
+      baseline: '',
+    };
+  }
+
   // Health check
   let health = performHealthCheck();
   if (!health.healthy && health.missing.includes('composer')) {
@@ -192,6 +224,16 @@ export async function submitDictation(): Promise<ResultReadyPayload | ErrorPaylo
   // Reset state
   state.baselineText = '';
   state.isActive = false;
+  state.lastStatus = 'idle';
+
+  // Notify background of status change to idle (critical for state sync)
+  try {
+    chrome.runtime.sendMessage(createMessage.statusChanged('idle')).catch(() => {
+      // Ignore if background is not available
+    });
+  } catch {
+    // Extension context may be invalidated
+  }
 
   return createMessage.resultReady(addedText, finalText, capture, clear);
 }

@@ -420,6 +420,13 @@ function setupMessageListener(): void {
 // ============================================================================
 
 async function init(): Promise<void> {
+  // Set RTL direction for RTL languages
+  const uiLang = chrome.i18n.getUILanguage();
+  if (uiLang.startsWith('ar') || uiLang.startsWith('he') || uiLang.startsWith('fa')) {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', uiLang);
+  }
+  
   await Promise.all([
     loadTheme(),
     loadDevMode(),

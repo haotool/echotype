@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Run unit tests
+        run: pnpm test
+
+      - name: Build extension
+        run: pnpm build
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create release zip
+        run: |
+          cd dist
+          zip -r ../EchoType-${{ steps.version.outputs.VERSION }}.zip .
+          cd ..
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: EchoType v${{ steps.version.outputs.VERSION }}
+          body: |
+            ## EchoType v${{ steps.version.outputs.VERSION }}
+            
+            ### Installation
+            1. Download `EchoType-${{ steps.version.outputs.VERSION }}.zip`
+            2. Unzip the file
+            3. Open Chrome and go to `chrome://extensions/`
+            4. Enable "Developer mode"
+            5. Click "Load unpacked" and select the unzipped folder
+            
+            ### Supported Languages
+            - English (en)
+            - 繁體中文 (zh_TW)
+            - 日本語 (ja)
+            - 한국어 (ko)
+            - Deutsch (de)
+            - Français (fr)
+            - Español (es)
+            
+            See [CHANGELOG.md](CHANGELOG.md) for full release notes.
+          files: |
+            EchoType-${{ steps.version.outputs.VERSION }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: echotype-release-${{ steps.version.outputs.VERSION }}
+          path: dist/
+          retention-days: 30

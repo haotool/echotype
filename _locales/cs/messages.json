@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Název rozšíření"
+  },
+  "extDescription": {
+    "message": "Univerzální hlasové diktování přes ChatGPT Whisper - diktujte kdekoli pomocí klávesových zkratek",
+    "description": "Popis rozšíření"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Titulek vyskakovacího okna"
+  },
+  "statusReady": {
+    "message": "Připraven",
+    "description": "Stav připravenosti"
+  },
+  "statusRecording": {
+    "message": "Nahrávání",
+    "description": "Stav nahrávání"
+  },
+  "statusProcessing": {
+    "message": "Zpracování",
+    "description": "Stav zpracování"
+  },
+  "statusError": {
+    "message": "Chyba",
+    "description": "Stav chyby"
+  },
+  "btnStart": {
+    "message": "Nahrát",
+    "description": "Tlačítko start"
+  },
+  "btnCancel": {
+    "message": "Zrušit",
+    "description": "Tlačítko zrušit"
+  },
+  "btnSubmit": {
+    "message": "Odeslat",
+    "description": "Tlačítko odeslat"
+  },
+  "btnCopy": {
+    "message": "Kopírovat do schránky",
+    "description": "Tlačítko kopírovat"
+  },
+  "latestResult": {
+    "message": "Poslední výsledek",
+    "description": "Titulek sekce posledního výsledku"
+  },
+  "noResult": {
+    "message": "Zatím žádné diktování",
+    "description": "Zpráva o žádném výsledku"
+  },
+  "settings": {
+    "message": "Nastavení",
+    "description": "Odkaz na nastavení"
+  },
+  "history": {
+    "message": "Historie",
+    "description": "Odkaz na historii"
+  },
+  "optionsTitle": {
+    "message": "Nastavení EchoType",
+    "description": "Titulek stránky možností"
+  },
+  "optionsSubtitle": {
+    "message": "Diktujte kdekoli pomocí hlasového vstupu ChatGPT",
+    "description": "Podtitulek stránky možností"
+  },
+  "settingsAutomation": {
+    "message": "Nastavení automatizace",
+    "description": "Sekce nastavení automatizace"
+  },
+  "autoCopy": {
+    "message": "Automatické kopírování",
+    "description": "Štítek nastavení automatického kopírování"
+  },
+  "autoCopyDesc": {
+    "message": "Automaticky kopírovat výsledek do schránky po dokončení",
+    "description": "Popis automatického kopírování"
+  },
+  "autoPaste": {
+    "message": "Automatické vložení",
+    "description": "Štítek nastavení automatického vložení"
+  },
+  "autoPasteDesc": {
+    "message": "Automaticky vložit výsledek do původního vstupního pole",
+    "description": "Popis automatického vložení"
+  },
+  "returnFocus": {
+    "message": "Vrátit fokus",
+    "description": "Štítek nastavení vrácení fokusu"
+  },
+  "returnFocusDesc": {
+    "message": "Vrátit se na původní kartu po zahájení diktování",
+    "description": "Popis vrácení fokusu"
+  },
+  "historySection": {
+    "message": "Historie",
+    "description": "Titulek sekce historie"
+  },
+  "historyEmpty": {
+    "message": "Žádná historie diktování",
+    "description": "Zpráva o prázdné historii"
+  },
+  "clearAll": {
+    "message": "Vymazat vše",
+    "description": "Tlačítko vymazat vše"
+  },
+  "shortcuts": {
+    "message": "Klávesové zkratky",
+    "description": "Titulek sekce zkratek"
+  },
+  "shortcutToggle": {
+    "message": "Přepnout diktování",
+    "description": "Štítek zkratky přepnutí"
+  },
+  "shortcutCancel": {
+    "message": "Zrušit diktování",
+    "description": "Štítek zkratky zrušení"
+  },
+  "shortcutPaste": {
+    "message": "Vložit výsledek",
+    "description": "Štítek zkratky vložení"
+  },
+  "saved": {
+    "message": "Uloženo",
+    "description": "Potvrzení uložení"
+  },
+  "copied": {
+    "message": "Zkopírováno!",
+    "description": "Potvrzení zkopírování"
+  },
+  "justNow": {
+    "message": "Právě teď",
+    "description": "Čas: právě teď"
+  },
+  "minutesAgo": {
+    "message": "Před $COUNT$ minutami",
+    "description": "Čas: před X minutami",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Včera",
+    "description": "Čas: včera"
+  },
+  "customizeShortcuts": {
+    "message": "Přizpůsobit zkratky",
+    "description": "Tlačítko pro přizpůsobení zkratek"
+  },
+  "shortcutsNote": {
+    "message": "Poznámka: Otevřete nastavení zkratek Chrome pro přizpůsobení klávesových zkratek",
+    "description": "Poznámka o přizpůsobení zkratek"
+  },
+  "notSet": {
+    "message": "Nenastaveno",
+    "description": "Zkratka nenastavena"
+  },
+  "devMode": {
+    "message": "Vývojářský režim",
+    "description": "Sekce vývojářského režimu"
+  },
+  "devModeDesc": {
+    "message": "Povolit další ladicí funkce",
+    "description": "Popis vývojářského režimu"
+  },
+  "debugLogging": {
+    "message": "Ladicí protokolování",
+    "description": "Nastavení ladicího protokolování"
+  },
+  "debugLoggingDesc": {
+    "message": "Zobrazit podrobné protokoly v konzoli prohlížeče",
+    "description": "Popis ladicího protokolování"
+  },
+  "openSWConsole": {
+    "message": "Otevřít konzoli Service Worker",
+    "description": "Tlačítko otevřít konzoli SW"
+  },
+  "openChatGPT": {
+    "message": "Otevřít kartu ChatGPT",
+    "description": "Tlačítko otevřít ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT nenalezen",
+    "description": "Titulek chyby když karta ChatGPT nenalezena"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Prosím otevřete ChatGPT a přihlaste se pro použití hlasového diktování",
+    "description": "Popis chyby když karta ChatGPT nenalezena"
+  },
+  "errorNoVoice": {
+    "message": "Hlasový vstup není k dispozici",
+    "description": "Titulek chyby když hlasový vstup není k dispozici"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Tlačítko hlasového vstupu nenalezeno. Ujistěte se, že jste přihlášeni do ChatGPT.",
+    "description": "Popis chyby když hlasový vstup není k dispozici"
+  },
+  "statusListening": {
+    "message": "Naslouchám...",
+    "description": "Stav naslouchání"
+  },
+  "statusUnknown": {
+    "message": "Kontroluji...",
+    "description": "Stav neznámý"
+  },
+  "startSuccess": {
+    "message": "Diktování zahájeno",
+    "description": "Toast zpráva když diktování začíná"
+  },
+  "submitSuccess": {
+    "message": "Úspěšně zachyceno!",
+    "description": "Toast zpráva když zachycení úspěšné"
+  },
+  "copySuccess": {
+    "message": "Zkopírováno do schránky",
+    "description": "Toast zpráva když kopírování úspěšné"
+  },
+  "copyFailed": {
+    "message": "Kopírování selhalo",
+    "description": "Toast zpráva když kopírování selhalo"
+  },
+  "cancelSuccess": {
+    "message": "Diktování zrušeno",
+    "description": "Toast zpráva když diktování zrušeno"
+  },
+  "cancelFailed": {
+    "message": "Zrušení selhalo",
+    "description": "Toast zpráva když zrušení selhalo"
+  }
+}

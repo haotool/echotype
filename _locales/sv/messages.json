@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Tilläggets namn"
+  },
+  "extDescription": {
+    "message": "Universell röstdiktamen via ChatGPT Whisper - diktera var som helst med tangentbordsgenvägar",
+    "description": "Tilläggets beskrivning"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Popup-titel"
+  },
+  "statusReady": {
+    "message": "Redo",
+    "description": "Status redo"
+  },
+  "statusRecording": {
+    "message": "Spelar in",
+    "description": "Status inspelning"
+  },
+  "statusProcessing": {
+    "message": "Bearbetar",
+    "description": "Status bearbetning"
+  },
+  "statusError": {
+    "message": "Fel",
+    "description": "Status fel"
+  },
+  "btnStart": {
+    "message": "Spela in",
+    "description": "Startknapp"
+  },
+  "btnCancel": {
+    "message": "Avbryt",
+    "description": "Avbrytknapp"
+  },
+  "btnSubmit": {
+    "message": "Skicka",
+    "description": "Skickaknapp"
+  },
+  "btnCopy": {
+    "message": "Kopiera till urklipp",
+    "description": "Kopieraknapp"
+  },
+  "latestResult": {
+    "message": "Senaste resultat",
+    "description": "Titel för senaste resultat"
+  },
+  "noResult": {
+    "message": "Ingen diktamen ännu",
+    "description": "Meddelande inget resultat"
+  },
+  "settings": {
+    "message": "Inställningar",
+    "description": "Inställningslänk"
+  },
+  "history": {
+    "message": "Historik",
+    "description": "Historiklänk"
+  },
+  "optionsTitle": {
+    "message": "EchoType Inställningar",
+    "description": "Titel alternativsida"
+  },
+  "optionsSubtitle": {
+    "message": "Diktera var som helst med ChatGPT röstinmatning",
+    "description": "Undertitel alternativsida"
+  },
+  "settingsAutomation": {
+    "message": "Automatiseringsinställningar",
+    "description": "Sektion automatiseringsinställningar"
+  },
+  "autoCopy": {
+    "message": "Automatisk kopiering",
+    "description": "Etikett automatisk kopiering"
+  },
+  "autoCopyDesc": {
+    "message": "Kopiera automatiskt resultat till urklipp efter slutförande",
+    "description": "Beskrivning automatisk kopiering"
+  },
+  "autoPaste": {
+    "message": "Automatisk inklistring",
+    "description": "Etikett automatisk inklistring"
+  },
+  "autoPasteDesc": {
+    "message": "Klistra automatiskt in resultat i ursprungligt inmatningsfält",
+    "description": "Beskrivning automatisk inklistring"
+  },
+  "returnFocus": {
+    "message": "Återställ fokus",
+    "description": "Etikett återställ fokus"
+  },
+  "returnFocusDesc": {
+    "message": "Återgå till ursprunglig flik efter start av diktamen",
+    "description": "Beskrivning återställ fokus"
+  },
+  "historySection": {
+    "message": "Historik",
+    "description": "Titel historiksektion"
+  },
+  "historyEmpty": {
+    "message": "Ingen diktamenhistorik",
+    "description": "Meddelande tom historik"
+  },
+  "clearAll": {
+    "message": "Rensa allt",
+    "description": "Knapp rensa allt"
+  },
+  "shortcuts": {
+    "message": "Tangentbordsgenvägar",
+    "description": "Titel genvägsektion"
+  },
+  "shortcutToggle": {
+    "message": "Växla diktamen",
+    "description": "Etikett växlingsgenväg"
+  },
+  "shortcutCancel": {
+    "message": "Avbryt diktamen",
+    "description": "Etikett avbrytgenväg"
+  },
+  "shortcutPaste": {
+    "message": "Klistra in resultat",
+    "description": "Etikett inklistringsgenväg"
+  },
+  "saved": {
+    "message": "Sparat",
+    "description": "Bekräftelse sparat"
+  },
+  "copied": {
+    "message": "Kopierat!",
+    "description": "Bekräftelse kopierat"
+  },
+  "justNow": {
+    "message": "Just nu",
+    "description": "Tid: just nu"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ minuter sedan",
+    "description": "Tid: X minuter sedan",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Igår",
+    "description": "Tid: igår"
+  },
+  "customizeShortcuts": {
+    "message": "Anpassa genvägar",
+    "description": "Knapp för att anpassa genvägar"
+  },
+  "shortcutsNote": {
+    "message": "Obs: Öppna Chrome genvägsinställningar för att anpassa tangentbordsgenvägar",
+    "description": "Notering om anpassning av genvägar"
+  },
+  "notSet": {
+    "message": "Ej inställt",
+    "description": "Genväg ej inställd"
+  },
+  "devMode": {
+    "message": "Utvecklarläge",
+    "description": "Sektion utvecklarläge"
+  },
+  "devModeDesc": {
+    "message": "Aktivera extra felsökningsfunktioner",
+    "description": "Beskrivning utvecklarläge"
+  },
+  "debugLogging": {
+    "message": "Felsökningsloggning",
+    "description": "Inställning felsökningsloggning"
+  },
+  "debugLoggingDesc": {
+    "message": "Visa detaljerade loggar i webbläsarkonsolen",
+    "description": "Beskrivning felsökningsloggning"
+  },
+  "openSWConsole": {
+    "message": "Öppna Service Worker-konsol",
+    "description": "Knapp öppna SW-konsol"
+  },
+  "openChatGPT": {
+    "message": "Öppna ChatGPT-flik",
+    "description": "Knapp öppna ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT hittades inte",
+    "description": "Feltitel när ChatGPT-flik inte hittas"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Vänligen öppna ChatGPT och logga in för att använda röstdiktamen",
+    "description": "Felbeskrivning när ChatGPT-flik inte hittas"
+  },
+  "errorNoVoice": {
+    "message": "Röstinmatning inte tillgänglig",
+    "description": "Feltitel när röstinmatning inte tillgänglig"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Röstinmatningsknapp hittades inte. Se till att du är inloggad på ChatGPT.",
+    "description": "Felbeskrivning när röstinmatning inte tillgänglig"
+  },
+  "statusListening": {
+    "message": "Lyssnar...",
+    "description": "Status lyssnar"
+  },
+  "statusUnknown": {
+    "message": "Kontrollerar...",
+    "description": "Status okänd"
+  },
+  "startSuccess": {
+    "message": "Diktamen startad",
+    "description": "Toast-meddelande när diktamen startar"
+  },
+  "submitSuccess": {
+    "message": "Lyckades fånga!",
+    "description": "Toast-meddelande när fångst lyckades"
+  },
+  "copySuccess": {
+    "message": "Kopierat till urklipp",
+    "description": "Toast-meddelande när kopiering lyckades"
+  },
+  "copyFailed": {
+    "message": "Kopiering misslyckades",
+    "description": "Toast-meddelande när kopiering misslyckades"
+  },
+  "cancelSuccess": {
+    "message": "Diktamen avbruten",
+    "description": "Toast-meddelande när diktamen avbryts"
+  },
+  "cancelFailed": {
+    "message": "Avbrytning misslyckades",
+    "description": "Toast-meddelande när avbrytning misslyckades"
+  }
+}

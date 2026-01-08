@@ -1,0 +1,240 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Название расширения"
+  },
+  "extDescription": {
+    "message": "Универсальная голосовая диктовка через ChatGPT Whisper - диктуйте где угодно с помощью горячих клавиш",
+    "description": "Описание расширения"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Заголовок всплывающего окна"
+  },
+  "statusReady": {
+    "message": "Готов",
+    "description": "Статус готов"
+  },
+  "statusRecording": {
+    "message": "Запись",
+    "description": "Статус запись"
+  },
+  "statusProcessing": {
+    "message": "Обработка",
+    "description": "Статус обработка"
+  },
+  "statusError": {
+    "message": "Ошибка",
+    "description": "Статус ошибка"
+  },
+  "btnStart": {
+    "message": "Начать",
+    "description": "Кнопка начать"
+  },
+  "btnPause": {
+    "message": "Пауза",
+    "description": "Кнопка пауза"
+  },
+  "btnSubmit": {
+    "message": "Отправить и Захватить",
+    "description": "Кнопка отправить"
+  },
+  "btnCopy": {
+    "message": "Копировать в Буфер",
+    "description": "Кнопка копировать"
+  },
+  "latestResult": {
+    "message": "Последний Результат",
+    "description": "Заголовок секции последний результат"
+  },
+  "noResult": {
+    "message": "Пока нет диктовки",
+    "description": "Сообщение нет результата"
+  },
+  "settings": {
+    "message": "Настройки",
+    "description": "Ссылка настройки"
+  },
+  "history": {
+    "message": "История",
+    "description": "Ссылка история"
+  },
+  "optionsTitle": {
+    "message": "Настройки EchoType",
+    "description": "Заголовок страницы настроек"
+  },
+  "optionsSubtitle": {
+    "message": "Диктуйте где угодно используя голосовой ввод ChatGPT",
+    "description": "Подзаголовок страницы настроек"
+  },
+  "settingsAutomation": {
+    "message": "Настройки Автоматизации",
+    "description": "Секция настройки автоматизации"
+  },
+  "autoCopy": {
+    "message": "Авто Копирование",
+    "description": "Метка авто копирование"
+  },
+  "autoCopyDesc": {
+    "message": "Автоматически копировать результат в буфер обмена после завершения",
+    "description": "Описание авто копирование"
+  },
+  "autoPaste": {
+    "message": "Авто Вставка",
+    "description": "Метка авто вставка"
+  },
+  "autoPasteDesc": {
+    "message": "Автоматически вставлять результат в исходное поле ввода",
+    "description": "Описание авто вставка"
+  },
+  "returnFocus": {
+    "message": "Вернуть Фокус",
+    "description": "Метка вернуть фокус"
+  },
+  "returnFocusDesc": {
+    "message": "Вернуться на исходную вкладку после начала диктовки",
+    "description": "Описание вернуть фокус"
+  },
+  "historySection": {
+    "message": "История",
+    "description": "Заголовок секции история"
+  },
+  "historyEmpty": {
+    "message": "Нет истории диктовки",
+    "description": "Сообщение пустая история"
+  },
+  "clearAll": {
+    "message": "Очистить Всё",
+    "description": "Кнопка очистить всё"
+  },
+  "shortcuts": {
+    "message": "Горячие Клавиши",
+    "description": "Заголовок секции горячие клавиши"
+  },
+  "shortcutToggle": {
+    "message": "Переключить диктовку",
+    "description": "Метка горячей клавиши переключить"
+  },
+  "shortcutCancel": {
+    "message": "Отменить диктовку",
+    "description": "Метка горячей клавиши отменить"
+  },
+  "shortcutPaste": {
+    "message": "Вставить результат",
+    "description": "Метка горячей клавиши вставить"
+  },
+  "btnRecord": {
+    "message": "Запись",
+    "description": "Текст кнопки запись"
+  },
+  "btnCancel": {
+    "message": "Отмена",
+    "description": "Текст кнопки отмена"
+  },
+  "cancelSuccess": {
+    "message": "Отменено",
+    "description": "Уведомление отмена успешна"
+  },
+  "saved": {
+    "message": "Сохранено",
+    "description": "Подтверждение сохранено"
+  },
+  "copied": {
+    "message": "Скопировано!",
+    "description": "Подтверждение скопировано"
+  },
+  "justNow": {
+    "message": "Только что",
+    "description": "Время: только что"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ минут назад",
+    "description": "Время: X минут назад",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Вчера",
+    "description": "Время: вчера"
+  },
+  "customizeShortcuts": {
+    "message": "Настроить Горячие Клавиши",
+    "description": "Кнопка настроить горячие клавиши"
+  },
+  "shortcutsNote": {
+    "message": "Примечание: Откройте настройки горячих клавиш Chrome для настройки клавиатурных сочетаний",
+    "description": "Примечание о настройке горячих клавиш"
+  },
+  "notSet": {
+    "message": "Не задано",
+    "description": "Горячая клавиша не задана"
+  },
+  "devMode": {
+    "message": "Режим Разработчика",
+    "description": "Секция режим разработчика"
+  },
+  "devModeDesc": {
+    "message": "Включить дополнительные функции отладки",
+    "description": "Описание режим разработчика"
+  },
+  "debugLogging": {
+    "message": "Журнал Отладки",
+    "description": "Настройка журнал отладки"
+  },
+  "debugLoggingDesc": {
+    "message": "Выводить подробные логи в консоль браузера",
+    "description": "Описание журнал отладки"
+  },
+  "openSWConsole": {
+    "message": "Открыть Консоль Service Worker",
+    "description": "Кнопка открыть консоль SW"
+  },
+  "openChatGPT": {
+    "message": "Открыть Вкладку ChatGPT",
+    "description": "Кнопка открыть ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT Не Найден",
+    "description": "Заголовок ошибки нет ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Пожалуйста, откройте ChatGPT и войдите для использования голосовой диктовки",
+    "description": "Описание ошибки нет ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Голосовой Ввод Недоступен",
+    "description": "Заголовок ошибки голосовой ввод недоступен"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Кнопка голосового ввода не найдена. Пожалуйста, убедитесь, что вы вошли в ChatGPT.",
+    "description": "Описание ошибки голосовой ввод недоступен"
+  },
+  "statusListening": {
+    "message": "Слушаю...",
+    "description": "Статус слушаю"
+  },
+  "statusUnknown": {
+    "message": "Проверка...",
+    "description": "Статус неизвестен"
+  },
+  "startSuccess": {
+    "message": "Диктовка начата",
+    "description": "Уведомление диктовка начата"
+  },
+  "submitSuccess": {
+    "message": "Успешно захвачено!",
+    "description": "Уведомление захват успешен"
+  },
+  "copySuccess": {
+    "message": "Скопировано в буфер обмена",
+    "description": "Уведомление копирование успешно"
+  },
+  "copyFailed": {
+    "message": "Ошибка копирования",
+    "description": "Уведомление ошибка копирования"
+  }
+}

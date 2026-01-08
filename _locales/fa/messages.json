@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "نام افزونه"
+  },
+  "extDescription": {
+    "message": "دیکته صوتی جهانی از طریق ChatGPT Whisper - در هر جایی با میانبرهای صفحه‌کلید دیکته کنید",
+    "description": "توضیحات افزونه"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "عنوان پنجره بازشو"
+  },
+  "statusReady": {
+    "message": "آماده",
+    "description": "وضعیت آماده"
+  },
+  "statusRecording": {
+    "message": "در حال ضبط",
+    "description": "وضعیت ضبط"
+  },
+  "statusProcessing": {
+    "message": "در حال پردازش",
+    "description": "وضعیت پردازش"
+  },
+  "statusError": {
+    "message": "خطا",
+    "description": "وضعیت خطا"
+  },
+  "btnStart": {
+    "message": "ضبط",
+    "description": "دکمه شروع"
+  },
+  "btnCancel": {
+    "message": "لغو",
+    "description": "دکمه لغو"
+  },
+  "btnSubmit": {
+    "message": "ارسال",
+    "description": "دکمه ارسال"
+  },
+  "btnCopy": {
+    "message": "کپی به کلیپ‌بورد",
+    "description": "دکمه کپی"
+  },
+  "latestResult": {
+    "message": "آخرین نتیجه",
+    "description": "عنوان بخش آخرین نتیجه"
+  },
+  "noResult": {
+    "message": "هنوز دیکته‌ای نیست",
+    "description": "پیام بدون نتیجه"
+  },
+  "settings": {
+    "message": "تنظیمات",
+    "description": "لینک تنظیمات"
+  },
+  "history": {
+    "message": "تاریخچه",
+    "description": "لینک تاریخچه"
+  },
+  "optionsTitle": {
+    "message": "تنظیمات EchoType",
+    "description": "عنوان صفحه گزینه‌ها"
+  },
+  "optionsSubtitle": {
+    "message": "در هر جایی با ورودی صوتی ChatGPT دیکته کنید",
+    "description": "زیرعنوان صفحه گزینه‌ها"
+  },
+  "settingsAutomation": {
+    "message": "تنظیمات خودکارسازی",
+    "description": "بخش تنظیمات خودکارسازی"
+  },
+  "autoCopy": {
+    "message": "کپی خودکار",
+    "description": "برچسب تنظیم کپی خودکار"
+  },
+  "autoCopyDesc": {
+    "message": "پس از اتمام، نتیجه را به طور خودکار در کلیپ‌بورد کپی کنید",
+    "description": "توضیحات کپی خودکار"
+  },
+  "autoPaste": {
+    "message": "چسباندن خودکار",
+    "description": "برچسب تنظیم چسباندن خودکار"
+  },
+  "autoPasteDesc": {
+    "message": "نتیجه را به طور خودکار در فیلد ورودی اصلی بچسبانید",
+    "description": "توضیحات چسباندن خودکار"
+  },
+  "returnFocus": {
+    "message": "بازگشت فوکوس",
+    "description": "برچسب تنظیم بازگشت فوکوس"
+  },
+  "returnFocusDesc": {
+    "message": "پس از شروع دیکته به تب اصلی برگردید",
+    "description": "توضیحات بازگشت فوکوس"
+  },
+  "historySection": {
+    "message": "تاریخچه",
+    "description": "عنوان بخش تاریخچه"
+  },
+  "historyEmpty": {
+    "message": "تاریخچه دیکته‌ای وجود ندارد",
+    "description": "پیام تاریخچه خالی"
+  },
+  "clearAll": {
+    "message": "پاک کردن همه",
+    "description": "دکمه پاک کردن همه"
+  },
+  "shortcuts": {
+    "message": "میانبرهای صفحه‌کلید",
+    "description": "عنوان بخش میانبرها"
+  },
+  "shortcutToggle": {
+    "message": "تغییر وضعیت دیکته",
+    "description": "برچسب میانبر تغییر وضعیت"
+  },
+  "shortcutCancel": {
+    "message": "لغو دیکته",
+    "description": "برچسب میانبر لغو"
+  },
+  "shortcutPaste": {
+    "message": "چسباندن نتیجه",
+    "description": "برچسب میانبر چسباندن"
+  },
+  "saved": {
+    "message": "ذخیره شد",
+    "description": "تأیید ذخیره"
+  },
+  "copied": {
+    "message": "کپی شد!",
+    "description": "تأیید کپی"
+  },
+  "justNow": {
+    "message": "همین الان",
+    "description": "زمان: همین الان"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ دقیقه پیش",
+    "description": "زمان: X دقیقه پیش",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "دیروز",
+    "description": "زمان: دیروز"
+  },
+  "customizeShortcuts": {
+    "message": "سفارشی‌سازی میانبرها",
+    "description": "دکمه سفارشی‌سازی میانبرها"
+  },
+  "shortcutsNote": {
+    "message": "توجه: تنظیمات میانبر Chrome را برای سفارشی‌سازی میانبرهای صفحه‌کلید باز کنید",
+    "description": "یادداشت درباره سفارشی‌سازی میانبرها"
+  },
+  "notSet": {
+    "message": "تنظیم نشده",
+    "description": "میانبر تنظیم نشده"
+  },
+  "devMode": {
+    "message": "حالت توسعه‌دهنده",
+    "description": "بخش حالت توسعه‌دهنده"
+  },
+  "devModeDesc": {
+    "message": "فعال‌سازی ویژگی‌های اشکال‌زدایی اضافی",
+    "description": "توضیحات حالت توسعه‌دهنده"
+  },
+  "debugLogging": {
+    "message": "ثبت اشکال‌زدایی",
+    "description": "تنظیم ثبت اشکال‌زدایی"
+  },
+  "debugLoggingDesc": {
+    "message": "نمایش گزارش‌های دقیق در کنسول مرورگر",
+    "description": "توضیحات ثبت اشکال‌زدایی"
+  },
+  "openSWConsole": {
+    "message": "باز کردن کنسول Service Worker",
+    "description": "دکمه باز کردن کنسول SW"
+  },
+  "openChatGPT": {
+    "message": "باز کردن تب ChatGPT",
+    "description": "دکمه باز کردن ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT یافت نشد",
+    "description": "عنوان خطا وقتی تب ChatGPT یافت نشد"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "لطفاً ChatGPT را باز کنید و وارد شوید تا از دیکته صوتی استفاده کنید",
+    "description": "توضیحات خطا وقتی تب ChatGPT یافت نشد"
+  },
+  "errorNoVoice": {
+    "message": "ورودی صوتی در دسترس نیست",
+    "description": "عنوان خطا وقتی ورودی صوتی در دسترس نیست"
+  },
+  "errorNoVoiceDesc": {
+    "message": "دکمه ورودی صوتی یافت نشد. لطفاً مطمئن شوید که وارد ChatGPT شده‌اید.",
+    "description": "توضیحات خطا وقتی ورودی صوتی در دسترس نیست"
+  },
+  "statusListening": {
+    "message": "در حال گوش دادن...",
+    "description": "وضعیت گوش دادن"
+  },
+  "statusUnknown": {
+    "message": "در حال بررسی...",
+    "description": "وضعیت نامشخص"
+  },
+  "startSuccess": {
+    "message": "دیکته شروع شد",
+    "description": "اعلان وقتی دیکته شروع می‌شود"
+  },
+  "submitSuccess": {
+    "message": "با موفقیت ضبط شد!",
+    "description": "اعلان وقتی ضبط موفق است"
+  },
+  "copySuccess": {
+    "message": "در کلیپ‌بورد کپی شد",
+    "description": "اعلان وقتی کپی موفق است"
+  },
+  "copyFailed": {
+    "message": "کپی ناموفق",
+    "description": "اعلان وقتی کپی ناموفق است"
+  },
+  "cancelSuccess": {
+    "message": "دیکته لغو شد",
+    "description": "اعلان وقتی دیکته لغو می‌شود"
+  },
+  "cancelFailed": {
+    "message": "لغو ناموفق",
+    "description": "اعلان وقتی لغو ناموفق است"
+  }
+}
