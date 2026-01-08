@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "拡張機能名"
+  },
+  "extDescription": {
+    "message": "ChatGPT Whisperを使用した音声入力 - キーボードショートカットでどこでも入力",
+    "description": "拡張機能の説明"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "ポップアップタイトル"
+  },
+  "statusReady": {
+    "message": "準備完了",
+    "description": "準備完了状態"
+  },
+  "statusRecording": {
+    "message": "録音中",
+    "description": "録音状態"
+  },
+  "statusProcessing": {
+    "message": "処理中",
+    "description": "処理状態"
+  },
+  "statusError": {
+    "message": "エラー",
+    "description": "エラー状態"
+  },
+  "btnStart": {
+    "message": "録音",
+    "description": "開始ボタン"
+  },
+  "btnCancel": {
+    "message": "キャンセル",
+    "description": "キャンセルボタン"
+  },
+  "btnSubmit": {
+    "message": "送信",
+    "description": "送信ボタン"
+  },
+  "btnCopy": {
+    "message": "クリップボードにコピー",
+    "description": "コピーボタン"
+  },
+  "latestResult": {
+    "message": "最新の結果",
+    "description": "最新の結果セクションタイトル"
+  },
+  "noResult": {
+    "message": "まだ入力がありません",
+    "description": "結果なしメッセージ"
+  },
+  "settings": {
+    "message": "設定",
+    "description": "設定リンク"
+  },
+  "history": {
+    "message": "履歴",
+    "description": "履歴リンク"
+  },
+  "optionsTitle": {
+    "message": "EchoType 設定",
+    "description": "設定ページタイトル"
+  },
+  "optionsSubtitle": {
+    "message": "ChatGPTの音声入力でどこでも入力",
+    "description": "設定ページサブタイトル"
+  },
+  "settingsAutomation": {
+    "message": "自動化設定",
+    "description": "自動化設定セクション"
+  },
+  "autoCopy": {
+    "message": "自動コピー",
+    "description": "自動コピー設定ラベル"
+  },
+  "autoCopyDesc": {
+    "message": "完了後に自動的にクリップボードにコピー",
+    "description": "自動コピーの説明"
+  },
+  "autoPaste": {
+    "message": "自動貼り付け",
+    "description": "自動貼り付け設定ラベル"
+  },
+  "autoPasteDesc": {
+    "message": "完了後に自動的に元の入力フィールドに貼り付け",
+    "description": "自動貼り付けの説明"
+  },
+  "returnFocus": {
+    "message": "フォーカスを戻す",
+    "description": "フォーカスを戻す設定ラベル"
+  },
+  "returnFocusDesc": {
+    "message": "録音開始後に元のタブに戻る",
+    "description": "フォーカスを戻すの説明"
+  },
+  "historySection": {
+    "message": "履歴",
+    "description": "履歴セクションタイトル"
+  },
+  "historyEmpty": {
+    "message": "履歴がありません",
+    "description": "履歴なしメッセージ"
+  },
+  "clearAll": {
+    "message": "すべてクリア",
+    "description": "すべてクリアボタン"
+  },
+  "shortcuts": {
+    "message": "キーボードショートカット",
+    "description": "ショートカットセクションタイトル"
+  },
+  "shortcutToggle": {
+    "message": "切り替え",
+    "description": "切り替えショートカットラベル"
+  },
+  "shortcutCancel": {
+    "message": "キャンセル",
+    "description": "キャンセルショートカットラベル"
+  },
+  "shortcutPaste": {
+    "message": "貼り付け",
+    "description": "貼り付けショートカットラベル"
+  },
+  "saved": {
+    "message": "保存しました",
+    "description": "保存確認"
+  },
+  "copied": {
+    "message": "コピーしました！",
+    "description": "コピー確認"
+  },
+  "justNow": {
+    "message": "たった今",
+    "description": "時間：たった今"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$分前",
+    "description": "時間：X分前",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "昨日",
+    "description": "時間：昨日"
+  },
+  "customizeShortcuts": {
+    "message": "ショートカットをカスタマイズ",
+    "description": "ショートカットカスタマイズボタン"
+  },
+  "shortcutsNote": {
+    "message": "ヒント：上のボタンをクリックしてChromeの設定でショートカットをカスタマイズ",
+    "description": "ショートカットカスタマイズのヒント"
+  },
+  "notSet": {
+    "message": "未設定",
+    "description": "ショートカット未設定"
+  },
+  "devMode": {
+    "message": "開発者モード",
+    "description": "開発者モードセクション"
+  },
+  "devModeDesc": {
+    "message": "追加のデバッグ機能を有効にする",
+    "description": "開発者モードの説明"
+  },
+  "debugLogging": {
+    "message": "デバッグログ",
+    "description": "デバッグログ設定"
+  },
+  "debugLoggingDesc": {
+    "message": "ブラウザコンソールに詳細なログを出力",
+    "description": "デバッグログの説明"
+  },
+  "openSWConsole": {
+    "message": "Service Workerコンソールを開く",
+    "description": "SWコンソールを開くボタン"
+  },
+  "openChatGPT": {
+    "message": "ChatGPTタブを開く",
+    "description": "ChatGPTを開くボタン"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPTが見つかりません",
+    "description": "ChatGPTタブが見つからない場合のエラータイトル"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "音声入力を使用するには、ChatGPTを開いてログインしてください",
+    "description": "ChatGPTタブが見つからない場合のエラー説明"
+  },
+  "errorNoVoice": {
+    "message": "音声入力が利用できません",
+    "description": "音声入力が利用できない場合のエラータイトル"
+  },
+  "errorNoVoiceDesc": {
+    "message": "音声入力ボタンが見つかりません。ChatGPTにログインしていることを確認してください。",
+    "description": "音声入力が利用できない場合のエラー説明"
+  },
+  "statusListening": {
+    "message": "聞いています...",
+    "description": "聞いている状態"
+  },
+  "statusUnknown": {
+    "message": "確認中...",
+    "description": "不明な状態"
+  },
+  "startSuccess": {
+    "message": "録音を開始しました",
+    "description": "録音開始時のトースト"
+  },
+  "submitSuccess": {
+    "message": "正常にキャプチャしました！",
+    "description": "キャプチャ成功時のトースト"
+  },
+  "copySuccess": {
+    "message": "クリップボードにコピーしました",
+    "description": "コピー成功時のトースト"
+  },
+  "copyFailed": {
+    "message": "コピーに失敗しました",
+    "description": "コピー失敗時のトースト"
+  },
+  "cancelSuccess": {
+    "message": "録音をキャンセルしました",
+    "description": "録音キャンセル時のトースト"
+  },
+  "cancelFailed": {
+    "message": "キャンセルに失敗しました",
+    "description": "キャンセル失敗時のトースト"
+  }
+}

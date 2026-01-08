@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Uzantı adı"
+  },
+  "extDescription": {
+    "message": "ChatGPT Whisper ile evrensel sesli dikte - klavye kısayollarıyla her yerde dikte edin",
+    "description": "Uzantı açıklaması"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Açılır pencere başlığı"
+  },
+  "statusReady": {
+    "message": "Hazır",
+    "description": "Hazır durumu"
+  },
+  "statusRecording": {
+    "message": "Kayıt yapılıyor",
+    "description": "Kayıt durumu"
+  },
+  "statusProcessing": {
+    "message": "İşleniyor",
+    "description": "İşleme durumu"
+  },
+  "statusError": {
+    "message": "Hata",
+    "description": "Hata durumu"
+  },
+  "btnStart": {
+    "message": "Kaydet",
+    "description": "Başlat düğmesi"
+  },
+  "btnCancel": {
+    "message": "İptal",
+    "description": "İptal düğmesi"
+  },
+  "btnSubmit": {
+    "message": "Gönder",
+    "description": "Gönder düğmesi"
+  },
+  "btnCopy": {
+    "message": "Panoya Kopyala",
+    "description": "Kopyala düğmesi"
+  },
+  "latestResult": {
+    "message": "Son Sonuç",
+    "description": "Son sonuç bölümü başlığı"
+  },
+  "noResult": {
+    "message": "Henüz dikte yok",
+    "description": "Sonuç yok mesajı"
+  },
+  "settings": {
+    "message": "Ayarlar",
+    "description": "Ayarlar bağlantısı"
+  },
+  "history": {
+    "message": "Geçmiş",
+    "description": "Geçmiş bağlantısı"
+  },
+  "optionsTitle": {
+    "message": "EchoType Ayarları",
+    "description": "Seçenekler sayfası başlığı"
+  },
+  "optionsSubtitle": {
+    "message": "ChatGPT sesli giriş kullanarak her yerde dikte edin",
+    "description": "Seçenekler sayfası alt başlığı"
+  },
+  "settingsAutomation": {
+    "message": "Otomasyon Ayarları",
+    "description": "Otomasyon ayarları bölümü"
+  },
+  "autoCopy": {
+    "message": "Otomatik Kopyala",
+    "description": "Otomatik kopyalama ayar etiketi"
+  },
+  "autoCopyDesc": {
+    "message": "Tamamlandıktan sonra sonucu otomatik olarak panoya kopyala",
+    "description": "Otomatik kopyalama açıklaması"
+  },
+  "autoPaste": {
+    "message": "Otomatik Yapıştır",
+    "description": "Otomatik yapıştırma ayar etiketi"
+  },
+  "autoPasteDesc": {
+    "message": "Sonucu otomatik olarak orijinal giriş alanına yapıştır",
+    "description": "Otomatik yapıştırma açıklaması"
+  },
+  "returnFocus": {
+    "message": "Odağı Geri Ver",
+    "description": "Odağı geri verme ayar etiketi"
+  },
+  "returnFocusDesc": {
+    "message": "Dikte başladıktan sonra orijinal sekmeye geri dön",
+    "description": "Odağı geri verme açıklaması"
+  },
+  "historySection": {
+    "message": "Geçmiş",
+    "description": "Geçmiş bölümü başlığı"
+  },
+  "historyEmpty": {
+    "message": "Dikte geçmişi yok",
+    "description": "Boş geçmiş mesajı"
+  },
+  "clearAll": {
+    "message": "Tümünü Temizle",
+    "description": "Tümünü temizle düğmesi"
+  },
+  "shortcuts": {
+    "message": "Klavye Kısayolları",
+    "description": "Kısayollar bölümü başlığı"
+  },
+  "shortcutToggle": {
+    "message": "Dikteyi Aç/Kapat",
+    "description": "Aç/kapat kısayol etiketi"
+  },
+  "shortcutCancel": {
+    "message": "Dikteyi İptal Et",
+    "description": "İptal kısayol etiketi"
+  },
+  "shortcutPaste": {
+    "message": "Sonucu Yapıştır",
+    "description": "Yapıştır kısayol etiketi"
+  },
+  "saved": {
+    "message": "Kaydedildi",
+    "description": "Kaydetme onayı"
+  },
+  "copied": {
+    "message": "Kopyalandı!",
+    "description": "Kopyalama onayı"
+  },
+  "justNow": {
+    "message": "Az önce",
+    "description": "Zaman: az önce"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ dakika önce",
+    "description": "Zaman: X dakika önce",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Dün",
+    "description": "Zaman: dün"
+  },
+  "customizeShortcuts": {
+    "message": "Kısayolları Özelleştir",
+    "description": "Kısayolları özelleştir düğmesi"
+  },
+  "shortcutsNote": {
+    "message": "Not: Klavye kısayollarını özelleştirmek için Chrome kısayol ayarlarını açın",
+    "description": "Kısayol özelleştirme hakkında not"
+  },
+  "notSet": {
+    "message": "Ayarlanmadı",
+    "description": "Kısayol ayarlanmadı"
+  },
+  "devMode": {
+    "message": "Geliştirici Modu",
+    "description": "Geliştirici modu bölümü"
+  },
+  "devModeDesc": {
+    "message": "Ek hata ayıklama özelliklerini etkinleştir",
+    "description": "Geliştirici modu açıklaması"
+  },
+  "debugLogging": {
+    "message": "Hata Ayıklama Günlüğü",
+    "description": "Hata ayıklama günlüğü ayarı"
+  },
+  "debugLoggingDesc": {
+    "message": "Tarayıcı konsolunda ayrıntılı günlükleri göster",
+    "description": "Hata ayıklama günlüğü açıklaması"
+  },
+  "openSWConsole": {
+    "message": "Service Worker Konsolunu Aç",
+    "description": "SW konsolunu aç düğmesi"
+  },
+  "openChatGPT": {
+    "message": "ChatGPT Sekmesini Aç",
+    "description": "ChatGPT'yi aç düğmesi"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT Bulunamadı",
+    "description": "ChatGPT sekmesi bulunamadığında hata başlığı"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Sesli dikteyi kullanmak için lütfen ChatGPT'yi açın ve giriş yapın",
+    "description": "ChatGPT sekmesi bulunamadığında hata açıklaması"
+  },
+  "errorNoVoice": {
+    "message": "Sesli Giriş Kullanılamıyor",
+    "description": "Sesli giriş kullanılamadığında hata başlığı"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Sesli giriş düğmesi bulunamadı. Lütfen ChatGPT'ye giriş yaptığınızdan emin olun.",
+    "description": "Sesli giriş kullanılamadığında hata açıklaması"
+  },
+  "statusListening": {
+    "message": "Dinliyor...",
+    "description": "Dinleme durumu"
+  },
+  "statusUnknown": {
+    "message": "Kontrol ediliyor...",
+    "description": "Bilinmeyen durum"
+  },
+  "startSuccess": {
+    "message": "Dikte başladı",
+    "description": "Dikte başladığında bildirim"
+  },
+  "submitSuccess": {
+    "message": "Başarıyla kaydedildi!",
+    "description": "Kayıt başarılı olduğunda bildirim"
+  },
+  "copySuccess": {
+    "message": "Panoya kopyalandı",
+    "description": "Kopyalama başarılı olduğunda bildirim"
+  },
+  "copyFailed": {
+    "message": "Kopyalama başarısız",
+    "description": "Kopyalama başarısız olduğunda bildirim"
+  },
+  "cancelSuccess": {
+    "message": "Dikte iptal edildi",
+    "description": "Dikte iptal edildiğinde bildirim"
+  },
+  "cancelFailed": {
+    "message": "İptal başarısız",
+    "description": "İptal başarısız olduğunda bildirim"
+  }
+}

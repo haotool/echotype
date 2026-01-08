@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Tên tiện ích mở rộng"
+  },
+  "extDescription": {
+    "message": "Đọc chính tả bằng giọng nói qua ChatGPT Whisper - đọc chính tả ở bất kỳ đâu với phím tắt",
+    "description": "Mô tả tiện ích mở rộng"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Tiêu đề popup"
+  },
+  "statusReady": {
+    "message": "Sẵn sàng",
+    "description": "Trạng thái sẵn sàng"
+  },
+  "statusRecording": {
+    "message": "Đang ghi",
+    "description": "Trạng thái đang ghi"
+  },
+  "statusProcessing": {
+    "message": "Đang xử lý",
+    "description": "Trạng thái đang xử lý"
+  },
+  "statusError": {
+    "message": "Lỗi",
+    "description": "Trạng thái lỗi"
+  },
+  "btnStart": {
+    "message": "Ghi âm",
+    "description": "Nút bắt đầu"
+  },
+  "btnCancel": {
+    "message": "Hủy",
+    "description": "Nút hủy"
+  },
+  "btnSubmit": {
+    "message": "Gửi",
+    "description": "Nút gửi"
+  },
+  "btnCopy": {
+    "message": "Sao chép vào bộ nhớ tạm",
+    "description": "Nút sao chép"
+  },
+  "latestResult": {
+    "message": "Kết quả mới nhất",
+    "description": "Tiêu đề phần kết quả mới nhất"
+  },
+  "noResult": {
+    "message": "Chưa có đọc chính tả",
+    "description": "Thông báo không có kết quả"
+  },
+  "settings": {
+    "message": "Cài đặt",
+    "description": "Liên kết cài đặt"
+  },
+  "history": {
+    "message": "Lịch sử",
+    "description": "Liên kết lịch sử"
+  },
+  "optionsTitle": {
+    "message": "Cài đặt EchoType",
+    "description": "Tiêu đề trang tùy chọn"
+  },
+  "optionsSubtitle": {
+    "message": "Đọc chính tả ở bất kỳ đâu bằng giọng nói ChatGPT",
+    "description": "Phụ đề trang tùy chọn"
+  },
+  "settingsAutomation": {
+    "message": "Cài đặt tự động hóa",
+    "description": "Phần cài đặt tự động hóa"
+  },
+  "autoCopy": {
+    "message": "Tự động sao chép",
+    "description": "Nhãn cài đặt tự động sao chép"
+  },
+  "autoCopyDesc": {
+    "message": "Tự động sao chép kết quả vào bộ nhớ tạm sau khi hoàn thành",
+    "description": "Mô tả tự động sao chép"
+  },
+  "autoPaste": {
+    "message": "Tự động dán",
+    "description": "Nhãn cài đặt tự động dán"
+  },
+  "autoPasteDesc": {
+    "message": "Tự động dán kết quả vào trường nhập liệu ban đầu",
+    "description": "Mô tả tự động dán"
+  },
+  "returnFocus": {
+    "message": "Trả lại tiêu điểm",
+    "description": "Nhãn cài đặt trả lại tiêu điểm"
+  },
+  "returnFocusDesc": {
+    "message": "Quay lại tab ban đầu sau khi bắt đầu đọc chính tả",
+    "description": "Mô tả trả lại tiêu điểm"
+  },
+  "historySection": {
+    "message": "Lịch sử",
+    "description": "Tiêu đề phần lịch sử"
+  },
+  "historyEmpty": {
+    "message": "Không có lịch sử đọc chính tả",
+    "description": "Thông báo lịch sử trống"
+  },
+  "clearAll": {
+    "message": "Xóa tất cả",
+    "description": "Nút xóa tất cả"
+  },
+  "shortcuts": {
+    "message": "Phím tắt",
+    "description": "Tiêu đề phần phím tắt"
+  },
+  "shortcutToggle": {
+    "message": "Chuyển đổi đọc chính tả",
+    "description": "Nhãn phím tắt chuyển đổi"
+  },
+  "shortcutCancel": {
+    "message": "Hủy đọc chính tả",
+    "description": "Nhãn phím tắt hủy"
+  },
+  "shortcutPaste": {
+    "message": "Dán kết quả",
+    "description": "Nhãn phím tắt dán"
+  },
+  "saved": {
+    "message": "Đã lưu",
+    "description": "Xác nhận đã lưu"
+  },
+  "copied": {
+    "message": "Đã sao chép!",
+    "description": "Xác nhận đã sao chép"
+  },
+  "justNow": {
+    "message": "Vừa xong",
+    "description": "Thời gian: vừa xong"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ phút trước",
+    "description": "Thời gian: X phút trước",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Hôm qua",
+    "description": "Thời gian: hôm qua"
+  },
+  "customizeShortcuts": {
+    "message": "Tùy chỉnh phím tắt",
+    "description": "Nút tùy chỉnh phím tắt"
+  },
+  "shortcutsNote": {
+    "message": "Lưu ý: Mở cài đặt phím tắt Chrome để tùy chỉnh phím tắt",
+    "description": "Ghi chú về tùy chỉnh phím tắt"
+  },
+  "notSet": {
+    "message": "Chưa đặt",
+    "description": "Phím tắt chưa đặt"
+  },
+  "devMode": {
+    "message": "Chế độ nhà phát triển",
+    "description": "Phần chế độ nhà phát triển"
+  },
+  "devModeDesc": {
+    "message": "Bật các tính năng gỡ lỗi bổ sung",
+    "description": "Mô tả chế độ nhà phát triển"
+  },
+  "debugLogging": {
+    "message": "Ghi nhật ký gỡ lỗi",
+    "description": "Cài đặt ghi nhật ký gỡ lỗi"
+  },
+  "debugLoggingDesc": {
+    "message": "Hiển thị nhật ký chi tiết trong bảng điều khiển trình duyệt",
+    "description": "Mô tả ghi nhật ký gỡ lỗi"
+  },
+  "openSWConsole": {
+    "message": "Mở bảng điều khiển Service Worker",
+    "description": "Nút mở bảng điều khiển SW"
+  },
+  "openChatGPT": {
+    "message": "Mở tab ChatGPT",
+    "description": "Nút mở ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "Không tìm thấy ChatGPT",
+    "description": "Tiêu đề lỗi khi không tìm thấy tab ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Vui lòng mở ChatGPT và đăng nhập để sử dụng đọc chính tả",
+    "description": "Mô tả lỗi khi không tìm thấy tab ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Nhập giọng nói không khả dụng",
+    "description": "Tiêu đề lỗi khi nhập giọng nói không khả dụng"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Không tìm thấy nút nhập giọng nói. Vui lòng đảm bảo bạn đã đăng nhập ChatGPT.",
+    "description": "Mô tả lỗi khi nhập giọng nói không khả dụng"
+  },
+  "statusListening": {
+    "message": "Đang nghe...",
+    "description": "Trạng thái đang nghe"
+  },
+  "statusUnknown": {
+    "message": "Đang kiểm tra...",
+    "description": "Trạng thái không xác định"
+  },
+  "startSuccess": {
+    "message": "Đã bắt đầu đọc chính tả",
+    "description": "Thông báo khi đọc chính tả bắt đầu"
+  },
+  "submitSuccess": {
+    "message": "Đã ghi lại thành công!",
+    "description": "Thông báo khi ghi lại thành công"
+  },
+  "copySuccess": {
+    "message": "Đã sao chép vào bộ nhớ tạm",
+    "description": "Thông báo khi sao chép thành công"
+  },
+  "copyFailed": {
+    "message": "Sao chép thất bại",
+    "description": "Thông báo khi sao chép thất bại"
+  },
+  "cancelSuccess": {
+    "message": "Đã hủy đọc chính tả",
+    "description": "Thông báo khi đọc chính tả bị hủy"
+  },
+  "cancelFailed": {
+    "message": "Hủy thất bại",
+    "description": "Thông báo khi hủy thất bại"
+  }
+}

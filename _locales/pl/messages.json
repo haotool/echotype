@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Nazwa rozszerzenia"
+  },
+  "extDescription": {
+    "message": "Uniwersalne dyktowanie głosowe przez ChatGPT Whisper - dyktuj wszędzie za pomocą skrótów klawiszowych",
+    "description": "Opis rozszerzenia"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Tytuł wyskakującego okienka"
+  },
+  "statusReady": {
+    "message": "Gotowy",
+    "description": "Status gotowy"
+  },
+  "statusRecording": {
+    "message": "Nagrywanie",
+    "description": "Status nagrywania"
+  },
+  "statusProcessing": {
+    "message": "Przetwarzanie",
+    "description": "Status przetwarzania"
+  },
+  "statusError": {
+    "message": "Błąd",
+    "description": "Status błędu"
+  },
+  "btnStart": {
+    "message": "Nagraj",
+    "description": "Przycisk start"
+  },
+  "btnCancel": {
+    "message": "Anuluj",
+    "description": "Przycisk anuluj"
+  },
+  "btnSubmit": {
+    "message": "Wyślij",
+    "description": "Przycisk wyślij"
+  },
+  "btnCopy": {
+    "message": "Kopiuj do schowka",
+    "description": "Przycisk kopiuj"
+  },
+  "latestResult": {
+    "message": "Ostatni wynik",
+    "description": "Tytuł sekcji ostatniego wyniku"
+  },
+  "noResult": {
+    "message": "Brak dyktowania",
+    "description": "Komunikat braku wyniku"
+  },
+  "settings": {
+    "message": "Ustawienia",
+    "description": "Link ustawienia"
+  },
+  "history": {
+    "message": "Historia",
+    "description": "Link historia"
+  },
+  "optionsTitle": {
+    "message": "Ustawienia EchoType",
+    "description": "Tytuł strony opcji"
+  },
+  "optionsSubtitle": {
+    "message": "Dyktuj wszędzie używając głosowego wejścia ChatGPT",
+    "description": "Podtytuł strony opcji"
+  },
+  "settingsAutomation": {
+    "message": "Ustawienia automatyzacji",
+    "description": "Sekcja ustawień automatyzacji"
+  },
+  "autoCopy": {
+    "message": "Automatyczne kopiowanie",
+    "description": "Etykieta ustawienia automatycznego kopiowania"
+  },
+  "autoCopyDesc": {
+    "message": "Automatycznie kopiuj wynik do schowka po zakończeniu",
+    "description": "Opis automatycznego kopiowania"
+  },
+  "autoPaste": {
+    "message": "Automatyczne wklejanie",
+    "description": "Etykieta ustawienia automatycznego wklejania"
+  },
+  "autoPasteDesc": {
+    "message": "Automatycznie wklej wynik do oryginalnego pola wprowadzania",
+    "description": "Opis automatycznego wklejania"
+  },
+  "returnFocus": {
+    "message": "Przywróć fokus",
+    "description": "Etykieta ustawienia przywracania fokusu"
+  },
+  "returnFocusDesc": {
+    "message": "Wróć do oryginalnej karty po rozpoczęciu dyktowania",
+    "description": "Opis przywracania fokusu"
+  },
+  "historySection": {
+    "message": "Historia",
+    "description": "Tytuł sekcji historii"
+  },
+  "historyEmpty": {
+    "message": "Brak historii dyktowania",
+    "description": "Komunikat pustej historii"
+  },
+  "clearAll": {
+    "message": "Wyczyść wszystko",
+    "description": "Przycisk wyczyść wszystko"
+  },
+  "shortcuts": {
+    "message": "Skróty klawiszowe",
+    "description": "Tytuł sekcji skrótów"
+  },
+  "shortcutToggle": {
+    "message": "Przełącz dyktowanie",
+    "description": "Etykieta skrótu przełączania"
+  },
+  "shortcutCancel": {
+    "message": "Anuluj dyktowanie",
+    "description": "Etykieta skrótu anulowania"
+  },
+  "shortcutPaste": {
+    "message": "Wklej wynik",
+    "description": "Etykieta skrótu wklejania"
+  },
+  "saved": {
+    "message": "Zapisano",
+    "description": "Potwierdzenie zapisania"
+  },
+  "copied": {
+    "message": "Skopiowano!",
+    "description": "Potwierdzenie skopiowania"
+  },
+  "justNow": {
+    "message": "Właśnie teraz",
+    "description": "Czas: właśnie teraz"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ minut temu",
+    "description": "Czas: X minut temu",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Wczoraj",
+    "description": "Czas: wczoraj"
+  },
+  "customizeShortcuts": {
+    "message": "Dostosuj skróty",
+    "description": "Przycisk dostosowania skrótów"
+  },
+  "shortcutsNote": {
+    "message": "Uwaga: Otwórz ustawienia skrótów Chrome, aby dostosować skróty klawiszowe",
+    "description": "Uwaga o dostosowywaniu skrótów"
+  },
+  "notSet": {
+    "message": "Nie ustawiono",
+    "description": "Skrót nie ustawiony"
+  },
+  "devMode": {
+    "message": "Tryb deweloperski",
+    "description": "Sekcja trybu deweloperskiego"
+  },
+  "devModeDesc": {
+    "message": "Włącz dodatkowe funkcje debugowania",
+    "description": "Opis trybu deweloperskiego"
+  },
+  "debugLogging": {
+    "message": "Logowanie debugowania",
+    "description": "Ustawienie logowania debugowania"
+  },
+  "debugLoggingDesc": {
+    "message": "Wyświetlaj szczegółowe logi w konsoli przeglądarki",
+    "description": "Opis logowania debugowania"
+  },
+  "openSWConsole": {
+    "message": "Otwórz konsolę Service Worker",
+    "description": "Przycisk otwórz konsolę SW"
+  },
+  "openChatGPT": {
+    "message": "Otwórz kartę ChatGPT",
+    "description": "Przycisk otwórz ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "Nie znaleziono ChatGPT",
+    "description": "Tytuł błędu gdy nie znaleziono karty ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Proszę otworzyć ChatGPT i zalogować się, aby używać dyktowania głosowego",
+    "description": "Opis błędu gdy nie znaleziono karty ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Wejście głosowe niedostępne",
+    "description": "Tytuł błędu gdy wejście głosowe niedostępne"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Nie znaleziono przycisku wejścia głosowego. Upewnij się, że jesteś zalogowany w ChatGPT.",
+    "description": "Opis błędu gdy wejście głosowe niedostępne"
+  },
+  "statusListening": {
+    "message": "Słucham...",
+    "description": "Status słuchania"
+  },
+  "statusUnknown": {
+    "message": "Sprawdzanie...",
+    "description": "Status nieznany"
+  },
+  "startSuccess": {
+    "message": "Dyktowanie rozpoczęte",
+    "description": "Powiadomienie gdy dyktowanie się rozpoczyna"
+  },
+  "submitSuccess": {
+    "message": "Pomyślnie przechwycono!",
+    "description": "Powiadomienie gdy przechwycenie się powiodło"
+  },
+  "copySuccess": {
+    "message": "Skopiowano do schowka",
+    "description": "Powiadomienie gdy kopiowanie się powiodło"
+  },
+  "copyFailed": {
+    "message": "Kopiowanie nie powiodło się",
+    "description": "Powiadomienie gdy kopiowanie się nie powiodło"
+  },
+  "cancelSuccess": {
+    "message": "Dyktowanie anulowane",
+    "description": "Powiadomienie gdy dyktowanie zostało anulowane"
+  },
+  "cancelFailed": {
+    "message": "Anulowanie nie powiodło się",
+    "description": "Powiadomienie gdy anulowanie się nie powiodło"
+  }
+}

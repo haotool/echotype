@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Όνομα επέκτασης"
+  },
+  "extDescription": {
+    "message": "Καθολική φωνητική υπαγόρευση μέσω ChatGPT Whisper - υπαγορεύστε οπουδήποτε με συντομεύσεις πληκτρολογίου",
+    "description": "Περιγραφή επέκτασης"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Τίτλος αναδυόμενου παραθύρου"
+  },
+  "statusReady": {
+    "message": "Έτοιμο",
+    "description": "Κατάσταση ετοιμότητας"
+  },
+  "statusRecording": {
+    "message": "Εγγραφή",
+    "description": "Κατάσταση εγγραφής"
+  },
+  "statusProcessing": {
+    "message": "Επεξεργασία",
+    "description": "Κατάσταση επεξεργασίας"
+  },
+  "statusError": {
+    "message": "Σφάλμα",
+    "description": "Κατάσταση σφάλματος"
+  },
+  "btnStart": {
+    "message": "Εγγραφή",
+    "description": "Κουμπί έναρξης"
+  },
+  "btnCancel": {
+    "message": "Ακύρωση",
+    "description": "Κουμπί ακύρωσης"
+  },
+  "btnSubmit": {
+    "message": "Υποβολή",
+    "description": "Κουμπί υποβολής"
+  },
+  "btnCopy": {
+    "message": "Αντιγραφή στο πρόχειρο",
+    "description": "Κουμπί αντιγραφής"
+  },
+  "latestResult": {
+    "message": "Τελευταίο αποτέλεσμα",
+    "description": "Τίτλος ενότητας τελευταίου αποτελέσματος"
+  },
+  "noResult": {
+    "message": "Δεν υπάρχει υπαγόρευση ακόμα",
+    "description": "Μήνυμα χωρίς αποτέλεσμα"
+  },
+  "settings": {
+    "message": "Ρυθμίσεις",
+    "description": "Σύνδεσμος ρυθμίσεων"
+  },
+  "history": {
+    "message": "Ιστορικό",
+    "description": "Σύνδεσμος ιστορικού"
+  },
+  "optionsTitle": {
+    "message": "Ρυθμίσεις EchoType",
+    "description": "Τίτλος σελίδας επιλογών"
+  },
+  "optionsSubtitle": {
+    "message": "Υπαγορεύστε οπουδήποτε χρησιμοποιώντας φωνητική εισαγωγή ChatGPT",
+    "description": "Υπότιτλος σελίδας επιλογών"
+  },
+  "settingsAutomation": {
+    "message": "Ρυθμίσεις αυτοματισμού",
+    "description": "Ενότητα ρυθμίσεων αυτοματισμού"
+  },
+  "autoCopy": {
+    "message": "Αυτόματη αντιγραφή",
+    "description": "Ετικέτα ρύθμισης αυτόματης αντιγραφής"
+  },
+  "autoCopyDesc": {
+    "message": "Αυτόματη αντιγραφή αποτελέσματος στο πρόχειρο μετά την ολοκλήρωση",
+    "description": "Περιγραφή αυτόματης αντιγραφής"
+  },
+  "autoPaste": {
+    "message": "Αυτόματη επικόλληση",
+    "description": "Ετικέτα ρύθμισης αυτόματης επικόλλησης"
+  },
+  "autoPasteDesc": {
+    "message": "Αυτόματη επικόλληση αποτελέσματος στο αρχικό πεδίο εισαγωγής",
+    "description": "Περιγραφή αυτόματης επικόλλησης"
+  },
+  "returnFocus": {
+    "message": "Επιστροφή εστίασης",
+    "description": "Ετικέτα ρύθμισης επιστροφής εστίασης"
+  },
+  "returnFocusDesc": {
+    "message": "Επιστροφή στην αρχική καρτέλα μετά την έναρξη υπαγόρευσης",
+    "description": "Περιγραφή επιστροφής εστίασης"
+  },
+  "historySection": {
+    "message": "Ιστορικό",
+    "description": "Τίτλος ενότητας ιστορικού"
+  },
+  "historyEmpty": {
+    "message": "Δεν υπάρχει ιστορικό υπαγόρευσης",
+    "description": "Μήνυμα κενού ιστορικού"
+  },
+  "clearAll": {
+    "message": "Εκκαθάριση όλων",
+    "description": "Κουμπί εκκαθάρισης όλων"
+  },
+  "shortcuts": {
+    "message": "Συντομεύσεις πληκτρολογίου",
+    "description": "Τίτλος ενότητας συντομεύσεων"
+  },
+  "shortcutToggle": {
+    "message": "Εναλλαγή υπαγόρευσης",
+    "description": "Ετικέτα συντόμευσης εναλλαγής"
+  },
+  "shortcutCancel": {
+    "message": "Ακύρωση υπαγόρευσης",
+    "description": "Ετικέτα συντόμευσης ακύρωσης"
+  },
+  "shortcutPaste": {
+    "message": "Επικόλληση αποτελέσματος",
+    "description": "Ετικέτα συντόμευσης επικόλλησης"
+  },
+  "saved": {
+    "message": "Αποθηκεύτηκε",
+    "description": "Επιβεβαίωση αποθήκευσης"
+  },
+  "copied": {
+    "message": "Αντιγράφηκε!",
+    "description": "Επιβεβαίωση αντιγραφής"
+  },
+  "justNow": {
+    "message": "Μόλις τώρα",
+    "description": "Χρόνος: μόλις τώρα"
+  },
+  "minutesAgo": {
+    "message": "Πριν $COUNT$ λεπτά",
+    "description": "Χρόνος: πριν X λεπτά",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Χθες",
+    "description": "Χρόνος: χθες"
+  },
+  "customizeShortcuts": {
+    "message": "Προσαρμογή συντομεύσεων",
+    "description": "Κουμπί για προσαρμογή συντομεύσεων"
+  },
+  "shortcutsNote": {
+    "message": "Σημείωση: Ανοίξτε τις ρυθμίσεις συντομεύσεων Chrome για προσαρμογή",
+    "description": "Σημείωση για προσαρμογή συντομεύσεων"
+  },
+  "notSet": {
+    "message": "Δεν έχει οριστεί",
+    "description": "Συντόμευση δεν έχει οριστεί"
+  },
+  "devMode": {
+    "message": "Λειτουργία προγραμματιστή",
+    "description": "Ενότητα λειτουργίας προγραμματιστή"
+  },
+  "devModeDesc": {
+    "message": "Ενεργοποίηση επιπλέον λειτουργιών εντοπισμού σφαλμάτων",
+    "description": "Περιγραφή λειτουργίας προγραμματιστή"
+  },
+  "debugLogging": {
+    "message": "Καταγραφή εντοπισμού σφαλμάτων",
+    "description": "Ρύθμιση καταγραφής εντοπισμού σφαλμάτων"
+  },
+  "debugLoggingDesc": {
+    "message": "Εμφάνιση λεπτομερών καταγραφών στην κονσόλα προγράμματος περιήγησης",
+    "description": "Περιγραφή καταγραφής εντοπισμού σφαλμάτων"
+  },
+  "openSWConsole": {
+    "message": "Άνοιγμα κονσόλας Service Worker",
+    "description": "Κουμπί ανοίγματος κονσόλας SW"
+  },
+  "openChatGPT": {
+    "message": "Άνοιγμα καρτέλας ChatGPT",
+    "description": "Κουμπί ανοίγματος ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "Δεν βρέθηκε ChatGPT",
+    "description": "Τίτλος σφάλματος όταν δεν βρεθεί καρτέλα ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Παρακαλώ ανοίξτε το ChatGPT και συνδεθείτε για χρήση φωνητικής υπαγόρευσης",
+    "description": "Περιγραφή σφάλματος όταν δεν βρεθεί καρτέλα ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Η φωνητική εισαγωγή δεν είναι διαθέσιμη",
+    "description": "Τίτλος σφάλματος όταν η φωνητική εισαγωγή δεν είναι διαθέσιμη"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Δεν βρέθηκε κουμπί φωνητικής εισαγωγής. Βεβαιωθείτε ότι έχετε συνδεθεί στο ChatGPT.",
+    "description": "Περιγραφή σφάλματος όταν η φωνητική εισαγωγή δεν είναι διαθέσιμη"
+  },
+  "statusListening": {
+    "message": "Ακούω...",
+    "description": "Κατάσταση ακρόασης"
+  },
+  "statusUnknown": {
+    "message": "Έλεγχος...",
+    "description": "Κατάσταση άγνωστη"
+  },
+  "startSuccess": {
+    "message": "Η υπαγόρευση ξεκίνησε",
+    "description": "Μήνυμα toast όταν ξεκινά η υπαγόρευση"
+  },
+  "submitSuccess": {
+    "message": "Επιτυχής καταγραφή!",
+    "description": "Μήνυμα toast όταν η καταγραφή είναι επιτυχής"
+  },
+  "copySuccess": {
+    "message": "Αντιγράφηκε στο πρόχειρο",
+    "description": "Μήνυμα toast όταν η αντιγραφή είναι επιτυχής"
+  },
+  "copyFailed": {
+    "message": "Η αντιγραφή απέτυχε",
+    "description": "Μήνυμα toast όταν η αντιγραφή αποτύχει"
+  },
+  "cancelSuccess": {
+    "message": "Η υπαγόρευση ακυρώθηκε",
+    "description": "Μήνυμα toast όταν η υπαγόρευση ακυρωθεί"
+  },
+  "cancelFailed": {
+    "message": "Η ακύρωση απέτυχε",
+    "description": "Μήνυμα toast όταν η ακύρωση αποτύχει"
+  }
+}

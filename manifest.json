@@ -2,10 +2,10 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "EchoType",
-  "version": "0.6.0",
+  "version": "0.8.0",
   "description": "__MSG_extDescription__",
-  "author": { "email": "echotype@example.com" },
-  "homepage_url": "https://github.com/user/echotype",
+  "author": { "email": "haotool.org@gmail.com" },
+  "homepage_url": "https://github.com/haotool/echotype",
   "default_locale": "en",
   "action": {
     "default_title": "EchoType - Voice Dictation",

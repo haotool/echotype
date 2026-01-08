@@ -1,0 +1,240 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Nome dell'estensione"
+  },
+  "extDescription": {
+    "message": "Dettatura vocale universale tramite ChatGPT Whisper - detta ovunque con scorciatoie da tastiera",
+    "description": "Descrizione dell'estensione"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Titolo del popup"
+  },
+  "statusReady": {
+    "message": "Pronto",
+    "description": "Stato pronto"
+  },
+  "statusRecording": {
+    "message": "Registrazione",
+    "description": "Stato registrazione"
+  },
+  "statusProcessing": {
+    "message": "Elaborazione",
+    "description": "Stato elaborazione"
+  },
+  "statusError": {
+    "message": "Errore",
+    "description": "Stato errore"
+  },
+  "btnStart": {
+    "message": "Avvia",
+    "description": "Pulsante avvia"
+  },
+  "btnPause": {
+    "message": "Pausa",
+    "description": "Pulsante pausa"
+  },
+  "btnSubmit": {
+    "message": "Invia e Cattura",
+    "description": "Pulsante invia"
+  },
+  "btnCopy": {
+    "message": "Copia negli Appunti",
+    "description": "Pulsante copia"
+  },
+  "latestResult": {
+    "message": "Ultimo Risultato",
+    "description": "Titolo sezione ultimo risultato"
+  },
+  "noResult": {
+    "message": "Nessuna dettatura ancora",
+    "description": "Messaggio nessun risultato"
+  },
+  "settings": {
+    "message": "Impostazioni",
+    "description": "Link impostazioni"
+  },
+  "history": {
+    "message": "Cronologia",
+    "description": "Link cronologia"
+  },
+  "optionsTitle": {
+    "message": "Impostazioni EchoType",
+    "description": "Titolo pagina opzioni"
+  },
+  "optionsSubtitle": {
+    "message": "Detta ovunque usando l'input vocale di ChatGPT",
+    "description": "Sottotitolo pagina opzioni"
+  },
+  "settingsAutomation": {
+    "message": "Impostazioni Automazione",
+    "description": "Sezione impostazioni automazione"
+  },
+  "autoCopy": {
+    "message": "Copia Automatica",
+    "description": "Etichetta copia automatica"
+  },
+  "autoCopyDesc": {
+    "message": "Copia automaticamente il risultato negli appunti dopo il completamento",
+    "description": "Descrizione copia automatica"
+  },
+  "autoPaste": {
+    "message": "Incolla Automatico",
+    "description": "Etichetta incolla automatico"
+  },
+  "autoPasteDesc": {
+    "message": "Incolla automaticamente il risultato nel campo di input originale",
+    "description": "Descrizione incolla automatico"
+  },
+  "returnFocus": {
+    "message": "Ritorna Focus",
+    "description": "Etichetta ritorna focus"
+  },
+  "returnFocusDesc": {
+    "message": "Torna alla scheda originale dopo aver avviato la dettatura",
+    "description": "Descrizione ritorna focus"
+  },
+  "historySection": {
+    "message": "Cronologia",
+    "description": "Titolo sezione cronologia"
+  },
+  "historyEmpty": {
+    "message": "Nessuna cronologia di dettatura",
+    "description": "Messaggio cronologia vuota"
+  },
+  "clearAll": {
+    "message": "Cancella Tutto",
+    "description": "Pulsante cancella tutto"
+  },
+  "shortcuts": {
+    "message": "Scorciatoie da Tastiera",
+    "description": "Titolo sezione scorciatoie"
+  },
+  "shortcutToggle": {
+    "message": "Attiva/disattiva dettatura",
+    "description": "Etichetta scorciatoia attiva/disattiva"
+  },
+  "shortcutCancel": {
+    "message": "Annulla dettatura",
+    "description": "Etichetta scorciatoia annulla"
+  },
+  "shortcutPaste": {
+    "message": "Incolla risultato",
+    "description": "Etichetta scorciatoia incolla"
+  },
+  "btnRecord": {
+    "message": "Registra",
+    "description": "Testo pulsante registra"
+  },
+  "btnCancel": {
+    "message": "Annulla",
+    "description": "Testo pulsante annulla"
+  },
+  "cancelSuccess": {
+    "message": "Annullato",
+    "description": "Toast annullamento riuscito"
+  },
+  "saved": {
+    "message": "Salvato",
+    "description": "Conferma salvato"
+  },
+  "copied": {
+    "message": "Copiato!",
+    "description": "Conferma copiato"
+  },
+  "justNow": {
+    "message": "Proprio ora",
+    "description": "Tempo: proprio ora"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ minuti fa",
+    "description": "Tempo: X minuti fa",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Ieri",
+    "description": "Tempo: ieri"
+  },
+  "customizeShortcuts": {
+    "message": "Personalizza Scorciatoie",
+    "description": "Pulsante personalizza scorciatoie"
+  },
+  "shortcutsNote": {
+    "message": "Nota: Apri le impostazioni delle scorciatoie di Chrome per personalizzare le scorciatoie da tastiera",
+    "description": "Nota sulla personalizzazione delle scorciatoie"
+  },
+  "notSet": {
+    "message": "Non impostato",
+    "description": "Scorciatoia non impostata"
+  },
+  "devMode": {
+    "message": "Modalità Sviluppatore",
+    "description": "Sezione modalità sviluppatore"
+  },
+  "devModeDesc": {
+    "message": "Abilita funzionalità di debug aggiuntive",
+    "description": "Descrizione modalità sviluppatore"
+  },
+  "debugLogging": {
+    "message": "Log di Debug",
+    "description": "Impostazione log di debug"
+  },
+  "debugLoggingDesc": {
+    "message": "Mostra log dettagliati nella console del browser",
+    "description": "Descrizione log di debug"
+  },
+  "openSWConsole": {
+    "message": "Apri Console Service Worker",
+    "description": "Pulsante apri console SW"
+  },
+  "openChatGPT": {
+    "message": "Apri Scheda ChatGPT",
+    "description": "Pulsante apri ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT Non Trovato",
+    "description": "Titolo errore nessun ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Per favore apri ChatGPT e accedi per usare la dettatura vocale",
+    "description": "Descrizione errore nessun ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Input Vocale Non Disponibile",
+    "description": "Titolo errore input vocale non disponibile"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Pulsante input vocale non trovato. Per favore assicurati di aver effettuato l'accesso a ChatGPT.",
+    "description": "Descrizione errore input vocale non disponibile"
+  },
+  "statusListening": {
+    "message": "In ascolto...",
+    "description": "Stato in ascolto"
+  },
+  "statusUnknown": {
+    "message": "Verifica...",
+    "description": "Stato sconosciuto"
+  },
+  "startSuccess": {
+    "message": "Dettatura avviata",
+    "description": "Toast dettatura avviata"
+  },
+  "submitSuccess": {
+    "message": "Catturato con successo!",
+    "description": "Toast cattura riuscita"
+  },
+  "copySuccess": {
+    "message": "Copiato negli appunti",
+    "description": "Toast copia riuscita"
+  },
+  "copyFailed": {
+    "message": "Copia fallita",
+    "description": "Toast copia fallita"
+  }
+}

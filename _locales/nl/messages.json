@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Extensienaam"
+  },
+  "extDescription": {
+    "message": "Universele spraakdictatie via ChatGPT Whisper - dicteer overal met sneltoetsen",
+    "description": "Extensiebeschrijving"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Pop-uptitel"
+  },
+  "statusReady": {
+    "message": "Gereed",
+    "description": "Status gereed"
+  },
+  "statusRecording": {
+    "message": "Opnemen",
+    "description": "Status opnemen"
+  },
+  "statusProcessing": {
+    "message": "Verwerken",
+    "description": "Status verwerken"
+  },
+  "statusError": {
+    "message": "Fout",
+    "description": "Status fout"
+  },
+  "btnStart": {
+    "message": "Opnemen",
+    "description": "Startknop"
+  },
+  "btnCancel": {
+    "message": "Annuleren",
+    "description": "Annuleerknop"
+  },
+  "btnSubmit": {
+    "message": "Verzenden",
+    "description": "Verzendknop"
+  },
+  "btnCopy": {
+    "message": "Kopiëren naar klembord",
+    "description": "Kopieerknop"
+  },
+  "latestResult": {
+    "message": "Laatste resultaat",
+    "description": "Titel sectie laatste resultaat"
+  },
+  "noResult": {
+    "message": "Nog geen dictatie",
+    "description": "Bericht geen resultaat"
+  },
+  "settings": {
+    "message": "Instellingen",
+    "description": "Link instellingen"
+  },
+  "history": {
+    "message": "Geschiedenis",
+    "description": "Link geschiedenis"
+  },
+  "optionsTitle": {
+    "message": "EchoType Instellingen",
+    "description": "Titel optiepagina"
+  },
+  "optionsSubtitle": {
+    "message": "Dicteer overal met ChatGPT spraakinvoer",
+    "description": "Ondertitel optiepagina"
+  },
+  "settingsAutomation": {
+    "message": "Automatiseringsinstellingen",
+    "description": "Sectie automatiseringsinstellingen"
+  },
+  "autoCopy": {
+    "message": "Automatisch kopiëren",
+    "description": "Label automatisch kopiëren instelling"
+  },
+  "autoCopyDesc": {
+    "message": "Kopieer resultaat automatisch naar klembord na voltooiing",
+    "description": "Beschrijving automatisch kopiëren"
+  },
+  "autoPaste": {
+    "message": "Automatisch plakken",
+    "description": "Label automatisch plakken instelling"
+  },
+  "autoPasteDesc": {
+    "message": "Plak resultaat automatisch in origineel invoerveld",
+    "description": "Beschrijving automatisch plakken"
+  },
+  "returnFocus": {
+    "message": "Focus herstellen",
+    "description": "Label focus herstellen instelling"
+  },
+  "returnFocusDesc": {
+    "message": "Keer terug naar origineel tabblad na starten dictatie",
+    "description": "Beschrijving focus herstellen"
+  },
+  "historySection": {
+    "message": "Geschiedenis",
+    "description": "Titel sectie geschiedenis"
+  },
+  "historyEmpty": {
+    "message": "Geen dictatiegeschiedenis",
+    "description": "Bericht lege geschiedenis"
+  },
+  "clearAll": {
+    "message": "Alles wissen",
+    "description": "Knop alles wissen"
+  },
+  "shortcuts": {
+    "message": "Sneltoetsen",
+    "description": "Titel sectie sneltoetsen"
+  },
+  "shortcutToggle": {
+    "message": "Dictatie schakelen",
+    "description": "Label schakelsneltoets"
+  },
+  "shortcutCancel": {
+    "message": "Dictatie annuleren",
+    "description": "Label annuleersneltoets"
+  },
+  "shortcutPaste": {
+    "message": "Resultaat plakken",
+    "description": "Label plaksneltoets"
+  },
+  "saved": {
+    "message": "Opgeslagen",
+    "description": "Bevestiging opgeslagen"
+  },
+  "copied": {
+    "message": "Gekopieerd!",
+    "description": "Bevestiging gekopieerd"
+  },
+  "justNow": {
+    "message": "Zojuist",
+    "description": "Tijd: zojuist"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ minuten geleden",
+    "description": "Tijd: X minuten geleden",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Gisteren",
+    "description": "Tijd: gisteren"
+  },
+  "customizeShortcuts": {
+    "message": "Sneltoetsen aanpassen",
+    "description": "Knop sneltoetsen aanpassen"
+  },
+  "shortcutsNote": {
+    "message": "Opmerking: Open Chrome sneltoetsinstellingen om sneltoetsen aan te passen",
+    "description": "Opmerking over sneltoetsen aanpassen"
+  },
+  "notSet": {
+    "message": "Niet ingesteld",
+    "description": "Sneltoets niet ingesteld"
+  },
+  "devMode": {
+    "message": "Ontwikkelaarsmodus",
+    "description": "Sectie ontwikkelaarsmodus"
+  },
+  "devModeDesc": {
+    "message": "Extra debugfuncties inschakelen",
+    "description": "Beschrijving ontwikkelaarsmodus"
+  },
+  "debugLogging": {
+    "message": "Debug logging",
+    "description": "Instelling debug logging"
+  },
+  "debugLoggingDesc": {
+    "message": "Toon gedetailleerde logs in browserconsole",
+    "description": "Beschrijving debug logging"
+  },
+  "openSWConsole": {
+    "message": "Open Service Worker Console",
+    "description": "Knop open SW console"
+  },
+  "openChatGPT": {
+    "message": "Open ChatGPT tabblad",
+    "description": "Knop open ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT niet gevonden",
+    "description": "Fouttitel wanneer ChatGPT tabblad niet gevonden"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Open ChatGPT en log in om spraakdictatie te gebruiken",
+    "description": "Foutbeschrijving wanneer ChatGPT tabblad niet gevonden"
+  },
+  "errorNoVoice": {
+    "message": "Spraakinvoer niet beschikbaar",
+    "description": "Fouttitel wanneer spraakinvoer niet beschikbaar"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Spraakinvoerknop niet gevonden. Zorg ervoor dat u bent ingelogd bij ChatGPT.",
+    "description": "Foutbeschrijving wanneer spraakinvoer niet beschikbaar"
+  },
+  "statusListening": {
+    "message": "Luisteren...",
+    "description": "Status luisteren"
+  },
+  "statusUnknown": {
+    "message": "Controleren...",
+    "description": "Status onbekend"
+  },
+  "startSuccess": {
+    "message": "Dictatie gestart",
+    "description": "Melding wanneer dictatie start"
+  },
+  "submitSuccess": {
+    "message": "Succesvol vastgelegd!",
+    "description": "Melding wanneer vastleggen succesvol"
+  },
+  "copySuccess": {
+    "message": "Gekopieerd naar klembord",
+    "description": "Melding wanneer kopiëren succesvol"
+  },
+  "copyFailed": {
+    "message": "Kopiëren mislukt",
+    "description": "Melding wanneer kopiëren mislukt"
+  },
+  "cancelSuccess": {
+    "message": "Dictatie geannuleerd",
+    "description": "Melding wanneer dictatie geannuleerd"
+  },
+  "cancelFailed": {
+    "message": "Annuleren mislukt",
+    "description": "Melding wanneer annuleren mislukt"
+  }
+}

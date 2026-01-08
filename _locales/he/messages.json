@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "שם התוסף"
+  },
+  "extDescription": {
+    "message": "הקלדה קולית אוניברסלית דרך ChatGPT Whisper - הקלד בכל מקום עם קיצורי מקשים",
+    "description": "תיאור התוסף"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "כותרת החלון הקופץ"
+  },
+  "statusReady": {
+    "message": "מוכן",
+    "description": "סטטוס מוכן"
+  },
+  "statusRecording": {
+    "message": "מקליט",
+    "description": "סטטוס הקלטה"
+  },
+  "statusProcessing": {
+    "message": "מעבד",
+    "description": "סטטוס עיבוד"
+  },
+  "statusError": {
+    "message": "שגיאה",
+    "description": "סטטוס שגיאה"
+  },
+  "btnStart": {
+    "message": "הקלט",
+    "description": "כפתור התחל"
+  },
+  "btnCancel": {
+    "message": "בטל",
+    "description": "כפתור ביטול"
+  },
+  "btnSubmit": {
+    "message": "שלח",
+    "description": "כפתור שלח"
+  },
+  "btnCopy": {
+    "message": "העתק ללוח",
+    "description": "כפתור העתקה"
+  },
+  "latestResult": {
+    "message": "תוצאה אחרונה",
+    "description": "כותרת קטע התוצאה האחרונה"
+  },
+  "noResult": {
+    "message": "עדיין אין הקלדה קולית",
+    "description": "הודעת אין תוצאה"
+  },
+  "settings": {
+    "message": "הגדרות",
+    "description": "קישור הגדרות"
+  },
+  "history": {
+    "message": "היסטוריה",
+    "description": "קישור היסטוריה"
+  },
+  "optionsTitle": {
+    "message": "הגדרות EchoType",
+    "description": "כותרת דף האפשרויות"
+  },
+  "optionsSubtitle": {
+    "message": "הקלד בכל מקום באמצעות קלט קולי של ChatGPT",
+    "description": "כותרת משנה של דף האפשרויות"
+  },
+  "settingsAutomation": {
+    "message": "הגדרות אוטומציה",
+    "description": "קטע הגדרות אוטומציה"
+  },
+  "autoCopy": {
+    "message": "העתקה אוטומטית",
+    "description": "תווית הגדרת העתקה אוטומטית"
+  },
+  "autoCopyDesc": {
+    "message": "העתק אוטומטית את התוצאה ללוח לאחר סיום",
+    "description": "תיאור העתקה אוטומטית"
+  },
+  "autoPaste": {
+    "message": "הדבקה אוטומטית",
+    "description": "תווית הגדרת הדבקה אוטומטית"
+  },
+  "autoPasteDesc": {
+    "message": "הדבק אוטומטית את התוצאה בשדה הקלט המקורי",
+    "description": "תיאור הדבקה אוטומטית"
+  },
+  "returnFocus": {
+    "message": "החזר מיקוד",
+    "description": "תווית הגדרת החזר מיקוד"
+  },
+  "returnFocusDesc": {
+    "message": "חזור ללשונית המקורית לאחר התחלת ההקלדה הקולית",
+    "description": "תיאור החזר מיקוד"
+  },
+  "historySection": {
+    "message": "היסטוריה",
+    "description": "כותרת קטע היסטוריה"
+  },
+  "historyEmpty": {
+    "message": "אין היסטוריית הקלדה קולית",
+    "description": "הודעת היסטוריה ריקה"
+  },
+  "clearAll": {
+    "message": "נקה הכל",
+    "description": "כפתור נקה הכל"
+  },
+  "shortcuts": {
+    "message": "קיצורי מקשים",
+    "description": "כותרת קטע קיצורי מקשים"
+  },
+  "shortcutToggle": {
+    "message": "החלף הקלדה קולית",
+    "description": "תווית קיצור החלפה"
+  },
+  "shortcutCancel": {
+    "message": "בטל הקלדה קולית",
+    "description": "תווית קיצור ביטול"
+  },
+  "shortcutPaste": {
+    "message": "הדבק תוצאה",
+    "description": "תווית קיצור הדבקה"
+  },
+  "saved": {
+    "message": "נשמר",
+    "description": "אישור שמירה"
+  },
+  "copied": {
+    "message": "הועתק!",
+    "description": "אישור העתקה"
+  },
+  "justNow": {
+    "message": "עכשיו",
+    "description": "זמן: עכשיו"
+  },
+  "minutesAgo": {
+    "message": "לפני $COUNT$ דקות",
+    "description": "זמן: לפני X דקות",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "אתמול",
+    "description": "זמן: אתמול"
+  },
+  "customizeShortcuts": {
+    "message": "התאם קיצורים",
+    "description": "כפתור התאמת קיצורים"
+  },
+  "shortcutsNote": {
+    "message": "הערה: פתח את הגדרות קיצורי המקשים של Chrome כדי להתאים קיצורי מקשים",
+    "description": "הערה על התאמת קיצורים"
+  },
+  "notSet": {
+    "message": "לא הוגדר",
+    "description": "קיצור לא הוגדר"
+  },
+  "devMode": {
+    "message": "מצב מפתח",
+    "description": "קטע מצב מפתח"
+  },
+  "devModeDesc": {
+    "message": "הפעל תכונות דיבאג נוספות",
+    "description": "תיאור מצב מפתח"
+  },
+  "debugLogging": {
+    "message": "רישום דיבאג",
+    "description": "הגדרת רישום דיבאג"
+  },
+  "debugLoggingDesc": {
+    "message": "הצג לוגים מפורטים בקונסולת הדפדפן",
+    "description": "תיאור רישום דיבאג"
+  },
+  "openSWConsole": {
+    "message": "פתח קונסולת Service Worker",
+    "description": "כפתור פתח קונסולת SW"
+  },
+  "openChatGPT": {
+    "message": "פתח לשונית ChatGPT",
+    "description": "כפתור פתח ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT לא נמצא",
+    "description": "כותרת שגיאה כאשר לשונית ChatGPT לא נמצאה"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "אנא פתח את ChatGPT והתחבר כדי להשתמש בהקלדה קולית",
+    "description": "תיאור שגיאה כאשר לשונית ChatGPT לא נמצאה"
+  },
+  "errorNoVoice": {
+    "message": "קלט קולי לא זמין",
+    "description": "כותרת שגיאה כאשר קלט קולי לא זמין"
+  },
+  "errorNoVoiceDesc": {
+    "message": "כפתור קלט קולי לא נמצא. אנא ודא שאתה מחובר ל-ChatGPT.",
+    "description": "תיאור שגיאה כאשר קלט קולי לא זמין"
+  },
+  "statusListening": {
+    "message": "מאזין...",
+    "description": "סטטוס מאזין"
+  },
+  "statusUnknown": {
+    "message": "בודק...",
+    "description": "סטטוס לא ידוע"
+  },
+  "startSuccess": {
+    "message": "ההקלדה הקולית החלה",
+    "description": "הודעה כאשר ההקלדה הקולית מתחילה"
+  },
+  "submitSuccess": {
+    "message": "נלכד בהצלחה!",
+    "description": "הודעה כאשר הלכידה מצליחה"
+  },
+  "copySuccess": {
+    "message": "הועתק ללוח",
+    "description": "הודעה כאשר ההעתקה מצליחה"
+  },
+  "copyFailed": {
+    "message": "ההעתקה נכשלה",
+    "description": "הודעה כאשר ההעתקה נכשלת"
+  },
+  "cancelSuccess": {
+    "message": "ההקלדה הקולית בוטלה",
+    "description": "הודעה כאשר ההקלדה הקולית מבוטלת"
+  },
+  "cancelFailed": {
+    "message": "הביטול נכשל",
+    "description": "הודעה כאשר הביטול נכשל"
+  }
+}

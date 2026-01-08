@@ -1,0 +1,240 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "اسم الإضافة"
+  },
+  "extDescription": {
+    "message": "إملاء صوتي عالمي عبر ChatGPT Whisper - أملِ في أي مكان باستخدام اختصارات لوحة المفاتيح",
+    "description": "وصف الإضافة"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "عنوان النافذة المنبثقة"
+  },
+  "statusReady": {
+    "message": "جاهز",
+    "description": "حالة جاهز"
+  },
+  "statusRecording": {
+    "message": "تسجيل",
+    "description": "حالة تسجيل"
+  },
+  "statusProcessing": {
+    "message": "معالجة",
+    "description": "حالة معالجة"
+  },
+  "statusError": {
+    "message": "خطأ",
+    "description": "حالة خطأ"
+  },
+  "btnStart": {
+    "message": "بدء",
+    "description": "زر بدء"
+  },
+  "btnPause": {
+    "message": "إيقاف مؤقت",
+    "description": "زر إيقاف مؤقت"
+  },
+  "btnSubmit": {
+    "message": "إرسال والتقاط",
+    "description": "زر إرسال"
+  },
+  "btnCopy": {
+    "message": "نسخ إلى الحافظة",
+    "description": "زر نسخ"
+  },
+  "latestResult": {
+    "message": "آخر نتيجة",
+    "description": "عنوان قسم آخر نتيجة"
+  },
+  "noResult": {
+    "message": "لا يوجد إملاء بعد",
+    "description": "رسالة لا نتيجة"
+  },
+  "settings": {
+    "message": "الإعدادات",
+    "description": "رابط الإعدادات"
+  },
+  "history": {
+    "message": "السجل",
+    "description": "رابط السجل"
+  },
+  "optionsTitle": {
+    "message": "إعدادات EchoType",
+    "description": "عنوان صفحة الخيارات"
+  },
+  "optionsSubtitle": {
+    "message": "أملِ في أي مكان باستخدام الإدخال الصوتي لـ ChatGPT",
+    "description": "العنوان الفرعي لصفحة الخيارات"
+  },
+  "settingsAutomation": {
+    "message": "إعدادات الأتمتة",
+    "description": "قسم إعدادات الأتمتة"
+  },
+  "autoCopy": {
+    "message": "نسخ تلقائي",
+    "description": "تسمية النسخ التلقائي"
+  },
+  "autoCopyDesc": {
+    "message": "نسخ النتيجة تلقائياً إلى الحافظة بعد الانتهاء",
+    "description": "وصف النسخ التلقائي"
+  },
+  "autoPaste": {
+    "message": "لصق تلقائي",
+    "description": "تسمية اللصق التلقائي"
+  },
+  "autoPasteDesc": {
+    "message": "لصق النتيجة تلقائياً في حقل الإدخال الأصلي",
+    "description": "وصف اللصق التلقائي"
+  },
+  "returnFocus": {
+    "message": "إعادة التركيز",
+    "description": "تسمية إعادة التركيز"
+  },
+  "returnFocusDesc": {
+    "message": "العودة إلى التبويب الأصلي بعد بدء الإملاء",
+    "description": "وصف إعادة التركيز"
+  },
+  "historySection": {
+    "message": "السجل",
+    "description": "عنوان قسم السجل"
+  },
+  "historyEmpty": {
+    "message": "لا يوجد سجل إملاء",
+    "description": "رسالة السجل فارغ"
+  },
+  "clearAll": {
+    "message": "مسح الكل",
+    "description": "زر مسح الكل"
+  },
+  "shortcuts": {
+    "message": "اختصارات لوحة المفاتيح",
+    "description": "عنوان قسم الاختصارات"
+  },
+  "shortcutToggle": {
+    "message": "تبديل الإملاء",
+    "description": "تسمية اختصار التبديل"
+  },
+  "shortcutCancel": {
+    "message": "إلغاء الإملاء",
+    "description": "تسمية اختصار الإلغاء"
+  },
+  "shortcutPaste": {
+    "message": "لصق النتيجة",
+    "description": "تسمية اختصار اللصق"
+  },
+  "btnRecord": {
+    "message": "تسجيل",
+    "description": "نص زر التسجيل"
+  },
+  "btnCancel": {
+    "message": "إلغاء",
+    "description": "نص زر الإلغاء"
+  },
+  "cancelSuccess": {
+    "message": "تم الإلغاء",
+    "description": "إشعار نجاح الإلغاء"
+  },
+  "saved": {
+    "message": "تم الحفظ",
+    "description": "تأكيد الحفظ"
+  },
+  "copied": {
+    "message": "تم النسخ!",
+    "description": "تأكيد النسخ"
+  },
+  "justNow": {
+    "message": "الآن",
+    "description": "الوقت: الآن"
+  },
+  "minutesAgo": {
+    "message": "منذ $COUNT$ دقائق",
+    "description": "الوقت: منذ X دقائق",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "أمس",
+    "description": "الوقت: أمس"
+  },
+  "customizeShortcuts": {
+    "message": "تخصيص الاختصارات",
+    "description": "زر تخصيص الاختصارات"
+  },
+  "shortcutsNote": {
+    "message": "ملاحظة: افتح إعدادات اختصارات Chrome لتخصيص اختصارات لوحة المفاتيح",
+    "description": "ملاحظة حول تخصيص الاختصارات"
+  },
+  "notSet": {
+    "message": "غير محدد",
+    "description": "الاختصار غير محدد"
+  },
+  "devMode": {
+    "message": "وضع المطور",
+    "description": "قسم وضع المطور"
+  },
+  "devModeDesc": {
+    "message": "تمكين ميزات التصحيح الإضافية",
+    "description": "وصف وضع المطور"
+  },
+  "debugLogging": {
+    "message": "سجل التصحيح",
+    "description": "إعداد سجل التصحيح"
+  },
+  "debugLoggingDesc": {
+    "message": "إخراج سجلات مفصلة في وحدة تحكم المتصفح",
+    "description": "وصف سجل التصحيح"
+  },
+  "openSWConsole": {
+    "message": "فتح وحدة تحكم Service Worker",
+    "description": "زر فتح وحدة تحكم SW"
+  },
+  "openChatGPT": {
+    "message": "فتح تبويب ChatGPT",
+    "description": "زر فتح ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT غير موجود",
+    "description": "عنوان خطأ عدم وجود ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "يرجى فتح ChatGPT وتسجيل الدخول لاستخدام الإملاء الصوتي",
+    "description": "وصف خطأ عدم وجود ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "الإدخال الصوتي غير متاح",
+    "description": "عنوان خطأ الإدخال الصوتي غير متاح"
+  },
+  "errorNoVoiceDesc": {
+    "message": "لم يتم العثور على زر الإدخال الصوتي. يرجى التأكد من تسجيل الدخول إلى ChatGPT.",
+    "description": "وصف خطأ الإدخال الصوتي غير متاح"
+  },
+  "statusListening": {
+    "message": "استماع...",
+    "description": "حالة استماع"
+  },
+  "statusUnknown": {
+    "message": "تحقق...",
+    "description": "حالة غير معروفة"
+  },
+  "startSuccess": {
+    "message": "بدأ الإملاء",
+    "description": "إشعار بدء الإملاء"
+  },
+  "submitSuccess": {
+    "message": "تم الالتقاط بنجاح!",
+    "description": "إشعار نجاح الالتقاط"
+  },
+  "copySuccess": {
+    "message": "تم النسخ إلى الحافظة",
+    "description": "إشعار نجاح النسخ"
+  },
+  "copyFailed": {
+    "message": "فشل النسخ",
+    "description": "إشعار فشل النسخ"
+  }
+}

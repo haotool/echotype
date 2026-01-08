@@ -384,6 +384,39 @@
     }
 
     /* ============================================================================
+       LANGUAGE SELECTOR
+       ============================================================================ */
+    .language-select {
+      padding: var(--space-2) var(--space-3);
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.875rem;
+      cursor: pointer;
+      min-width: 150px;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .language-select:hover {
+      border-color: var(--primary-500);
+    }
+
+    .language-select:focus {
+      outline: none;
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .language-note {
+      margin-top: var(--space-3);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ============================================================================
        HISTORY
        ============================================================================ */
     .history-list {
@@ -646,7 +679,7 @@
         </div>
         <div class="brand-info">
           <h1>EchoType</h1>
-          <span class="version">v0.5.0</span>
+          <span class="version">v0.6.2</span>
         </div>
       </div>
       <div class="header-actions">
@@ -701,6 +734,56 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
+      </div>
+    </section>
+
+    <!-- Language Settings -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            <path d="M2 12h20"/>
+          </svg>
+          Language
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Interface Language</div>
+            <div class="setting-description">Select your preferred language for the extension interface</div>
+          </div>
+          <select class="language-select" id="languageSelect">
+            <option value="en">English</option>
+            <option value="zh_TW">繁體中文</option>
+            <option value="zh_CN">简体中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+            <option value="it">Italiano</option>
+            <option value="ru">Русский</option>
+            <option value="ar">العربية</option>
+            <option value="vi">Tiếng Việt</option>
+            <option value="th">ภาษาไทย</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="he">עברית</option>
+            <option value="fa">فارسی</option>
+            <option value="tr">Türkçe</option>
+            <option value="pl">Polski</option>
+            <option value="nl">Nederlands</option>
+            <option value="uk">Українська</option>
+            <option value="hi">हिन्दी</option>
+            <option value="cs">Čeština</option>
+            <option value="el">Ελληνικά</option>
+            <option value="sv">Svenska</option>
+          </select>
+        </div>
+        <p class="language-note">Note: Changing the language will reload the extension pages</p>
       </div>
     </section>
 
@@ -842,7 +925,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>EchoType v0.5.0 • <a href="https://github.com/user/echotype" target="_blank">GitHub</a></p>
+      <p>EchoType v0.8.0 • <a href="https://github.com/haotool/echotype" target="_blank">GitHub</a></p>
     </footer>
   </div>
 

@@ -386,3 +386,47 @@
 .animate-recording {
   animation: recording-pulse 1.5s ease-in-out infinite;
 }
+
+/* ============================================================================
+   RTL (Right-to-Left) SUPPORT
+   For Arabic and other RTL languages
+   ============================================================================ */
+
+[dir="rtl"],
+:lang(ar),
+:lang(he),
+:lang(fa) {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .flex-row,
+:lang(ar) .flex-row,
+:lang(he) .flex-row,
+:lang(fa) .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* RTL-aware margins and paddings */
+[dir="rtl"] .ml-auto,
+:lang(ar) .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto,
+:lang(ar) .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* RTL-aware text alignment */
+[dir="rtl"] .text-left,
+:lang(ar) .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right,
+:lang(ar) .text-right {
+  text-align: left;
+}

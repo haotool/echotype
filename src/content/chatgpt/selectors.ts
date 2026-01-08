@@ -52,6 +52,72 @@ const DICTATION_LABELS = {
     'Dictation button',
     'Start voice input',
     'Record voice',
+    // Japanese
+    '音声入力',
+    'ディクテーション',
+    // Korean
+    '음성 입력',
+    '받아쓰기',
+    // German
+    'Spracheingabe',
+    'Diktat',
+    // French
+    'Saisie vocale',
+    'Dictée',
+    // Spanish
+    'Entrada de voz',
+    'Dictado',
+    // Portuguese
+    'Entrada de voz',
+    'Ditado',
+    // Italian
+    'Input vocale',
+    'Dettatura',
+    // Russian
+    'Голосовой ввод',
+    'Диктовка',
+    // Arabic
+    'الإدخال الصوتي',
+    'إملاء',
+    // Vietnamese
+    'Nhập giọng nói',
+    'Đọc chính tả',
+    // Thai
+    'ป้อนเสียง',
+    'การป้อนข้อความด้วยเสียง',
+    // Indonesian
+    'Input suara',
+    'Dikte',
+    // Hebrew
+    'קלט קולי',
+    'הקלדה קולית',
+    // Persian
+    'ورودی صوتی',
+    'دیکته',
+    // Turkish
+    'Sesli giriş',
+    'Dikte',
+    // Polish
+    'Wprowadzanie głosowe',
+    'Dyktowanie',
+    // Dutch
+    'Spraakinvoer',
+    'Dicteren',
+    // Ukrainian
+    'Голосовий ввід',
+    'Диктування',
+    // Hindi
+    'वॉइस इनपुट',
+    'डिक्टेशन',
+    // Czech
+    'Hlasový vstup',
+    'Diktování',
+    // Greek
+    'Φωνητική εισαγωγή',
+    'Υπαγόρευση',
+    // Swedish
+    'Röstinmatning',
+    'Diktamen',
   ],
   stop: [
     // Traditional Chinese
@@ -64,6 +130,67 @@ const DICTATION_LABELS = {
     'Stop recording',
     'Stop dictation',
     'Stop voice input',
+    // Japanese
+    '録音を停止',
+    '停止',
+    // Korean
+    '녹음 중지',
+    '중지',
+    // German
+    'Aufnahme stoppen',
+    // French
+    'Arrêter l\'enregistrement',
+    // Spanish
+    'Detener grabación',
+    // Portuguese
+    'Parar gravação',
+    // Italian
+    'Ferma registrazione',
+    // Russian
+    'Остановить запись',
+    'Остановить',
+    // Arabic
+    'إيقاف التسجيل',
+    'إيقاف',
+    // Vietnamese
+    'Dừng ghi',
+    'Dừng',
+    // Thai
+    'หยุดบันทึก',
+    'หยุด',
+    // Indonesian
+    'Hentikan rekaman',
+    'Berhenti',
+    // Hebrew
+    'עצור הקלטה',
+    'עצור',
+    // Persian
+    'توقف ضبط',
+    'توقف',
+    // Turkish
+    'Kaydı durdur',
+    'Durdur',
+    // Polish
+    'Zatrzymaj nagrywanie',
+    'Zatrzymaj',
+    // Dutch
+    'Opname stoppen',
+    'Stoppen',
+    // Ukrainian
+    'Зупинити запис',
+    'Зупинити',
+    // Hindi
+    'रिकॉर्डिंग रोकें',
+    'रोकें',
+    // Czech
+    'Zastavit nahrávání',
+    'Zastavit',
+    // Greek
+    'Διακοπή εγγραφής',
+    'Διακοπή',
+    // Swedish
+    'Stoppa inspelning',
+    'Stoppa',
   ],
   submit: [
     // Traditional Chinese
@@ -76,6 +203,52 @@ const DICTATION_LABELS = {
     'Submit recording',
     'Submit dictation',
     'Send voice input',
+    // Japanese
+    '送信',
+    '提出',
+    // Korean
+    '제출',
+    '보내기',
+    // German
+    'Senden',
+    // French
+    'Envoyer',
+    // Spanish
+    'Enviar',
+    // Portuguese
+    'Enviar',
+    // Italian
+    'Invia',
+    // Russian
+    'Отправить',
+    // Arabic
+    'إرسال',
+    // Vietnamese
+    'Gửi',
+    // Thai
+    'ส่ง',
+    // Indonesian
+    'Kirim',
+    // Hebrew
+    'שלח',
+    // Persian
+    'ارسال',
+    // Turkish
+    'Gönder',
+    // Polish
+    'Wyślij',
+    // Dutch
+    'Verzenden',
+    // Ukrainian
+    'Надіслати',
+    // Hindi
+    'भेजें',
+    // Czech
+    'Odeslat',
+    // Greek
+    'Υποβολή',
+    // Swedish
+    'Skicka',
   ],
 } as const;
 
@@ -366,6 +539,54 @@ export function performHealthCheck(): HealthCheckResult {
  */
 export function isVoiceInputAvailable(): boolean {
   return Boolean(findStartButton() || findStopButton());
+}
+
+/**
+ * Check if user is logged in to ChatGPT.
+ * Detects login state by looking for login-related UI elements.
+ * 
+ * @returns Object with login status and reason
+ */
+export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
+  // Check for login button (indicates not logged in)
+  const loginButton = document.querySelector('button[data-testid="login-button"]') ||
+                      document.querySelector('a[href*="/auth/login"]') ||
+                      document.querySelector('button:has-text("Log in")') ||
+                      document.querySelector('button:has-text("登入")') ||
+                      document.querySelector('button:has-text("登录")');
+  
+  if (loginButton) {
+    return { loggedIn: false, reason: 'login_button_found' };
+  }
+
+  // Check for user menu (indicates logged in)
+  const userMenu = document.querySelector('[data-testid="profile-button"]') ||
+                   document.querySelector('button[aria-label*="Profile"]') ||
+                   document.querySelector('button[aria-label*="帳戶"]') ||
+                   document.querySelector('button[aria-label*="账户"]') ||
+                   document.querySelector('img[alt*="User"]');
+  
+  if (userMenu) {
+    return { loggedIn: true, reason: 'user_menu_found' };
+  }
+
+  // Check for composer (usually only visible when logged in)
+  const composer = getComposerElement();
+  if (composer) {
+    return { loggedIn: true, reason: 'composer_found' };
+  }
+
+  // Check for "Sign up" or "Get started" buttons (indicates not logged in)
+  const signupButton = document.querySelector('button:has-text("Sign up")') ||
+                       document.querySelector('button:has-text("Get started")') ||
+                       document.querySelector('a[href*="/auth/signup"]');
+  
+  if (signupButton) {
+    return { loggedIn: false, reason: 'signup_button_found' };
+  }
+
+  // Default: assume not logged in if we can't determine
+  return { loggedIn: false, reason: 'unknown' };
 }
 
 // ============================================================================

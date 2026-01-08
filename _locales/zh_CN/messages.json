@@ -1,0 +1,240 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "扩展名称"
+  },
+  "extDescription": {
+    "message": "通过 ChatGPT Whisper 进行全网页语音听写 - 使用快捷键随处输入",
+    "description": "扩展描述"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "弹出窗口标题"
+  },
+  "statusReady": {
+    "message": "就绪",
+    "description": "就绪状态"
+  },
+  "statusRecording": {
+    "message": "录音中",
+    "description": "录音状态"
+  },
+  "statusProcessing": {
+    "message": "处理中",
+    "description": "处理状态"
+  },
+  "statusError": {
+    "message": "错误",
+    "description": "错误状态"
+  },
+  "btnStart": {
+    "message": "开始",
+    "description": "开始按钮"
+  },
+  "btnPause": {
+    "message": "暂停",
+    "description": "暂停按钮"
+  },
+  "btnSubmit": {
+    "message": "提交并捕获",
+    "description": "提交按钮"
+  },
+  "btnCopy": {
+    "message": "复制到剪贴板",
+    "description": "复制按钮"
+  },
+  "latestResult": {
+    "message": "最新结果",
+    "description": "最新结果区域标题"
+  },
+  "noResult": {
+    "message": "暂无听写内容",
+    "description": "无结果消息"
+  },
+  "settings": {
+    "message": "设置",
+    "description": "设置链接"
+  },
+  "history": {
+    "message": "历史",
+    "description": "历史链接"
+  },
+  "optionsTitle": {
+    "message": "EchoType 设置",
+    "description": "选项页面标题"
+  },
+  "optionsSubtitle": {
+    "message": "使用 ChatGPT 语音输入随处听写",
+    "description": "选项页面副标题"
+  },
+  "settingsAutomation": {
+    "message": "自动化设置",
+    "description": "自动化设置区域"
+  },
+  "autoCopy": {
+    "message": "自动复制",
+    "description": "自动复制标签"
+  },
+  "autoCopyDesc": {
+    "message": "完成后自动将结果复制到剪贴板",
+    "description": "自动复制描述"
+  },
+  "autoPaste": {
+    "message": "自动粘贴",
+    "description": "自动粘贴标签"
+  },
+  "autoPasteDesc": {
+    "message": "自动将结果粘贴到原始输入框",
+    "description": "自动粘贴描述"
+  },
+  "returnFocus": {
+    "message": "返回焦点",
+    "description": "返回焦点标签"
+  },
+  "returnFocusDesc": {
+    "message": "开始听写后返回原始标签页",
+    "description": "返回焦点描述"
+  },
+  "historySection": {
+    "message": "历史记录",
+    "description": "历史区域标题"
+  },
+  "historyEmpty": {
+    "message": "无听写历史",
+    "description": "空历史消息"
+  },
+  "clearAll": {
+    "message": "清除全部",
+    "description": "清除全部按钮"
+  },
+  "shortcuts": {
+    "message": "键盘快捷键",
+    "description": "快捷键区域标题"
+  },
+  "shortcutToggle": {
+    "message": "切换听写",
+    "description": "切换快捷键标签"
+  },
+  "shortcutCancel": {
+    "message": "取消听写",
+    "description": "取消快捷键标签"
+  },
+  "shortcutPaste": {
+    "message": "粘贴结果",
+    "description": "粘贴快捷键标签"
+  },
+  "btnRecord": {
+    "message": "录音",
+    "description": "录音按钮文本"
+  },
+  "btnCancel": {
+    "message": "取消",
+    "description": "取消按钮文本"
+  },
+  "cancelSuccess": {
+    "message": "已取消",
+    "description": "取消成功提示"
+  },
+  "saved": {
+    "message": "已保存",
+    "description": "保存确认"
+  },
+  "copied": {
+    "message": "已复制！",
+    "description": "复制确认"
+  },
+  "justNow": {
+    "message": "刚刚",
+    "description": "时间：刚刚"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ 分钟前",
+    "description": "时间：X 分钟前",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "昨天",
+    "description": "时间：昨天"
+  },
+  "customizeShortcuts": {
+    "message": "自定义快捷键",
+    "description": "自定义快捷键按钮"
+  },
+  "shortcutsNote": {
+    "message": "注意：打开 Chrome 快捷键设置来自定义键盘快捷键",
+    "description": "关于自定义快捷键的说明"
+  },
+  "notSet": {
+    "message": "未设置",
+    "description": "快捷键未设置"
+  },
+  "devMode": {
+    "message": "开发者模式",
+    "description": "开发者模式区域"
+  },
+  "devModeDesc": {
+    "message": "启用额外的调试功能",
+    "description": "开发者模式描述"
+  },
+  "debugLogging": {
+    "message": "调试日志",
+    "description": "调试日志设置"
+  },
+  "debugLoggingDesc": {
+    "message": "在浏览器控制台输出详细日志",
+    "description": "调试日志描述"
+  },
+  "openSWConsole": {
+    "message": "打开 Service Worker 控制台",
+    "description": "打开 SW 控制台按钮"
+  },
+  "openChatGPT": {
+    "message": "打开 ChatGPT 标签页",
+    "description": "打开 ChatGPT 按钮"
+  },
+  "errorNoChatGPT": {
+    "message": "未找到 ChatGPT",
+    "description": "错误标题：未找到 ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "请打开 ChatGPT 并登录以使用语音听写",
+    "description": "错误描述：未找到 ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "语音输入不可用",
+    "description": "错误标题：语音输入不可用"
+  },
+  "errorNoVoiceDesc": {
+    "message": "未找到语音输入按钮。请确保您已登录 ChatGPT。",
+    "description": "错误描述：语音输入不可用"
+  },
+  "statusListening": {
+    "message": "聆听中...",
+    "description": "聆听状态"
+  },
+  "statusUnknown": {
+    "message": "检查中...",
+    "description": "未知状态"
+  },
+  "startSuccess": {
+    "message": "听写已开始",
+    "description": "听写开始提示"
+  },
+  "submitSuccess": {
+    "message": "捕获成功！",
+    "description": "捕获成功提示"
+  },
+  "copySuccess": {
+    "message": "已复制到剪贴板",
+    "description": "复制成功提示"
+  },
+  "copyFailed": {
+    "message": "复制失败",
+    "description": "复制失败提示"
+  }
+}

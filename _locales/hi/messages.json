@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "एक्सटेंशन का नाम"
+  },
+  "extDescription": {
+    "message": "ChatGPT Whisper के माध्यम से सार्वभौमिक वॉइस डिक्टेशन - कीबोर्ड शॉर्टकट के साथ कहीं भी डिक्टेट करें",
+    "description": "एक्सटेंशन का विवरण"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "पॉपअप शीर्षक"
+  },
+  "statusReady": {
+    "message": "तैयार",
+    "description": "तैयार होने पर स्थिति"
+  },
+  "statusRecording": {
+    "message": "रिकॉर्डिंग",
+    "description": "रिकॉर्डिंग के दौरान स्थिति"
+  },
+  "statusProcessing": {
+    "message": "प्रोसेसिंग",
+    "description": "प्रोसेसिंग के दौरान स्थिति"
+  },
+  "statusError": {
+    "message": "त्रुटि",
+    "description": "त्रुटि होने पर स्थिति"
+  },
+  "btnStart": {
+    "message": "रिकॉर्ड",
+    "description": "स्टार्ट बटन"
+  },
+  "btnCancel": {
+    "message": "रद्द करें",
+    "description": "रद्द बटन"
+  },
+  "btnSubmit": {
+    "message": "भेजें",
+    "description": "भेजें बटन"
+  },
+  "btnCopy": {
+    "message": "क्लिपबोर्ड में कॉपी करें",
+    "description": "कॉपी बटन"
+  },
+  "latestResult": {
+    "message": "नवीनतम परिणाम",
+    "description": "नवीनतम परिणाम अनुभाग शीर्षक"
+  },
+  "noResult": {
+    "message": "अभी तक कोई डिक्टेशन नहीं",
+    "description": "कोई परिणाम नहीं संदेश"
+  },
+  "settings": {
+    "message": "सेटिंग्स",
+    "description": "सेटिंग्स लिंक"
+  },
+  "history": {
+    "message": "इतिहास",
+    "description": "इतिहास लिंक"
+  },
+  "optionsTitle": {
+    "message": "EchoType सेटिंग्स",
+    "description": "विकल्प पेज शीर्षक"
+  },
+  "optionsSubtitle": {
+    "message": "ChatGPT वॉइस इनपुट का उपयोग करके कहीं भी डिक्टेट करें",
+    "description": "विकल्प पेज उपशीर्षक"
+  },
+  "settingsAutomation": {
+    "message": "स्वचालन सेटिंग्स",
+    "description": "स्वचालन सेटिंग्स अनुभाग"
+  },
+  "autoCopy": {
+    "message": "स्वचालित कॉपी",
+    "description": "स्वचालित कॉपी सेटिंग लेबल"
+  },
+  "autoCopyDesc": {
+    "message": "पूर्ण होने के बाद परिणाम को स्वचालित रूप से क्लिपबोर्ड में कॉपी करें",
+    "description": "स्वचालित कॉपी विवरण"
+  },
+  "autoPaste": {
+    "message": "स्वचालित पेस्ट",
+    "description": "स्वचालित पेस्ट सेटिंग लेबल"
+  },
+  "autoPasteDesc": {
+    "message": "परिणाम को स्वचालित रूप से मूल इनपुट फ़ील्ड में पेस्ट करें",
+    "description": "स्वचालित पेस्ट विवरण"
+  },
+  "returnFocus": {
+    "message": "फोकस वापस करें",
+    "description": "फोकस वापस करें सेटिंग लेबल"
+  },
+  "returnFocusDesc": {
+    "message": "डिक्टेशन शुरू करने के बाद मूल टैब पर वापस जाएं",
+    "description": "फोकस वापस करें विवरण"
+  },
+  "historySection": {
+    "message": "इतिहास",
+    "description": "इतिहास अनुभाग शीर्षक"
+  },
+  "historyEmpty": {
+    "message": "कोई डिक्टेशन इतिहास नहीं",
+    "description": "खाली इतिहास संदेश"
+  },
+  "clearAll": {
+    "message": "सब साफ करें",
+    "description": "सब साफ करें बटन"
+  },
+  "shortcuts": {
+    "message": "कीबोर्ड शॉर्टकट",
+    "description": "शॉर्टकट अनुभाग शीर्षक"
+  },
+  "shortcutToggle": {
+    "message": "डिक्टेशन टॉगल करें",
+    "description": "टॉगल शॉर्टकट लेबल"
+  },
+  "shortcutCancel": {
+    "message": "डिक्टेशन रद्द करें",
+    "description": "रद्द शॉर्टकट लेबल"
+  },
+  "shortcutPaste": {
+    "message": "परिणाम पेस्ट करें",
+    "description": "पेस्ट शॉर्टकट लेबल"
+  },
+  "saved": {
+    "message": "सहेजा गया",
+    "description": "सहेजा गया पुष्टि"
+  },
+  "copied": {
+    "message": "कॉपी किया गया!",
+    "description": "कॉपी किया गया पुष्टि"
+  },
+  "justNow": {
+    "message": "अभी",
+    "description": "समय: अभी"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ मिनट पहले",
+    "description": "समय: X मिनट पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "कल",
+    "description": "समय: कल"
+  },
+  "customizeShortcuts": {
+    "message": "शॉर्टकट कस्टमाइज़ करें",
+    "description": "शॉर्टकट कस्टमाइज़ करने के लिए बटन"
+  },
+  "shortcutsNote": {
+    "message": "नोट: कीबोर्ड शॉर्टकट कस्टमाइज़ करने के लिए Chrome शॉर्टकट सेटिंग्स खोलें",
+    "description": "शॉर्टकट कस्टमाइज़ करने के बारे में नोट"
+  },
+  "notSet": {
+    "message": "सेट नहीं",
+    "description": "शॉर्टकट सेट नहीं"
+  },
+  "devMode": {
+    "message": "डेवलपर मोड",
+    "description": "डेवलपर मोड अनुभाग"
+  },
+  "devModeDesc": {
+    "message": "अतिरिक्त डीबगिंग सुविधाएं सक्षम करें",
+    "description": "डेवलपर मोड विवरण"
+  },
+  "debugLogging": {
+    "message": "डीबग लॉगिंग",
+    "description": "डीबग लॉगिंग सेटिंग"
+  },
+  "debugLoggingDesc": {
+    "message": "ब्राउज़र कंसोल में विस्तृत लॉग दिखाएं",
+    "description": "डीबग लॉगिंग विवरण"
+  },
+  "openSWConsole": {
+    "message": "Service Worker कंसोल खोलें",
+    "description": "SW कंसोल खोलें बटन"
+  },
+  "openChatGPT": {
+    "message": "ChatGPT टैब खोलें",
+    "description": "ChatGPT खोलें बटन"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT नहीं मिला",
+    "description": "ChatGPT टैब नहीं मिलने पर त्रुटि शीर्षक"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "वॉइस डिक्टेशन का उपयोग करने के लिए कृपया ChatGPT खोलें और लॉग इन करें",
+    "description": "ChatGPT टैब नहीं मिलने पर त्रुटि विवरण"
+  },
+  "errorNoVoice": {
+    "message": "वॉइस इनपुट उपलब्ध नहीं",
+    "description": "वॉइस इनपुट उपलब्ध न होने पर त्रुटि शीर्षक"
+  },
+  "errorNoVoiceDesc": {
+    "message": "वॉइस इनपुट बटन नहीं मिला। कृपया सुनिश्चित करें कि आप ChatGPT में लॉग इन हैं।",
+    "description": "वॉइस इनपुट उपलब्ध न होने पर त्रुटि विवरण"
+  },
+  "statusListening": {
+    "message": "सुन रहा है...",
+    "description": "सुनते समय स्थिति"
+  },
+  "statusUnknown": {
+    "message": "जाँच रहा है...",
+    "description": "अज्ञात होने पर स्थिति"
+  },
+  "startSuccess": {
+    "message": "डिक्टेशन शुरू हुआ",
+    "description": "डिक्टेशन शुरू होने पर टोस्ट संदेश"
+  },
+  "submitSuccess": {
+    "message": "सफलतापूर्वक कैप्चर किया गया!",
+    "description": "कैप्चर सफल होने पर टोस्ट संदेश"
+  },
+  "copySuccess": {
+    "message": "क्लिपबोर्ड में कॉपी किया गया",
+    "description": "कॉपी सफल होने पर टोस्ट संदेश"
+  },
+  "copyFailed": {
+    "message": "कॉपी विफल",
+    "description": "कॉपी विफल होने पर टोस्ट संदेश"
+  },
+  "cancelSuccess": {
+    "message": "डिक्टेशन रद्द किया गया",
+    "description": "डिक्टेशन रद्द होने पर टोस्ट संदेश"
+  },
+  "cancelFailed": {
+    "message": "रद्द करना विफल",
+    "description": "रद्द करना विफल होने पर टोस्ट संदेश"
+  }
+}

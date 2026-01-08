@@ -113,6 +113,7 @@ onSettingsChange((settings) => {
 
 /**
  * Handle the start-dictation command.
+ * Includes robust retry logic and content script injection.
  */
 async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
   console.log('[EchoType] Start dictation command');
@@ -121,36 +122,49 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   const tabInfo = await ensureChatGPTTab(true);
   if (!tabInfo) {
     console.error('[EchoType] Failed to get ChatGPT tab');
+    await showErrorBadge();
+    await playErrorSound();
     return {
       ok: false,
       error: {
         code: 'TAB_NOT_FOUND',
-        message: 'No ChatGPT tab available',
+        message: 'Could not open ChatGPT. Please try again.',
       },
     };
   }
 
-  // Wait a bit for tab to be ready
+  // Wait for tab to be fully ready
+  const ready = await waitForTabComplete(tabInfo.tabId, 8000);
+  if (!ready) {
+    console.warn('[EchoType] Tab may not be fully loaded');
+  }
+
+  // Ensure content script is injected
+  const injected = await ensureChatGPTContentScript(tabInfo.tabId);
+  if (!injected) {
+    console.error('[EchoType] Failed to inject content script');
+    await showErrorBadge();
+    await playErrorSound();
+    return {
+      ok: false,
+      error: {
+        code: 'INJECTION_FAILED',
+        message: 'Could not connect to ChatGPT page. Please refresh and try again.',
+      },
+    };
+  }
+
+  // Small delay to ensure content script is initialized
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  // Send start command to content script
-  const ready = await waitForTabComplete(tabInfo.tabId);
-  if (ready) {
-    await ensureChatGPTContentScript(tabInfo.tabId);
-  }
-
-  let result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError }>(
+  // Send start command with retry logic (handled by sendToChatGPTTab)
+  const result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError }>(
     createMessage.cmdStart('snapshot')
   );
-  if (!result && ready) {
-    await ensureChatGPTContentScript(tabInfo.tabId);
-    result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError }>(
-      createMessage.cmdStart('snapshot')
-    );
-  }
 
   if (result?.ok) {
-    console.log('[EchoType] Dictation started');
+    console.log('[EchoType] Dictation started successfully');
+    currentDictationStatus = 'recording';
     await updateBadge('recording');
     await playStartSound();
 
@@ -160,18 +174,17 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
     }
     return result;
   } else {
-    console.error('[EchoType] Failed to start dictation:', result?.error);
+    const errorMessage = result?.error?.message || 'No response from ChatGPT tab';
+    console.error('[EchoType] Failed to start dictation:', errorMessage);
     await showErrorBadge();
     await playErrorSound();
-    return (
-      result ?? {
-        ok: false,
-        error: {
-          code: 'UNKNOWN_ERROR',
-          message: 'No response from ChatGPT tab',
-        },
-      }
-    );
+    return {
+      ok: false,
+      error: result?.error ?? {
+        code: 'UNKNOWN_ERROR',
+        message: errorMessage,
+      },
+    };
   }
 }
 
@@ -276,12 +289,21 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
       clearOk: clear.ok,
     });
 
-// Only process if we have added text
-      if (addedText) {
-        // Add to history
-        const historyItem = await addToHistory(addedText);
-        await showSuccessBadge();
-        await playSuccessSound();
+    // CRITICAL: Reset dictation status to idle after successful submit
+    currentDictationStatus = 'idle';
+    await updateBadge('idle');
+    
+    // Forward status change to popup (ensures UI sync)
+    chrome.runtime.sendMessage(createMessage.statusChanged('idle')).catch(() => {
+      // Popup may not be open, ignore error
+    });
+
+    // Only process if we have added text
+    if (addedText) {
+      // Add to history
+      const historyItem = await addToHistory(addedText);
+      await showSuccessBadge();
+      await playSuccessSound();
 
       // Auto-copy to clipboard if enabled
       if (currentSettings.autoCopyToClipboard) {

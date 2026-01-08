@@ -91,6 +91,9 @@ export type ErrorCode =
   | 'PERMISSION_DENIED'
   | 'CLIPBOARD_ERROR'
   | 'TIMEOUT'
+  | 'INJECTION_FAILED'
+  | 'NOT_LOGGED_IN'
+  | 'VOICE_INPUT_UNAVAILABLE'
   | 'UNKNOWN_ERROR';
 
 export interface EchoTypeError {

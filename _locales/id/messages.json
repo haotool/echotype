@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Nama ekstensi"
+  },
+  "extDescription": {
+    "message": "Dikte suara universal melalui ChatGPT Whisper - dikte di mana saja dengan pintasan keyboard",
+    "description": "Deskripsi ekstensi"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Judul popup"
+  },
+  "statusReady": {
+    "message": "Siap",
+    "description": "Status siap"
+  },
+  "statusRecording": {
+    "message": "Merekam",
+    "description": "Status merekam"
+  },
+  "statusProcessing": {
+    "message": "Memproses",
+    "description": "Status memproses"
+  },
+  "statusError": {
+    "message": "Error",
+    "description": "Status error"
+  },
+  "btnStart": {
+    "message": "Rekam",
+    "description": "Tombol mulai"
+  },
+  "btnCancel": {
+    "message": "Batal",
+    "description": "Tombol batal"
+  },
+  "btnSubmit": {
+    "message": "Kirim",
+    "description": "Tombol kirim"
+  },
+  "btnCopy": {
+    "message": "Salin ke Clipboard",
+    "description": "Tombol salin"
+  },
+  "latestResult": {
+    "message": "Hasil Terbaru",
+    "description": "Judul bagian hasil terbaru"
+  },
+  "noResult": {
+    "message": "Belum ada dikte",
+    "description": "Pesan tidak ada hasil"
+  },
+  "settings": {
+    "message": "Pengaturan",
+    "description": "Tautan pengaturan"
+  },
+  "history": {
+    "message": "Riwayat",
+    "description": "Tautan riwayat"
+  },
+  "optionsTitle": {
+    "message": "Pengaturan EchoType",
+    "description": "Judul halaman opsi"
+  },
+  "optionsSubtitle": {
+    "message": "Dikte di mana saja menggunakan input suara ChatGPT",
+    "description": "Subjudul halaman opsi"
+  },
+  "settingsAutomation": {
+    "message": "Pengaturan Otomatisasi",
+    "description": "Bagian pengaturan otomatisasi"
+  },
+  "autoCopy": {
+    "message": "Salin Otomatis",
+    "description": "Label pengaturan salin otomatis"
+  },
+  "autoCopyDesc": {
+    "message": "Salin hasil ke clipboard secara otomatis setelah selesai",
+    "description": "Deskripsi salin otomatis"
+  },
+  "autoPaste": {
+    "message": "Tempel Otomatis",
+    "description": "Label pengaturan tempel otomatis"
+  },
+  "autoPasteDesc": {
+    "message": "Tempel hasil ke kolom input asli secara otomatis",
+    "description": "Deskripsi tempel otomatis"
+  },
+  "returnFocus": {
+    "message": "Kembali ke Fokus",
+    "description": "Label pengaturan kembali ke fokus"
+  },
+  "returnFocusDesc": {
+    "message": "Kembali ke tab asli setelah memulai dikte",
+    "description": "Deskripsi kembali ke fokus"
+  },
+  "historySection": {
+    "message": "Riwayat",
+    "description": "Judul bagian riwayat"
+  },
+  "historyEmpty": {
+    "message": "Tidak ada riwayat dikte",
+    "description": "Pesan riwayat kosong"
+  },
+  "clearAll": {
+    "message": "Hapus Semua",
+    "description": "Tombol hapus semua"
+  },
+  "shortcuts": {
+    "message": "Pintasan Keyboard",
+    "description": "Judul bagian pintasan"
+  },
+  "shortcutToggle": {
+    "message": "Beralih dikte",
+    "description": "Label pintasan beralih"
+  },
+  "shortcutCancel": {
+    "message": "Batalkan dikte",
+    "description": "Label pintasan batal"
+  },
+  "shortcutPaste": {
+    "message": "Tempel hasil",
+    "description": "Label pintasan tempel"
+  },
+  "saved": {
+    "message": "Tersimpan",
+    "description": "Konfirmasi tersimpan"
+  },
+  "copied": {
+    "message": "Tersalin!",
+    "description": "Konfirmasi tersalin"
+  },
+  "justNow": {
+    "message": "Baru saja",
+    "description": "Waktu: baru saja"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ menit yang lalu",
+    "description": "Waktu: X menit yang lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Kemarin",
+    "description": "Waktu: kemarin"
+  },
+  "customizeShortcuts": {
+    "message": "Kustomisasi Pintasan",
+    "description": "Tombol kustomisasi pintasan"
+  },
+  "shortcutsNote": {
+    "message": "Catatan: Buka pengaturan pintasan Chrome untuk menyesuaikan pintasan keyboard",
+    "description": "Catatan tentang kustomisasi pintasan"
+  },
+  "notSet": {
+    "message": "Tidak diatur",
+    "description": "Pintasan tidak diatur"
+  },
+  "devMode": {
+    "message": "Mode Pengembang",
+    "description": "Bagian mode pengembang"
+  },
+  "devModeDesc": {
+    "message": "Aktifkan fitur debugging tambahan",
+    "description": "Deskripsi mode pengembang"
+  },
+  "debugLogging": {
+    "message": "Logging Debug",
+    "description": "Pengaturan logging debug"
+  },
+  "debugLoggingDesc": {
+    "message": "Tampilkan log detail di konsol browser",
+    "description": "Deskripsi logging debug"
+  },
+  "openSWConsole": {
+    "message": "Buka Konsol Service Worker",
+    "description": "Tombol buka konsol SW"
+  },
+  "openChatGPT": {
+    "message": "Buka Tab ChatGPT",
+    "description": "Tombol buka ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT Tidak Ditemukan",
+    "description": "Judul error saat tab ChatGPT tidak ditemukan"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Silakan buka ChatGPT dan masuk untuk menggunakan dikte suara",
+    "description": "Deskripsi error saat tab ChatGPT tidak ditemukan"
+  },
+  "errorNoVoice": {
+    "message": "Input Suara Tidak Tersedia",
+    "description": "Judul error saat input suara tidak tersedia"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Tombol input suara tidak ditemukan. Pastikan Anda sudah masuk ke ChatGPT.",
+    "description": "Deskripsi error saat input suara tidak tersedia"
+  },
+  "statusListening": {
+    "message": "Mendengarkan...",
+    "description": "Status mendengarkan"
+  },
+  "statusUnknown": {
+    "message": "Memeriksa...",
+    "description": "Status tidak diketahui"
+  },
+  "startSuccess": {
+    "message": "Dikte dimulai",
+    "description": "Toast saat dikte dimulai"
+  },
+  "submitSuccess": {
+    "message": "Berhasil ditangkap!",
+    "description": "Toast saat berhasil ditangkap"
+  },
+  "copySuccess": {
+    "message": "Disalin ke clipboard",
+    "description": "Toast saat berhasil disalin"
+  },
+  "copyFailed": {
+    "message": "Gagal menyalin",
+    "description": "Toast saat gagal menyalin"
+  },
+  "cancelSuccess": {
+    "message": "Dikte dibatalkan",
+    "description": "Toast saat dikte dibatalkan"
+  },
+  "cancelFailed": {
+    "message": "Gagal membatalkan",
+    "description": "Toast saat gagal membatalkan"
+  }
+}

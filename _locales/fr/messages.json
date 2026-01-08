@@ -1,0 +1,240 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Nom de l'extension"
+  },
+  "extDescription": {
+    "message": "Dictée vocale universelle via ChatGPT Whisper - dictez n'importe où avec des raccourcis clavier",
+    "description": "Description de l'extension"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Titre du popup"
+  },
+  "statusReady": {
+    "message": "Prêt",
+    "description": "Statut prêt"
+  },
+  "statusRecording": {
+    "message": "Enregistrement",
+    "description": "Statut enregistrement"
+  },
+  "statusProcessing": {
+    "message": "Traitement",
+    "description": "Statut traitement"
+  },
+  "statusError": {
+    "message": "Erreur",
+    "description": "Statut erreur"
+  },
+  "btnStart": {
+    "message": "Démarrer",
+    "description": "Bouton démarrer"
+  },
+  "btnPause": {
+    "message": "Pause",
+    "description": "Bouton pause"
+  },
+  "btnSubmit": {
+    "message": "Soumettre et Capturer",
+    "description": "Bouton soumettre"
+  },
+  "btnCopy": {
+    "message": "Copier dans le presse-papiers",
+    "description": "Bouton copier"
+  },
+  "latestResult": {
+    "message": "Dernier Résultat",
+    "description": "Titre de la section dernier résultat"
+  },
+  "noResult": {
+    "message": "Pas encore de dictée",
+    "description": "Message aucun résultat"
+  },
+  "settings": {
+    "message": "Paramètres",
+    "description": "Lien paramètres"
+  },
+  "history": {
+    "message": "Historique",
+    "description": "Lien historique"
+  },
+  "optionsTitle": {
+    "message": "Paramètres EchoType",
+    "description": "Titre de la page options"
+  },
+  "optionsSubtitle": {
+    "message": "Dictez n'importe où avec l'entrée vocale ChatGPT",
+    "description": "Sous-titre de la page options"
+  },
+  "settingsAutomation": {
+    "message": "Paramètres d'Automatisation",
+    "description": "Section paramètres automatisation"
+  },
+  "autoCopy": {
+    "message": "Copie Automatique",
+    "description": "Libellé copie automatique"
+  },
+  "autoCopyDesc": {
+    "message": "Copier automatiquement le résultat dans le presse-papiers après la complétion",
+    "description": "Description copie automatique"
+  },
+  "autoPaste": {
+    "message": "Collage Automatique",
+    "description": "Libellé collage automatique"
+  },
+  "autoPasteDesc": {
+    "message": "Coller automatiquement le résultat dans le champ de saisie original",
+    "description": "Description collage automatique"
+  },
+  "returnFocus": {
+    "message": "Retour au Focus",
+    "description": "Libellé retour au focus"
+  },
+  "returnFocusDesc": {
+    "message": "Retourner à l'onglet original après le démarrage de la dictée",
+    "description": "Description retour au focus"
+  },
+  "historySection": {
+    "message": "Historique",
+    "description": "Titre de la section historique"
+  },
+  "historyEmpty": {
+    "message": "Aucun historique de dictée",
+    "description": "Message historique vide"
+  },
+  "clearAll": {
+    "message": "Tout Effacer",
+    "description": "Bouton tout effacer"
+  },
+  "shortcuts": {
+    "message": "Raccourcis Clavier",
+    "description": "Titre de la section raccourcis"
+  },
+  "shortcutToggle": {
+    "message": "Basculer la dictée",
+    "description": "Libellé raccourci basculer"
+  },
+  "shortcutCancel": {
+    "message": "Annuler la dictée",
+    "description": "Libellé raccourci annuler"
+  },
+  "shortcutPaste": {
+    "message": "Coller le résultat",
+    "description": "Libellé raccourci coller"
+  },
+  "btnRecord": {
+    "message": "Enregistrer",
+    "description": "Texte bouton enregistrer"
+  },
+  "btnCancel": {
+    "message": "Annuler",
+    "description": "Texte bouton annuler"
+  },
+  "cancelSuccess": {
+    "message": "Annulé",
+    "description": "Toast annulation réussie"
+  },
+  "saved": {
+    "message": "Enregistré",
+    "description": "Confirmation enregistré"
+  },
+  "copied": {
+    "message": "Copié !",
+    "description": "Confirmation copié"
+  },
+  "justNow": {
+    "message": "À l'instant",
+    "description": "Temps: à l'instant"
+  },
+  "minutesAgo": {
+    "message": "Il y a $COUNT$ minutes",
+    "description": "Temps: il y a X minutes",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Hier",
+    "description": "Temps: hier"
+  },
+  "customizeShortcuts": {
+    "message": "Personnaliser les Raccourcis",
+    "description": "Bouton personnaliser les raccourcis"
+  },
+  "shortcutsNote": {
+    "message": "Note: Ouvrez les paramètres de raccourcis de Chrome pour personnaliser les raccourcis clavier",
+    "description": "Note sur la personnalisation des raccourcis"
+  },
+  "notSet": {
+    "message": "Non défini",
+    "description": "Raccourci non défini"
+  },
+  "devMode": {
+    "message": "Mode Développeur",
+    "description": "Section mode développeur"
+  },
+  "devModeDesc": {
+    "message": "Activer les fonctionnalités de débogage supplémentaires",
+    "description": "Description mode développeur"
+  },
+  "debugLogging": {
+    "message": "Journalisation de Débogage",
+    "description": "Paramètre journalisation de débogage"
+  },
+  "debugLoggingDesc": {
+    "message": "Afficher les journaux détaillés dans la console du navigateur",
+    "description": "Description journalisation de débogage"
+  },
+  "openSWConsole": {
+    "message": "Ouvrir la Console Service Worker",
+    "description": "Bouton ouvrir console SW"
+  },
+  "openChatGPT": {
+    "message": "Ouvrir l'Onglet ChatGPT",
+    "description": "Bouton ouvrir ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT Non Trouvé",
+    "description": "Titre erreur pas de ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Veuillez ouvrir ChatGPT et vous connecter pour utiliser la dictée vocale",
+    "description": "Description erreur pas de ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "Entrée Vocale Indisponible",
+    "description": "Titre erreur entrée vocale non disponible"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Bouton d'entrée vocale non trouvé. Veuillez vous assurer d'être connecté à ChatGPT.",
+    "description": "Description erreur entrée vocale non disponible"
+  },
+  "statusListening": {
+    "message": "Écoute...",
+    "description": "Statut écoute"
+  },
+  "statusUnknown": {
+    "message": "Vérification...",
+    "description": "Statut inconnu"
+  },
+  "startSuccess": {
+    "message": "Dictée démarrée",
+    "description": "Toast dictée démarrée"
+  },
+  "submitSuccess": {
+    "message": "Capturé avec succès !",
+    "description": "Toast capture réussie"
+  },
+  "copySuccess": {
+    "message": "Copié dans le presse-papiers",
+    "description": "Toast copie réussie"
+  },
+  "copyFailed": {
+    "message": "Échec de la copie",
+    "description": "Toast échec copie"
+  }
+}

@@ -38,7 +38,7 @@ See `STORE_DESCRIPTION.md` for the full listing text in both English and Traditi
 ## Submission Checklist
 
 - [ ] Register Chrome Web Store Developer account ($5 one-time fee)
-- [ ] Upload `EchoType-v0.5.0.zip` as the extension package
+- [ ] Upload `EchoType-v0.6.2.zip` as the extension package
 - [ ] Upload all icons (16, 32, 48, 128)
 - [ ] Upload at least 1 screenshot (1280x800)
 - [ ] Upload promotional image (440x280)

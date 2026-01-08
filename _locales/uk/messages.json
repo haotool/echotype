@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "Назва розширення"
+  },
+  "extDescription": {
+    "message": "Універсальна голосова диктовка через ChatGPT Whisper - диктуйте будь-де за допомогою гарячих клавіш",
+    "description": "Опис розширення"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "Заголовок спливаючого вікна"
+  },
+  "statusReady": {
+    "message": "Готово",
+    "description": "Статус готово"
+  },
+  "statusRecording": {
+    "message": "Запис",
+    "description": "Статус запису"
+  },
+  "statusProcessing": {
+    "message": "Обробка",
+    "description": "Статус обробки"
+  },
+  "statusError": {
+    "message": "Помилка",
+    "description": "Статус помилки"
+  },
+  "btnStart": {
+    "message": "Записати",
+    "description": "Кнопка старт"
+  },
+  "btnCancel": {
+    "message": "Скасувати",
+    "description": "Кнопка скасувати"
+  },
+  "btnSubmit": {
+    "message": "Надіслати",
+    "description": "Кнопка надіслати"
+  },
+  "btnCopy": {
+    "message": "Копіювати в буфер",
+    "description": "Кнопка копіювати"
+  },
+  "latestResult": {
+    "message": "Останній результат",
+    "description": "Заголовок секції останнього результату"
+  },
+  "noResult": {
+    "message": "Поки немає диктовки",
+    "description": "Повідомлення немає результату"
+  },
+  "settings": {
+    "message": "Налаштування",
+    "description": "Посилання налаштування"
+  },
+  "history": {
+    "message": "Історія",
+    "description": "Посилання історія"
+  },
+  "optionsTitle": {
+    "message": "Налаштування EchoType",
+    "description": "Заголовок сторінки опцій"
+  },
+  "optionsSubtitle": {
+    "message": "Диктуйте будь-де, використовуючи голосовий ввід ChatGPT",
+    "description": "Підзаголовок сторінки опцій"
+  },
+  "settingsAutomation": {
+    "message": "Налаштування автоматизації",
+    "description": "Секція налаштувань автоматизації"
+  },
+  "autoCopy": {
+    "message": "Автоматичне копіювання",
+    "description": "Мітка налаштування автоматичного копіювання"
+  },
+  "autoCopyDesc": {
+    "message": "Автоматично копіювати результат у буфер обміну після завершення",
+    "description": "Опис автоматичного копіювання"
+  },
+  "autoPaste": {
+    "message": "Автоматичне вставлення",
+    "description": "Мітка налаштування автоматичного вставлення"
+  },
+  "autoPasteDesc": {
+    "message": "Автоматично вставляти результат у початкове поле введення",
+    "description": "Опис автоматичного вставлення"
+  },
+  "returnFocus": {
+    "message": "Повернути фокус",
+    "description": "Мітка налаштування повернення фокусу"
+  },
+  "returnFocusDesc": {
+    "message": "Повернутися на початкову вкладку після початку диктовки",
+    "description": "Опис повернення фокусу"
+  },
+  "historySection": {
+    "message": "Історія",
+    "description": "Заголовок секції історії"
+  },
+  "historyEmpty": {
+    "message": "Немає історії диктовки",
+    "description": "Повідомлення порожня історія"
+  },
+  "clearAll": {
+    "message": "Очистити все",
+    "description": "Кнопка очистити все"
+  },
+  "shortcuts": {
+    "message": "Гарячі клавіші",
+    "description": "Заголовок секції гарячих клавіш"
+  },
+  "shortcutToggle": {
+    "message": "Перемкнути диктовку",
+    "description": "Мітка гарячої клавіші перемикання"
+  },
+  "shortcutCancel": {
+    "message": "Скасувати диктовку",
+    "description": "Мітка гарячої клавіші скасування"
+  },
+  "shortcutPaste": {
+    "message": "Вставити результат",
+    "description": "Мітка гарячої клавіші вставлення"
+  },
+  "saved": {
+    "message": "Збережено",
+    "description": "Підтвердження збережено"
+  },
+  "copied": {
+    "message": "Скопійовано!",
+    "description": "Підтвердження скопійовано"
+  },
+  "justNow": {
+    "message": "Щойно",
+    "description": "Час: щойно"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ хвилин тому",
+    "description": "Час: X хвилин тому",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "Вчора",
+    "description": "Час: вчора"
+  },
+  "customizeShortcuts": {
+    "message": "Налаштувати гарячі клавіші",
+    "description": "Кнопка налаштувати гарячі клавіші"
+  },
+  "shortcutsNote": {
+    "message": "Примітка: Відкрийте налаштування гарячих клавіш Chrome для налаштування клавіатурних скорочень",
+    "description": "Примітка про налаштування гарячих клавіш"
+  },
+  "notSet": {
+    "message": "Не задано",
+    "description": "Гаряча клавіша не задана"
+  },
+  "devMode": {
+    "message": "Режим розробника",
+    "description": "Секція режиму розробника"
+  },
+  "devModeDesc": {
+    "message": "Увімкнути додаткові функції налагодження",
+    "description": "Опис режиму розробника"
+  },
+  "debugLogging": {
+    "message": "Журнал налагодження",
+    "description": "Налаштування журналу налагодження"
+  },
+  "debugLoggingDesc": {
+    "message": "Виводити детальні логи в консоль браузера",
+    "description": "Опис журналу налагодження"
+  },
+  "openSWConsole": {
+    "message": "Відкрити консоль Service Worker",
+    "description": "Кнопка відкрити консоль SW"
+  },
+  "openChatGPT": {
+    "message": "Відкрити вкладку ChatGPT",
+    "description": "Кнопка відкрити ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ChatGPT не знайдено",
+    "description": "Заголовок помилки коли вкладка ChatGPT не знайдена"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "Будь ласка, відкрийте ChatGPT та увійдіть для використання голосової диктовки",
+    "description": "Опис помилки коли вкладка ChatGPT не знайдена"
+  },
+  "errorNoVoice": {
+    "message": "Голосовий ввід недоступний",
+    "description": "Заголовок помилки коли голосовий ввід недоступний"
+  },
+  "errorNoVoiceDesc": {
+    "message": "Кнопка голосового вводу не знайдена. Переконайтеся, що ви увійшли в ChatGPT.",
+    "description": "Опис помилки коли голосовий ввід недоступний"
+  },
+  "statusListening": {
+    "message": "Слухаю...",
+    "description": "Статус слухаю"
+  },
+  "statusUnknown": {
+    "message": "Перевірка...",
+    "description": "Статус невідомо"
+  },
+  "startSuccess": {
+    "message": "Диктовку розпочато",
+    "description": "Сповіщення коли диктовка починається"
+  },
+  "submitSuccess": {
+    "message": "Успішно захоплено!",
+    "description": "Сповіщення коли захоплення успішне"
+  },
+  "copySuccess": {
+    "message": "Скопійовано в буфер обміну",
+    "description": "Сповіщення коли копіювання успішне"
+  },
+  "copyFailed": {
+    "message": "Помилка копіювання",
+    "description": "Сповіщення коли копіювання невдале"
+  },
+  "cancelSuccess": {
+    "message": "Диктовку скасовано",
+    "description": "Сповіщення коли диктовку скасовано"
+  },
+  "cancelFailed": {
+    "message": "Помилка скасування",
+    "description": "Сповіщення коли скасування невдале"
+  }
+}

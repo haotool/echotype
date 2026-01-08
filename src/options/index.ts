@@ -17,6 +17,7 @@ import { MSG, createMessage } from '@shared/protocol';
 const STORAGE_KEY = 'echotype_settings';
 const STORAGE_KEY_THEME = 'echotype_theme';
 const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
+const STORAGE_KEY_LANGUAGE = 'echotype_language';
 
 // ============================================================================
 // DOM Elements
@@ -31,6 +32,9 @@ const elements = {
   autoCopyToClipboard: document.getElementById('autoCopyToClipboard') as HTMLInputElement,
   autoPasteToActiveTab: document.getElementById('autoPasteToActiveTab') as HTMLInputElement,
   returnFocusAfterStart: document.getElementById('returnFocusAfterStart') as HTMLInputElement,
+  
+  // Language
+  languageSelect: document.getElementById('languageSelect') as HTMLSelectElement,
   
   // Shortcuts
   shortcutsContainer: document.getElementById('shortcutsContainer') as HTMLElement,
@@ -100,6 +104,58 @@ async function toggleTheme(): Promise<void> {
   isDarkTheme = !isDarkTheme;
   applyTheme();
   await chrome.storage.local.set({ [STORAGE_KEY_THEME]: isDarkTheme ? 'dark' : 'light' });
+}
+
+// ============================================================================
+// Language Management
+// ============================================================================
+
+async function loadLanguage(): Promise<void> {
+  try {
+    const result = await chrome.storage.local.get(STORAGE_KEY_LANGUAGE);
+    const savedLang = result[STORAGE_KEY_LANGUAGE];
+    
+    // Default to browser's UI language if no saved preference
+    const currentLang = savedLang || chrome.i18n.getUILanguage().replace('-', '_');
+    
+    // Set the select value if the language is available
+    if (elements.languageSelect) {
+      const options = Array.from(elements.languageSelect.options);
+      const hasOption = options.some(opt => opt.value === currentLang);
+      
+      if (hasOption) {
+        elements.languageSelect.value = currentLang;
+      } else {
+        // Try to match just the language code (e.g., 'en' from 'en-US')
+        const langCode = currentLang.split('_')[0];
+        const matchingOption = options.find(opt => opt.value.startsWith(langCode));
+        if (matchingOption) {
+          elements.languageSelect.value = matchingOption.value;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('[EchoType] Failed to load language preference:', error);
+  }
+}
+
+async function handleLanguageChange(): Promise<void> {
+  const selectedLang = elements.languageSelect.value;
+  
+  try {
+    await chrome.storage.local.set({ [STORAGE_KEY_LANGUAGE]: selectedLang });
+    showToast(`Language changed to ${elements.languageSelect.selectedOptions[0]?.text || selectedLang}`);
+    
+    // Note: Chrome extensions don't support dynamic language switching
+    // The user needs to reload the extension pages or restart Chrome
+    // We show a note about this in the UI
+    
+    // Optionally reload the page to apply changes
+    // setTimeout(() => location.reload(), 1500);
+  } catch (error) {
+    console.error('[EchoType] Failed to save language preference:', error);
+    showToast('Failed to save language preference');
+  }
 }
 
 // ============================================================================
@@ -492,6 +548,9 @@ function setupEventListeners(): void {
   elements.autoPasteToActiveTab.addEventListener('change', handleSettingChange);
   elements.returnFocusAfterStart.addEventListener('change', handleSettingChange);
   
+  // Language
+  elements.languageSelect?.addEventListener('change', handleLanguageChange);
+  
   // Shortcuts
   elements.customizeShortcuts.addEventListener('click', () => {
     chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
@@ -521,7 +580,15 @@ function setupEventListeners(): void {
 // ============================================================================
 
 async function init(): Promise<void> {
+  // Set RTL direction for RTL languages
+  const uiLang = chrome.i18n.getUILanguage();
+  if (uiLang.startsWith('ar') || uiLang.startsWith('he') || uiLang.startsWith('fa')) {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', uiLang);
+  }
+  
   await loadTheme();
+  await loadLanguage();
   await loadUI();
   await loadDevMode();
   setupEventListeners();

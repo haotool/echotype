@@ -1,0 +1,236 @@
+{
+  "extName": {
+    "message": "EchoType",
+    "description": "ชื่อส่วนขยาย"
+  },
+  "extDescription": {
+    "message": "ป้อนข้อความด้วยเสียงผ่าน ChatGPT Whisper - ป้อนข้อความด้วยเสียงได้ทุกที่ด้วยปุ่มลัด",
+    "description": "คำอธิบายส่วนขยาย"
+  },
+  "popupTitle": {
+    "message": "EchoType",
+    "description": "ชื่อป๊อปอัป"
+  },
+  "statusReady": {
+    "message": "พร้อม",
+    "description": "สถานะพร้อม"
+  },
+  "statusRecording": {
+    "message": "กำลังบันทึก",
+    "description": "สถานะกำลังบันทึก"
+  },
+  "statusProcessing": {
+    "message": "กำลังประมวลผล",
+    "description": "สถานะกำลังประมวลผล"
+  },
+  "statusError": {
+    "message": "ข้อผิดพลาด",
+    "description": "สถานะข้อผิดพลาด"
+  },
+  "btnStart": {
+    "message": "บันทึก",
+    "description": "ปุ่มเริ่ม"
+  },
+  "btnCancel": {
+    "message": "ยกเลิก",
+    "description": "ปุ่มยกเลิก"
+  },
+  "btnSubmit": {
+    "message": "ส่ง",
+    "description": "ปุ่มส่ง"
+  },
+  "btnCopy": {
+    "message": "คัดลอกไปยังคลิปบอร์ด",
+    "description": "ปุ่มคัดลอก"
+  },
+  "latestResult": {
+    "message": "ผลลัพธ์ล่าสุด",
+    "description": "หัวข้อส่วนผลลัพธ์ล่าสุด"
+  },
+  "noResult": {
+    "message": "ยังไม่มีการป้อนข้อความด้วยเสียง",
+    "description": "ข้อความไม่มีผลลัพธ์"
+  },
+  "settings": {
+    "message": "การตั้งค่า",
+    "description": "ลิงก์การตั้งค่า"
+  },
+  "history": {
+    "message": "ประวัติ",
+    "description": "ลิงก์ประวัติ"
+  },
+  "optionsTitle": {
+    "message": "การตั้งค่า EchoType",
+    "description": "หัวข้อหน้าตัวเลือก"
+  },
+  "optionsSubtitle": {
+    "message": "ป้อนข้อความด้วยเสียงได้ทุกที่โดยใช้ ChatGPT",
+    "description": "หัวข้อรองหน้าตัวเลือก"
+  },
+  "settingsAutomation": {
+    "message": "การตั้งค่าอัตโนมัติ",
+    "description": "ส่วนการตั้งค่าอัตโนมัติ"
+  },
+  "autoCopy": {
+    "message": "คัดลอกอัตโนมัติ",
+    "description": "ป้ายกำกับการตั้งค่าคัดลอกอัตโนมัติ"
+  },
+  "autoCopyDesc": {
+    "message": "คัดลอกผลลัพธ์ไปยังคลิปบอร์ดโดยอัตโนมัติหลังเสร็จสิ้น",
+    "description": "คำอธิบายคัดลอกอัตโนมัติ"
+  },
+  "autoPaste": {
+    "message": "วางอัตโนมัติ",
+    "description": "ป้ายกำกับการตั้งค่าวางอัตโนมัติ"
+  },
+  "autoPasteDesc": {
+    "message": "วางผลลัพธ์ลงในช่องป้อนข้อมูลเดิมโดยอัตโนมัติ",
+    "description": "คำอธิบายวางอัตโนมัติ"
+  },
+  "returnFocus": {
+    "message": "กลับไปยังโฟกัส",
+    "description": "ป้ายกำกับการตั้งค่ากลับไปยังโฟกัส"
+  },
+  "returnFocusDesc": {
+    "message": "กลับไปยังแท็บเดิมหลังเริ่มป้อนข้อความด้วยเสียง",
+    "description": "คำอธิบายกลับไปยังโฟกัส"
+  },
+  "historySection": {
+    "message": "ประวัติ",
+    "description": "หัวข้อส่วนประวัติ"
+  },
+  "historyEmpty": {
+    "message": "ไม่มีประวัติการป้อนข้อความด้วยเสียง",
+    "description": "ข้อความประวัติว่างเปล่า"
+  },
+  "clearAll": {
+    "message": "ล้างทั้งหมด",
+    "description": "ปุ่มล้างทั้งหมด"
+  },
+  "shortcuts": {
+    "message": "ปุ่มลัด",
+    "description": "หัวข้อส่วนปุ่มลัด"
+  },
+  "shortcutToggle": {
+    "message": "สลับการป้อนข้อความด้วยเสียง",
+    "description": "ป้ายกำกับปุ่มลัดสลับ"
+  },
+  "shortcutCancel": {
+    "message": "ยกเลิกการป้อนข้อความด้วยเสียง",
+    "description": "ป้ายกำกับปุ่มลัดยกเลิก"
+  },
+  "shortcutPaste": {
+    "message": "วางผลลัพธ์",
+    "description": "ป้ายกำกับปุ่มลัดวาง"
+  },
+  "saved": {
+    "message": "บันทึกแล้ว",
+    "description": "การยืนยันบันทึกแล้ว"
+  },
+  "copied": {
+    "message": "คัดลอกแล้ว!",
+    "description": "การยืนยันคัดลอกแล้ว"
+  },
+  "justNow": {
+    "message": "เมื่อกี้",
+    "description": "เวลา: เมื่อกี้"
+  },
+  "minutesAgo": {
+    "message": "$COUNT$ นาทีที่แล้ว",
+    "description": "เวลา: X นาทีที่แล้ว",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "yesterday": {
+    "message": "เมื่อวาน",
+    "description": "เวลา: เมื่อวาน"
+  },
+  "customizeShortcuts": {
+    "message": "ปรับแต่งปุ่มลัด",
+    "description": "ปุ่มปรับแต่งปุ่มลัด"
+  },
+  "shortcutsNote": {
+    "message": "หมายเหตุ: เปิดการตั้งค่าปุ่มลัด Chrome เพื่อปรับแต่งปุ่มลัด",
+    "description": "หมายเหตุเกี่ยวกับการปรับแต่งปุ่มลัด"
+  },
+  "notSet": {
+    "message": "ไม่ได้ตั้งค่า",
+    "description": "ปุ่มลัดไม่ได้ตั้งค่า"
+  },
+  "devMode": {
+    "message": "โหมดนักพัฒนา",
+    "description": "ส่วนโหมดนักพัฒนา"
+  },
+  "devModeDesc": {
+    "message": "เปิดใช้งานคุณสมบัติการดีบักเพิ่มเติม",
+    "description": "คำอธิบายโหมดนักพัฒนา"
+  },
+  "debugLogging": {
+    "message": "การบันทึกดีบัก",
+    "description": "การตั้งค่าการบันทึกดีบัก"
+  },
+  "debugLoggingDesc": {
+    "message": "แสดงบันทึกรายละเอียดในคอนโซลเบราว์เซอร์",
+    "description": "คำอธิบายการบันทึกดีบัก"
+  },
+  "openSWConsole": {
+    "message": "เปิดคอนโซล Service Worker",
+    "description": "ปุ่มเปิดคอนโซล SW"
+  },
+  "openChatGPT": {
+    "message": "เปิดแท็บ ChatGPT",
+    "description": "ปุ่มเปิด ChatGPT"
+  },
+  "errorNoChatGPT": {
+    "message": "ไม่พบ ChatGPT",
+    "description": "หัวข้อข้อผิดพลาดเมื่อไม่พบแท็บ ChatGPT"
+  },
+  "errorNoChatGPTDesc": {
+    "message": "กรุณาเปิด ChatGPT และเข้าสู่ระบบเพื่อใช้การป้อนข้อความด้วยเสียง",
+    "description": "คำอธิบายข้อผิดพลาดเมื่อไม่พบแท็บ ChatGPT"
+  },
+  "errorNoVoice": {
+    "message": "การป้อนเสียงไม่พร้อมใช้งาน",
+    "description": "หัวข้อข้อผิดพลาดเมื่อการป้อนเสียงไม่พร้อมใช้งาน"
+  },
+  "errorNoVoiceDesc": {
+    "message": "ไม่พบปุ่มป้อนเสียง กรุณาตรวจสอบว่าคุณเข้าสู่ระบบ ChatGPT แล้ว",
+    "description": "คำอธิบายข้อผิดพลาดเมื่อการป้อนเสียงไม่พร้อมใช้งาน"
+  },
+  "statusListening": {
+    "message": "กำลังฟัง...",
+    "description": "สถานะกำลังฟัง"
+  },
+  "statusUnknown": {
+    "message": "กำลังตรวจสอบ...",
+    "description": "สถานะไม่ทราบ"
+  },
+  "startSuccess": {
+    "message": "เริ่มป้อนข้อความด้วยเสียงแล้ว",
+    "description": "แจ้งเตือนเมื่อเริ่มป้อนข้อความด้วยเสียง"
+  },
+  "submitSuccess": {
+    "message": "บันทึกสำเร็จ!",
+    "description": "แจ้งเตือนเมื่อบันทึกสำเร็จ"
+  },
+  "copySuccess": {
+    "message": "คัดลอกไปยังคลิปบอร์ดแล้ว",
+    "description": "แจ้งเตือนเมื่อคัดลอกสำเร็จ"
+  },
+  "copyFailed": {
+    "message": "คัดลอกล้มเหลว",
+    "description": "แจ้งเตือนเมื่อคัดลอกล้มเหลว"
+  },
+  "cancelSuccess": {
+    "message": "ยกเลิกการป้อนข้อความด้วยเสียงแล้ว",
+    "description": "แจ้งเตือนเมื่อยกเลิกการป้อนข้อความด้วยเสียง"
+  },
+  "cancelFailed": {
+    "message": "ยกเลิกล้มเหลว",
+    "description": "แจ้งเตือนเมื่อยกเลิกล้มเหลว"
+  }
+}

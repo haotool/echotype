@@ -72,7 +72,21 @@ export async function openPopupPage(context: BrowserContext, extensionId: string
  */
 export async function openOptionsPage(context: BrowserContext, extensionId: string) {
   const page = await context.newPage();
-  await page.goto(`chrome-extension://${extensionId}/src/options/index.html`);
+  try {
+    await page.goto(`chrome-extension://${extensionId}/src/options/index.html`, {
+      waitUntil: 'domcontentloaded',
+      timeout: 10000,
+    });
+  } catch {
+    // Chrome may redirect to chrome://extensions/?options=... in some cases
+    // Wait and try to navigate again
+    await page.waitForTimeout(500);
+    if (!page.url().includes(extensionId)) {
+      await page.goto(`chrome-extension://${extensionId}/src/options/index.html`, {
+        waitUntil: 'domcontentloaded',
+      });
+    }
+  }
   return page;
 }
 

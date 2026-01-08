@@ -81,8 +81,48 @@ We may update this Privacy Policy from time to time. Changes will be reflected i
 
 If you have questions about this Privacy Policy, please open an issue on our GitHub repository:
 
-**GitHub**: https://github.com/user/echotype
+**GitHub**: https://github.com/haotool/echotype
 
 ---
 
-© 2026 EchoType Team. All rights reserved.
+## Disclaimer
+
+**EchoType is an open-source project provided "AS IS" without warranty of any kind.**
+
+### Important Notice
+
+1. **No Affiliation**: EchoType is not affiliated with, endorsed by, or sponsored by OpenAI, ChatGPT, or any related entities. This is an independent, community-driven project.
+
+2. **Use at Your Own Risk**: By using this extension, you acknowledge that:
+   - The extension interacts with third-party services (ChatGPT) that may change without notice
+   - The developers are not responsible for any issues arising from the use of this extension
+   - You are responsible for complying with ChatGPT's Terms of Service
+
+3. **No Warranty**: This software is provided without any express or implied warranties, including but not limited to:
+   - Merchantability
+   - Fitness for a particular purpose
+   - Non-infringement
+
+4. **Limitation of Liability**: In no event shall the authors or copyright holders be liable for any claim, damages, or other liability arising from the use of this software.
+
+5. **Third-Party Services**: This extension relies on ChatGPT's voice dictation feature. We have no control over:
+   - Availability of the voice dictation feature
+   - Changes to ChatGPT's interface or functionality
+   - Data processing by OpenAI/ChatGPT
+
+### Takedown Requests
+
+If you believe this extension infringes on any rights or violates any terms, please contact us:
+
+- **Email**: haotool.org@gmail.com
+- **GitHub Issues**: https://github.com/haotool/echotype/issues
+
+We will respond to all legitimate takedown requests within 48 hours.
+
+### Open Source License
+
+EchoType is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+© 2026 EchoType Contributors. This is an open-source project.
