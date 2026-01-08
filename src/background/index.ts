@@ -538,7 +538,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       try {
         const response = await chrome.tabs.sendMessage(tabInfo.tabId, payload);
         sendResponse({ ok: true, tabId: tabInfo.tabId, response });
-      } catch (error) {
+      } catch {
         const readyRetry = ready || (await waitForTabComplete(tabInfo.tabId));
         if (!readyRetry) {
           sendResponse({ ok: false, error: 'chatgpt-tab-not-ready' });
