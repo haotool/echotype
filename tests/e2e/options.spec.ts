@@ -157,4 +157,27 @@ test.describe('Options Page', () => {
     // Dev section should now be visible
     await expect(devSection).toBeVisible();
   });
+
+  test('should run Inspect DOM via dev bridge', async ({ context, extensionId }) => {
+    const chatgptPage = await context.newPage();
+    await chatgptPage.goto('https://chatgpt.com/?temporary-chat=true');
+    await chatgptPage.waitForLoadState('domcontentloaded');
+
+    const page = await openOptionsPage(context, extensionId);
+
+    const devModeToggle = page
+      .locator('.toggle')
+      .filter({ has: page.locator('#devMode') })
+      .locator('.toggle-slider');
+    await devModeToggle.scrollIntoViewIfNeeded();
+    await devModeToggle.click();
+    await page.waitForTimeout(200);
+
+    const inspectButton = page.locator('#btn-inspect-dom');
+    await expect(inspectButton).toBeVisible();
+    await inspectButton.click();
+
+    const toastMessage = page.locator('#toastMessage');
+    await expect(toastMessage).toContainText('Check ChatGPT console');
+  });
 });

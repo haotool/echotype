@@ -61,6 +61,21 @@ describe('createMessage', () => {
     });
   });
 
+  describe('inspectDom', () => {
+    it('should create inspect dom message', () => {
+      const msg = createMessage.inspectDom();
+      expect(msg.type).toBe(MSG.INSPECT_DOM);
+    });
+  });
+
+  describe('devForward', () => {
+    it('should create dev forward message', () => {
+      const msg = createMessage.devForward({ type: MSG.INSPECT_DOM });
+      expect(msg.type).toBe(MSG.DEV_FORWARD);
+      expect(msg.message.type).toBe(MSG.INSPECT_DOM);
+    });
+  });
+
   describe('resultReady', () => {
     it('should create result ready message', () => {
       const capture: CaptureResult = { text: 'test', reason: 'stable' };
@@ -139,6 +154,8 @@ describe('type guards', () => {
       expect(isCommandMessage(createMessage.cmdPause())).toBe(true);
       expect(isCommandMessage(createMessage.cmdSubmit())).toBe(true);
       expect(isCommandMessage(createMessage.cmdGetStatus())).toBe(true);
+      expect(isCommandMessage(createMessage.inspectDom())).toBe(true);
+      expect(isCommandMessage(createMessage.devForward({ type: MSG.INSPECT_DOM }))).toBe(true);
     });
 
     it('should return false for non-command messages', () => {
