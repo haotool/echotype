@@ -18,9 +18,9 @@ const CHATGPT_URL = 'https://chatgpt.com/?temporary-chat=true';
 const CHATGPT_PATTERN = 'https://chatgpt.com/*';
 
 /** Maximum retries for tab operations */
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 5;
 /** Delay between retries in ms */
-const RETRY_DELAY = 500;
+const RETRY_DELAY = 300;
 /** Timeout for tab complete in ms */
 const TAB_COMPLETE_TIMEOUT = 10000;
 

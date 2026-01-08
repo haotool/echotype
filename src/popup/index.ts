@@ -327,13 +327,24 @@ function setupEventListeners(): void {
         const response = await sendMessage<{ type: string; addedText?: string; error?: { message: string } }>(
           createMessage.cmdSubmit()
         );
-        if (response?.type === MSG.RESULT_READY && response.addedText) {
-          showToast('Captured successfully!');
+        if (response?.type === MSG.RESULT_READY) {
+          // CRITICAL: Reset status to idle after successful submit
+          currentStatus = 'idle';
+          updateStatusUI('idle');
+          if (response.addedText) {
+            showToast('Captured successfully!');
+          }
         } else if (response?.error) {
+          // Reset to idle on error as well
+          currentStatus = 'idle';
+          updateStatusUI('idle');
           showError('Submit Failed', response.error.message);
         }
       } catch (error) {
         console.error('[EchoType] Submit failed:', error);
+        // Reset to idle on exception
+        currentStatus = 'idle';
+        updateStatusUI('idle');
         showToast('Submit failed');
       }
     } else {
@@ -343,7 +354,11 @@ function setupEventListeners(): void {
         const response = await sendMessage<{ ok: boolean; error?: { message: string } }>(
           createMessage.cmdStart()
         );
-        if (!response?.ok && response?.error) {
+        if (response?.ok) {
+          // CRITICAL: Update status to recording after successful start
+          currentStatus = 'recording';
+          updateStatusUI('recording');
+        } else if (response?.error) {
           showError('Start Failed', response.error.message);
         }
       } catch (error) {
@@ -357,9 +372,15 @@ function setupEventListeners(): void {
   elements.btnCancel.addEventListener('click', async () => {
     try {
       await sendMessage(createMessage.cmdPause());
+      // CRITICAL: Reset status to idle after cancel
+      currentStatus = 'idle';
+      updateStatusUI('idle');
       showToast('Cancelled');
     } catch (error) {
       console.error('[EchoType] Cancel failed:', error);
+      // Reset to idle on error as well
+      currentStatus = 'idle';
+      updateStatusUI('idle');
       showToast('Cancel failed');
     }
   });

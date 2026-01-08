@@ -69,28 +69,56 @@ function playBeep(
 
 /**
  * Write text to the clipboard.
+ * Uses Clipboard API with fallback to execCommand.
  *
  * @param text - Text to write
  * @returns Success status
  */
 async function writeToClipboard(text: string): Promise<boolean> {
+  // First try: Modern Clipboard API
   try {
     await navigator.clipboard.writeText(text);
+    console.log('[EchoType] Clipboard write successful (API)');
     return true;
   } catch (error) {
-    console.error('[EchoType] Clipboard write error:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.warn('[EchoType] Clipboard API failed:', errorMessage);
 
-    // Fallback using execCommand
+    // Check if it's a permission error
+    if (error instanceof DOMException) {
+      console.warn('[EchoType] DOMException name:', error.name);
+      
+      // NotAllowedError usually means we need user interaction
+      if (error.name === 'NotAllowedError') {
+        console.warn('[EchoType] Clipboard permission denied, trying fallback...');
+      }
+    }
+
+    // Fallback: execCommand (deprecated but still works in some contexts)
     try {
       const textarea = document.createElement('textarea');
       textarea.value = text;
-      textarea.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
+      textarea.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+      textarea.setAttribute('readonly', ''); // Prevent keyboard on mobile
       document.body.appendChild(textarea);
+      
+      // Select the text
+      textarea.focus();
       textarea.select();
+      textarea.setSelectionRange(0, text.length); // For iOS
+      
       const result = document.execCommand('copy');
       textarea.remove();
-      return result;
-    } catch {
+      
+      if (result) {
+        console.log('[EchoType] Clipboard write successful (execCommand fallback)');
+        return true;
+      } else {
+        console.error('[EchoType] execCommand copy returned false');
+        return false;
+      }
+    } catch (fallbackError) {
+      console.error('[EchoType] Clipboard fallback failed:', fallbackError);
       return false;
     }
   }

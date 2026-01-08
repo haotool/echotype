@@ -94,20 +94,64 @@ async function ensureOffscreenDocument(): Promise<void> {
  * @returns Success status
  */
 export async function writeToClipboard(text: string): Promise<boolean> {
-  try {
-    await ensureOffscreenDocument();
+  if (!text) {
+    console.warn('[EchoType] Clipboard write skipped: empty text');
+    return false;
+  }
 
-    // Send message to offscreen document
-    const response = await chrome.runtime.sendMessage({
-      type: MSG.OFFSCREEN_CLIPBOARD_WRITE,
-      text,
-      target: 'offscreen',
-    });
+  try {
+    // Ensure offscreen document exists
+    await ensureOffscreenDocument();
+    console.log('[EchoType] Offscreen document ready, sending clipboard request');
+
+    // Send message to offscreen document with timeout
+    const response = await Promise.race([
+      chrome.runtime.sendMessage({
+        type: MSG.OFFSCREEN_CLIPBOARD_WRITE,
+        text,
+        target: 'offscreen',
+      }),
+      new Promise<null>((_, reject) => 
+        setTimeout(() => reject(new Error('Clipboard operation timeout')), 5000)
+      ),
+    ]);
 
     const result = response as OffscreenClipboardResultPayload | undefined;
-    return result?.success ?? false;
+    
+    if (result?.success) {
+      console.log('[EchoType] Clipboard write successful');
+      return true;
+    } else {
+      console.warn('[EchoType] Clipboard write failed:', result?.error || 'Unknown error');
+      return false;
+    }
   } catch (error) {
-    console.error('[EchoType] Clipboard write error:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[EchoType] Clipboard write error:', errorMessage);
+    
+    // If offscreen document failed, try to recreate it
+    if (errorMessage.includes('Receiving end does not exist')) {
+      console.log('[EchoType] Attempting to recreate offscreen document...');
+      try {
+        await chrome.offscreen.closeDocument().catch(() => {});
+        creatingOffscreen = null;
+        await ensureOffscreenDocument();
+        
+        // Retry once
+        const retryResponse = await chrome.runtime.sendMessage({
+          type: MSG.OFFSCREEN_CLIPBOARD_WRITE,
+          text,
+          target: 'offscreen',
+        });
+        
+        const retryResult = retryResponse as OffscreenClipboardResultPayload | undefined;
+        return retryResult?.success ?? false;
+      } catch (retryError) {
+        console.error('[EchoType] Clipboard retry failed:', retryError);
+        return false;
+      }
+    }
+    
     return false;
   }
 }
