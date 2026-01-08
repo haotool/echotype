@@ -12,7 +12,7 @@ import type {
   ErrorPayload,
   StatusChangedPayload,
 } from '@shared/protocol';
-import type { HistoryItem } from '@shared/types';
+import type { HistoryItem, EchoTypeError } from '@shared/types';
 
 import { loadSettings, onSettingsChange } from './settings';
 import {
@@ -114,23 +114,40 @@ onSettingsChange((settings) => {
 /**
  * Handle the start-dictation command.
  */
-async function handleStartDictation(): Promise<void> {
+async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
   console.log('[EchoType] Start dictation command');
 
   // Ensure ChatGPT tab exists and is active
   const tabInfo = await ensureChatGPTTab(true);
   if (!tabInfo) {
     console.error('[EchoType] Failed to get ChatGPT tab');
-    return;
+    return {
+      ok: false,
+      error: {
+        code: 'TAB_NOT_FOUND',
+        message: 'No ChatGPT tab available',
+      },
+    };
   }
 
   // Wait a bit for tab to be ready
   await new Promise((resolve) => setTimeout(resolve, 300));
 
   // Send start command to content script
-  const result = await sendToChatGPTTab<{ ok: boolean; error?: unknown }>(
+  const ready = await waitForTabComplete(tabInfo.tabId);
+  if (ready) {
+    await ensureChatGPTContentScript(tabInfo.tabId);
+  }
+
+  let result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError }>(
     createMessage.cmdStart('snapshot')
   );
+  if (!result && ready) {
+    await ensureChatGPTContentScript(tabInfo.tabId);
+    result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError }>(
+      createMessage.cmdStart('snapshot')
+    );
+  }
 
   if (result?.ok) {
     console.log('[EchoType] Dictation started');
@@ -141,50 +158,112 @@ async function handleStartDictation(): Promise<void> {
     if (currentSettings.returnFocusAfterStart) {
       await returnToPreviousTab();
     }
+    return result;
   } else {
     console.error('[EchoType] Failed to start dictation:', result?.error);
     await showErrorBadge();
     await playErrorSound();
+    return (
+      result ?? {
+        ok: false,
+        error: {
+          code: 'UNKNOWN_ERROR',
+          message: 'No response from ChatGPT tab',
+        },
+      }
+    );
   }
 }
 
 /**
  * Handle the pause-dictation command.
  */
-async function handlePauseDictation(): Promise<void> {
+async function handlePauseDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
   console.log('[EchoType] Pause dictation command');
 
-  const result = await sendToChatGPTTab<{ ok: boolean }>(
+  const tabInfo = await ensureChatGPTTab(false);
+  if (!tabInfo) {
+    return {
+      ok: false,
+      error: {
+        code: 'TAB_NOT_FOUND',
+        message: 'No ChatGPT tab available',
+      },
+    };
+  }
+
+  const ready = await waitForTabComplete(tabInfo.tabId);
+  if (ready) {
+    await ensureChatGPTContentScript(tabInfo.tabId);
+  }
+
+  let result = await sendToChatGPTTab<{ ok: boolean }>(
     createMessage.cmdPause()
   );
+  if (!result && ready) {
+    await ensureChatGPTContentScript(tabInfo.tabId);
+    result = await sendToChatGPTTab<{ ok: boolean }>(
+      createMessage.cmdPause()
+    );
+  }
 
   if (result?.ok) {
     console.log('[EchoType] Dictation paused');
     await updateBadge('idle');
+    return { ok: true };
   }
+  return {
+    ok: false,
+    error: {
+      code: 'UNKNOWN_ERROR',
+      message: 'No response from ChatGPT tab',
+    },
+  };
 }
 
 /**
  * Handle the submit-dictation command.
  */
-async function handleSubmitDictation(): Promise<void> {
+async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayload> {
   console.log('[EchoType] Submit dictation command');
   await updateBadge('processing');
 
-  const result = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
+  const tabInfo = await ensureChatGPTTab(false);
+  if (!tabInfo) {
+    return createMessage.error({
+      code: 'TAB_NOT_FOUND',
+      message: 'No ChatGPT tab available',
+    });
+  }
+
+  const ready = await waitForTabComplete(tabInfo.tabId);
+  if (ready) {
+    await ensureChatGPTContentScript(tabInfo.tabId);
+  }
+
+  let result = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
     createMessage.cmdSubmit(true)
   );
+  if (!result && ready) {
+    await ensureChatGPTContentScript(tabInfo.tabId);
+    result = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
+      createMessage.cmdSubmit(true)
+    );
+  }
 
   if (!result) {
     console.error('[EchoType] No response from ChatGPT tab');
-    return;
+    return createMessage.error({
+      code: 'UNKNOWN_ERROR',
+      message: 'No response from ChatGPT tab',
+    });
   }
 
   if (result.type === MSG.ERROR) {
     console.error('[EchoType] Dictation error:', result.error);
     await showErrorBadge();
     await playErrorSound();
-    return;
+    return result;
   }
 
   if (result.type === MSG.RESULT_READY) {
@@ -218,7 +297,9 @@ async function handleSubmitDictation(): Promise<void> {
         await handlePasteLastResult();
       }
     }
+    return result;
   }
+  return result;
 }
 
 /**
@@ -309,6 +390,31 @@ chrome.commands.onCommand.addListener(async (command) => {
  * Listen for messages from content scripts and popup.
  */
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  // Handle commands from popup/options
+  if (message.type === MSG.CMD_START) {
+    (async () => {
+      const result = await handleStartDictation();
+      sendResponse(result);
+    })();
+    return true;
+  }
+
+  if (message.type === MSG.CMD_PAUSE) {
+    (async () => {
+      const result = await handlePauseDictation();
+      sendResponse(result);
+    })();
+    return true;
+  }
+
+  if (message.type === MSG.CMD_SUBMIT) {
+    (async () => {
+      const result = await handleSubmitDictation();
+      sendResponse(result);
+    })();
+    return true;
+  }
+
   // Handle status changes from ChatGPT content script
   if (message.type === MSG.STATUS_CHANGED) {
     const statusMessage = message as StatusChangedPayload;
@@ -317,11 +423,13 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return false;
   }
 
-  // Handle status requests from popup
-  if (message.type === MSG.GET_STATUS) {
+  if (message.type === MSG.CMD_GET_STATUS || message.type === MSG.GET_STATUS) {
     sendResponse({ status: currentDictationStatus });
     return false;
   }
+
+  // Handle status requests from popup
+  // (Handled above to support CMD_GET_STATUS and GET_STATUS)
 
   // Handle history requests from popup
   if (message.type === MSG.GET_HISTORY) {

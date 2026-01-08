@@ -15,21 +15,38 @@ import {
   getStatus,
   resetController,
 } from './controller';
-import { performHealthCheck } from './selectors';
+import { inspectDOM, performHealthCheck } from './selectors';
 
 // ============================================================================
 // Initialization
 // ============================================================================
 
-console.log('[EchoType] ChatGPT content script loaded');
+const globalScope = window as Window & { __ECHOTYPE_CONTENT_SCRIPT_LOADED__?: boolean };
+
+if (globalScope.__ECHOTYPE_CONTENT_SCRIPT_LOADED__) {
+  console.log('[EchoType] ChatGPT content script already loaded');
+} else {
+  globalScope.__ECHOTYPE_CONTENT_SCRIPT_LOADED__ = true;
+  console.log('[EchoType] ChatGPT content script loaded');
+
+function safeSendMessage(message: unknown): void {
+  try {
+    chrome.runtime.sendMessage(message).catch(() => {
+      // Ignore send errors (background may be unavailable)
+    });
+  } catch (error) {
+    // Extension context may be invalidated after reload
+    console.warn('[EchoType] Message send failed:', error);
+  }
+}
 
 // Perform initial health check
-const health = performHealthCheck();
-if (!health.healthy) {
-  console.warn('[EchoType] Health check failed:', health.missing);
-} else {
-  console.log('[EchoType] Health check passed, status:', getStatus());
-}
+  const health = performHealthCheck();
+  if (!health.healthy) {
+    console.warn('[EchoType] Health check failed:', health.missing);
+  } else {
+    console.log('[EchoType] Health check passed, status:', getStatus());
+  }
 
 // ============================================================================
 // Message Listener
@@ -38,7 +55,7 @@ if (!health.healthy) {
 /**
  * Listen for messages from the background script.
  */
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Check if this is a command message
   if (
     message.type === MSG.CMD_START ||
@@ -51,8 +68,23 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true; // Keep channel open for async response
   }
 
+  if (message.type === MSG.INSPECT_DOM) {
+    inspectDOM(true);
+    sendResponse({ ok: true });
+    return false;
+  }
+
+  if (message.type === MSG.DEV_HANDSHAKE) {
+    sendResponse({
+      ok: true,
+      url: location.href,
+      readyState: document.readyState,
+    });
+    return false;
+  }
+
   return false;
-});
+  });
 
 // ============================================================================
 // Status Change Observer
@@ -62,25 +94,23 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
  * Observe DOM mutations to detect status changes.
  * Throttled to prevent excessive updates.
  */
-const statusObserver = new MutationObserver(
+  const statusObserver = new MutationObserver(
   throttle(() => {
     const statusChange = checkStatusChange();
     if (statusChange) {
       // Notify background of status change
-      chrome.runtime.sendMessage(statusChange).catch(() => {
-        // Ignore send errors (background may not be listening)
-      });
+      safeSendMessage(statusChange);
     }
   }, 150)
 );
 
 // Start observing
-statusObserver.observe(document.body, {
-  childList: true,
-  subtree: true,
-  attributes: true,
-  attributeFilter: ['aria-label'],
-});
+  statusObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['aria-label'],
+  });
 
 // ============================================================================
 // Cleanup
@@ -89,22 +119,23 @@ statusObserver.observe(document.body, {
 /**
  * Cleanup on unload.
  */
-window.addEventListener('unload', () => {
-  statusObserver.disconnect();
-  resetController();
-  console.log('[EchoType] ChatGPT content script unloaded');
-});
+  window.addEventListener('unload', () => {
+    statusObserver.disconnect();
+    resetController();
+    console.log('[EchoType] ChatGPT content script unloaded');
+  });
 
 // ============================================================================
 // Debug API
 // ============================================================================
 
 // Expose debug API for development
-if (process.env.NODE_ENV === 'development') {
-  (window as unknown as { __ECHOTYPE_DEBUG__: unknown }).__ECHOTYPE_DEBUG__ = {
-    getStatus,
-    checkStatusChange,
-    resetController,
-    performHealthCheck,
-  };
+  if (process.env.NODE_ENV === 'development') {
+    (window as unknown as { __ECHOTYPE_DEBUG__: unknown }).__ECHOTYPE_DEBUG__ = {
+      getStatus,
+      checkStatusChange,
+      resetController,
+      performHealthCheck,
+    };
+  }
 }
