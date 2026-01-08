@@ -37,3 +37,6 @@ pnpm-debug.log*
 *.tmp
 *.temp
 .cache/
+
+# Playwright
+playwright-report/
