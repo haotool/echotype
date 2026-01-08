@@ -34,9 +34,7 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self';"
   },
-  "host_permissions": [
-    "https://chatgpt.com/*"
-  ],
+  "host_permissions": ["https://chatgpt.com/*"],
   "background": {
     "service_worker": "src/background/index.ts",
     "type": "module"
@@ -51,9 +49,7 @@
       "matches": ["<all_urls>"],
       "js": ["src/content/universal/index.ts"],
       "run_at": "document_idle",
-      "exclude_matches": [
-        "https://chatgpt.com/*"
-      ]
+      "exclude_matches": ["https://chatgpt.com/*"]
     }
   ],
   "options_ui": {
