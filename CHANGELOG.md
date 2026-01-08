@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🐛 Critical Bug Fixes
 - **State Reset Bug** - Fixed dictation state not resetting after submit, which caused the extension to be stuck in "recording" state
+  - Popup now explicitly resets `currentStatus` to 'idle' after submit/cancel operations
+  - Added immediate UI update after status change for responsive feedback
 - **Tab Connection** - Improved ChatGPT tab connection reliability with retry logic and exponential backoff
+  - Increased max retries from 3 to 5 for better reliability
+  - Optimized retry delay for faster recovery
 - **Content Script Injection** - Enhanced content script injection with validation and recovery
+- **Clipboard DOMException** - Improved clipboard write with robust fallback using execCommand
 
 ### ✨ New Features
 - **Login Detection** - Added automatic detection of ChatGPT login status with user-friendly error messages
