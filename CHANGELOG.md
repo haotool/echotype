@@ -30,10 +30,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error Messages** - More descriptive error messages for common failure scenarios
 - **Logging** - Enhanced debug logging for troubleshooting
 
+### 📦 Build Optimizations
+- **Terser Minification** - Added terser for production builds with console.log removal
+- **Chunk Splitting** - Manual chunk splitting for better caching (protocol, utils)
+- **Target ESNext** - Build target set to esnext for smaller bundle size
+- **ZIP Size** - Reduced from 96KB to 94KB
+
 ### 📝 Metadata
 - **GitHub Account** - Updated to `haotool` organization
 - **Contact Email** - Updated to `haotool.org@gmail.com`
 - **Version** - Bumped to 0.8.0
+- **Test Coverage** - 75% coverage with 88 unit tests
 
 ---
 
