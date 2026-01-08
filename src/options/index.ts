@@ -113,10 +113,10 @@ async function toggleTheme(): Promise<void> {
 async function loadLanguage(): Promise<void> {
   try {
     const result = await chrome.storage.local.get(STORAGE_KEY_LANGUAGE);
-    const savedLang = result[STORAGE_KEY_LANGUAGE];
+    const savedLang = result[STORAGE_KEY_LANGUAGE] as string | undefined;
     
     // Default to browser's UI language if no saved preference
-    const currentLang = savedLang || chrome.i18n.getUILanguage().replace('-', '_');
+    const currentLang: string = savedLang || chrome.i18n.getUILanguage().replace('-', '_');
     
     // Set the select value if the language is available
     if (elements.languageSelect) {
@@ -165,7 +165,8 @@ async function handleLanguageChange(): Promise<void> {
 async function loadSettings(): Promise<EchoTypeSettings> {
   try {
     const result = await chrome.storage.sync.get(STORAGE_KEY);
-    return { ...DEFAULT_SETTINGS, ...result[STORAGE_KEY] };
+    const stored = result[STORAGE_KEY] as Partial<EchoTypeSettings> | undefined;
+    return { ...DEFAULT_SETTINGS, ...(stored || {}) };
   } catch {
     return DEFAULT_SETTINGS;
   }

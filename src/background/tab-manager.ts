@@ -261,7 +261,7 @@ export async function waitForTabComplete(
       resolve(false);
     }, timeoutMs);
 
-    const listener = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+    const listener = (updatedTabId: number, changeInfo: { status?: string }) => {
       if (updatedTabId !== tabId) return;
       if (changeInfo.status !== 'complete') return;
 

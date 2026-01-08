@@ -76,7 +76,7 @@ export function stopHeartbeat(): void {
  */
 export async function getLastHeartbeat(): Promise<HeartbeatData | undefined> {
   const result = await chrome.storage.local.get(HEARTBEAT_KEY);
-  return result[HEARTBEAT_KEY];
+  return result[HEARTBEAT_KEY] as HeartbeatData | undefined;
 }
 
 /**

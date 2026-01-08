@@ -91,9 +91,10 @@ export function onSettingsChange(
     areaName: string
   ) => {
     if (areaName === 'sync' && changes[STORAGE_KEY]) {
-      const newSettings = {
+      const newValue = changes[STORAGE_KEY].newValue as Partial<EchoTypeSettings> | undefined;
+      const newSettings: EchoTypeSettings = {
         ...DEFAULT_SETTINGS,
-        ...changes[STORAGE_KEY].newValue,
+        ...(newValue || {}),
       };
       callback(newSettings);
     }
