@@ -5,6 +5,24 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.7] - 2026-01-10
+
+### 🐛 Critical Bug Fixes
+- **Fixed Invalid CSS Selector Error** - Replaced Playwright-specific `button:has-text()` with valid CSS selectors
+  - Error: `SyntaxError: 'button:has-text("Log in")' is not a valid selector`
+  - Solution: Created `findButtonByText()` helper using standard DOM methods
+- **Improved Login Detection** - Enhanced `checkLoginStatus()` with more reliable selectors
+  - Added multi-language support for login button detection
+  - Added profile image detection for logged-in state
+  - Changed default to assume logged in when no indicators found (safer for extension)
+
+### 🔧 Technical Improvements
+- New `findButtonByText()` helper function for text-based button search
+- Expanded aria-label selectors for user menu detection
+- Better fallback logic for login state detection
+
+---
+
 ## [0.8.6] - 2026-01-10
 
 ### 🐛 Bug Fixes

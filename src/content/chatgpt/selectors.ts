@@ -542,6 +542,23 @@ export function isVoiceInputAvailable(): boolean {
 }
 
 /**
+ * Helper function to find button by text content.
+ * Uses standard DOM methods instead of Playwright-specific selectors.
+ */
+function findButtonByText(texts: string[]): Element | null {
+  const buttons = document.querySelectorAll('button');
+  for (const button of buttons) {
+    const buttonText = button.textContent?.trim().toLowerCase() || '';
+    for (const text of texts) {
+      if (buttonText.includes(text.toLowerCase())) {
+        return button;
+      }
+    }
+  }
+  return null;
+}
+
+/**
  * Check if user is logged in to ChatGPT.
  * Detects login state by looking for login-related UI elements.
  *
@@ -549,12 +566,11 @@ export function isVoiceInputAvailable(): boolean {
  */
 export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
   // Check for login button (indicates not logged in)
+  // Using valid CSS selectors and DOM text search
   const loginButton =
     document.querySelector('button[data-testid="login-button"]') ||
     document.querySelector('a[href*="/auth/login"]') ||
-    document.querySelector('button:has-text("Log in")') ||
-    document.querySelector('button:has-text("登入")') ||
-    document.querySelector('button:has-text("登录")');
+    findButtonByText(['Log in', '登入', '登录', 'Sign in', '登錄']);
 
   if (loginButton) {
     return { loggedIn: false, reason: 'login_button_found' };
@@ -566,7 +582,11 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
     document.querySelector('button[aria-label*="Profile"]') ||
     document.querySelector('button[aria-label*="帳戶"]') ||
     document.querySelector('button[aria-label*="账户"]') ||
-    document.querySelector('img[alt*="User"]');
+    document.querySelector('button[aria-label*="設定檔"]') ||
+    document.querySelector('button[aria-label*="开启设置"]') ||
+    document.querySelector('img[alt*="User"]') ||
+    document.querySelector('img[alt*="設定檔圖像"]') ||
+    document.querySelector('img[alt*="头像"]');
 
   if (userMenu) {
     return { loggedIn: true, reason: 'user_menu_found' };
@@ -580,16 +600,16 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
 
   // Check for "Sign up" or "Get started" buttons (indicates not logged in)
   const signupButton =
-    document.querySelector('button:has-text("Sign up")') ||
-    document.querySelector('button:has-text("Get started")') ||
-    document.querySelector('a[href*="/auth/signup"]');
+    document.querySelector('a[href*="/auth/signup"]') ||
+    findButtonByText(['Sign up', 'Get started', '註冊', '注册', '開始使用']);
 
   if (signupButton) {
     return { loggedIn: false, reason: 'signup_button_found' };
   }
 
-  // Default: assume not logged in if we can't determine
-  return { loggedIn: false, reason: 'unknown' };
+  // Default: assume logged in if composer is found or no login buttons
+  // This is a safer default for the extension
+  return { loggedIn: true, reason: 'no_login_indicators' };
 }
 
 // ============================================================================

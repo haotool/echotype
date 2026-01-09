@@ -130,7 +130,7 @@ test.describe('Options Page', () => {
     // Check version is displayed in footer
     const footer = page.locator('.footer');
     await expect(footer).toBeVisible();
-    await expect(footer).toContainText('v0.8.6');
+    await expect(footer).toContainText('v0.8.7');
   });
 
   test('should have developer mode toggle', async ({ context, extensionId }) => {
