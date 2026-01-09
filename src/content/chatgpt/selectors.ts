@@ -4,10 +4,10 @@
  *
  * Centralized DOM selectors for ChatGPT interface.
  * Supports multiple languages and handles UI changes gracefully.
- * 
+ *
  * Strategy: SVG href fragments are prioritized for stability,
  * with aria-label as fallback for accessibility.
- * 
+ *
  * @version 3.0.0
  * @updated 2026-01-09
  */
@@ -22,7 +22,7 @@ import type { DictationStatus, EchoTypeError } from '@shared/types';
 /**
  * SVG href fragments for dictation buttons.
  * These are more stable than aria-labels as they reference specific icon IDs.
- * 
+ *
  * Note: These values should be updated if ChatGPT changes their icon system.
  */
 const SVG_HREFS = {
@@ -44,7 +44,7 @@ const DICTATION_LABELS = {
     // Traditional Chinese
     '聽寫按鈕',
     '語音輸入',
-    // Simplified Chinese  
+    // Simplified Chinese
     '听写按钮',
     '语音输入',
     // English
@@ -139,7 +139,7 @@ const DICTATION_LABELS = {
     // German
     'Aufnahme stoppen',
     // French
-    'Arrêter l\'enregistrement',
+    "Arrêter l'enregistrement",
     // Spanish
     'Detener grabación',
     // Portuguese
@@ -254,7 +254,7 @@ const DICTATION_LABELS = {
 
 /**
  * Build selector string prioritizing SVG href, with aria-label fallback.
- * 
+ *
  * @param svgHrefs - SVG href fragments to match
  * @param ariaLabels - Aria-label values as fallback
  * @returns Combined CSS selector string
@@ -264,15 +264,11 @@ function buildButtonSelector(
   ariaLabels: readonly string[]
 ): string {
   // SVG href selectors (priority)
-  const svgSelectors = svgHrefs.map(
-    href => `button:has(svg use[href*="${href}"])`
-  );
-  
+  const svgSelectors = svgHrefs.map((href) => `button:has(svg use[href*="${href}"])`);
+
   // Aria-label selectors (fallback)
-  const ariaSelectors = ariaLabels.map(
-    label => `button[aria-label="${label}"]`
-  );
-  
+  const ariaSelectors = ariaLabels.map((label) => `button[aria-label="${label}"]`);
+
   return [...svgSelectors, ...ariaSelectors].join(', ');
 }
 
@@ -281,7 +277,7 @@ function buildButtonSelector(
  * @deprecated Use buildButtonSelector for better stability
  */
 export function buildAriaLabelSelector(labels: readonly string[]): string {
-  return labels.map(label => `button[aria-label="${label}"]`).join(', ');
+  return labels.map((label) => `button[aria-label="${label}"]`).join(', ');
 }
 
 /**
@@ -337,7 +333,7 @@ export function getComposerElement(): HTMLElement | null {
   if (el instanceof HTMLElement) {
     return el;
   }
-  
+
   // Try alternative selectors
   for (const selector of SELECTORS.composerAlt) {
     el = $(selector);
@@ -346,7 +342,7 @@ export function getComposerElement(): HTMLElement | null {
       return el;
     }
   }
-  
+
   return null;
 }
 
@@ -445,10 +441,14 @@ export function detectStatus(): DictationStatus {
  */
 export function buttonExists(type: 'start' | 'stop' | 'submit'): boolean {
   switch (type) {
-    case 'start': return Boolean(findStartButton());
-    case 'stop': return Boolean(findStopButton());
-    case 'submit': return Boolean(findSubmitButton());
-    default: return false;
+    case 'start':
+      return Boolean(findStartButton());
+    case 'stop':
+      return Boolean(findStopButton());
+    case 'submit':
+      return Boolean(findSubmitButton());
+    default:
+      return false;
   }
 }
 
@@ -544,28 +544,30 @@ export function isVoiceInputAvailable(): boolean {
 /**
  * Check if user is logged in to ChatGPT.
  * Detects login state by looking for login-related UI elements.
- * 
+ *
  * @returns Object with login status and reason
  */
 export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
   // Check for login button (indicates not logged in)
-  const loginButton = document.querySelector('button[data-testid="login-button"]') ||
-                      document.querySelector('a[href*="/auth/login"]') ||
-                      document.querySelector('button:has-text("Log in")') ||
-                      document.querySelector('button:has-text("登入")') ||
-                      document.querySelector('button:has-text("登录")');
-  
+  const loginButton =
+    document.querySelector('button[data-testid="login-button"]') ||
+    document.querySelector('a[href*="/auth/login"]') ||
+    document.querySelector('button:has-text("Log in")') ||
+    document.querySelector('button:has-text("登入")') ||
+    document.querySelector('button:has-text("登录")');
+
   if (loginButton) {
     return { loggedIn: false, reason: 'login_button_found' };
   }
 
   // Check for user menu (indicates logged in)
-  const userMenu = document.querySelector('[data-testid="profile-button"]') ||
-                   document.querySelector('button[aria-label*="Profile"]') ||
-                   document.querySelector('button[aria-label*="帳戶"]') ||
-                   document.querySelector('button[aria-label*="账户"]') ||
-                   document.querySelector('img[alt*="User"]');
-  
+  const userMenu =
+    document.querySelector('[data-testid="profile-button"]') ||
+    document.querySelector('button[aria-label*="Profile"]') ||
+    document.querySelector('button[aria-label*="帳戶"]') ||
+    document.querySelector('button[aria-label*="账户"]') ||
+    document.querySelector('img[alt*="User"]');
+
   if (userMenu) {
     return { loggedIn: true, reason: 'user_menu_found' };
   }
@@ -577,10 +579,11 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
   }
 
   // Check for "Sign up" or "Get started" buttons (indicates not logged in)
-  const signupButton = document.querySelector('button:has-text("Sign up")') ||
-                       document.querySelector('button:has-text("Get started")') ||
-                       document.querySelector('a[href*="/auth/signup"]');
-  
+  const signupButton =
+    document.querySelector('button:has-text("Sign up")') ||
+    document.querySelector('button:has-text("Get started")') ||
+    document.querySelector('a[href*="/auth/signup"]');
+
   if (signupButton) {
     return { loggedIn: false, reason: 'signup_button_found' };
   }
@@ -663,32 +666,39 @@ export function clickSubmitButton(): boolean {
  */
 export function inspectDOM(force = false): void {
   if (!DEBUG && !force) return;
-  
+
   console.group('[EchoType] DOM Inspection');
-  
+
   // Find all buttons with aria-label
   const buttons = document.querySelectorAll('button[aria-label]');
   console.log('Buttons with aria-label:', buttons.length);
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     const label = btn.getAttribute('aria-label');
-    if (label?.toLowerCase().includes('voice') || 
-        label?.toLowerCase().includes('record') ||
-        label?.toLowerCase().includes('dictation') ||
-        label?.includes('聽寫') ||
-        label?.includes('錄音') ||
-        label?.includes('語音')) {
+    if (
+      label?.toLowerCase().includes('voice') ||
+      label?.toLowerCase().includes('record') ||
+      label?.toLowerCase().includes('dictation') ||
+      label?.includes('聽寫') ||
+      label?.includes('錄音') ||
+      label?.includes('語音')
+    ) {
       console.log(`  Found: "${label}"`);
     }
   });
-  
+
   // Check composer
   const composer = getComposerElement();
-  console.log('Composer found:', Boolean(composer), composer?.tagName, composer?.className);
-  
+  console.log(
+    'Composer found:',
+    Boolean(composer),
+    composer?.tagName,
+    composer?.className
+  );
+
   // Check health
   const health = performHealthCheck();
   console.log('Health check:', health);
-  
+
   console.groupEnd();
 }
 

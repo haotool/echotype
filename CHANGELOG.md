@@ -5,6 +5,32 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.5] - 2026-01-10
+
+### 🐛 Critical Bug Fixes
+
+#### P0: Dictation Button State Synchronization
+- **Root Cause**: Dual state management race condition between Popup (`currentStatus`) and Background (`currentDictationStatus`) caused UI/backend state divergence
+- **Fix 1**: Added `syncStatusFromBackground()` function in Popup to force sync before any action
+- **Fix 2**: Migrated Background status to `chrome.storage.session` for persistence across Service Worker terminations
+- **Fix 3**: Added type-safe status validation with `isValidStatus()` guard
+
+### 🔧 Technical Improvements
+- Background Service Worker now persists dictation status to `chrome.storage.session`
+- Popup refactored to Single Source of Truth architecture (v3.0.0)
+- Removed local `currentStatus` variable from Popup - all state from Background
+- Added `getStatusFromBackground()` and `isRecording()` helper functions
+- Added `DictationStatusType` type alias for better type safety
+- Improved error handling for status sync failures
+
+### 📚 Best Practices Applied
+- Chrome Extension MV3: Use Storage API instead of global variables for state persistence
+- Single Source of Truth: Background is the authority for dictation status
+- Defensive Programming: Always sync state before actions to prevent race conditions
+- Reliable Messaging: New `messaging.ts` module with retry logic and error handling
+
+---
+
 ## [0.8.4] - 2026-01-09
 
 ### 🧪 Test Coverage Improvements

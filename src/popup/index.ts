@@ -2,8 +2,13 @@
  * EchoType Popup Controller
  * Modern UI with theme support and developer mode
  * 
- * @version 2.0.0
- * @updated 2026-01-08
+ * Architecture: Single Source of Truth
+ * - Background Service Worker is the authority for dictation status
+ * - Popup only renders UI based on Background state
+ * - No local status caching to prevent race conditions
+ * 
+ * @version 3.0.0
+ * @updated 2026-01-10
  */
 
 import type { HistoryItem, DictationStatus } from '../shared/types';
@@ -66,7 +71,7 @@ const elements = {
 };
 
 // ============================================================================
-// State
+// State (UI-only, non-critical)
 // ============================================================================
 
 let lastResult: HistoryItem | null = null;
@@ -128,8 +133,33 @@ async function loadDevMode(): Promise<void> {
 }
 
 // ============================================================================
-// Status Management
+// Status Management (Single Source of Truth: Background)
 // ============================================================================
+
+/**
+ * Fetch current status from Background Service Worker.
+ * This is the ONLY source of truth for dictation status.
+ * 
+ * @returns Current dictation status from Background
+ */
+async function getStatusFromBackground(): Promise<DictationStatus> {
+  try {
+    const response = await chrome.runtime.sendMessage({ type: MSG.CMD_GET_STATUS });
+    return response?.status || 'idle';
+  } catch (error) {
+    console.warn('[EchoType] Failed to get status from background:', error);
+    return 'idle';
+  }
+}
+
+/**
+ * Check if currently recording based on Background state.
+ * Always queries Background - no local caching.
+ */
+async function isRecording(): Promise<boolean> {
+  const status = await getStatusFromBackground();
+  return status === 'recording' || status === 'listening';
+}
 
 function updateStatusUI(status: DictationStatus): void {
   // Update badge
@@ -141,11 +171,11 @@ function updateStatusUI(status: DictationStatus): void {
   elements.waveform.classList.toggle('active', isActive);
   
   // Determine if recording
-  const isRecording = status === 'recording' || status === 'listening';
+  const isRecordingState = status === 'recording' || status === 'listening';
   const isProcessing = status === 'processing';
   
   // Update toggle button based on state
-  if (isRecording) {
+  if (isRecordingState) {
     // Recording state: Show "Submit" (green)
     elements.btnToggle.classList.remove('btn-record-ready');
     elements.btnToggle.classList.add('btn-submit-ready');
@@ -261,15 +291,11 @@ function showToast(message: string): void {
 // API Communication
 // ============================================================================
 
-async function sendMessage<T>(message: unknown): Promise<T> {
-  return chrome.runtime.sendMessage(message);
-}
-
 async function copyToClipboard(text: string): Promise<boolean> {
   try {
-    const response = await sendMessage<{ success: boolean }>(
+    const response = await chrome.runtime.sendMessage(
       createMessage.offscreenClipboardWrite(text)
-    );
+    ) as { success: boolean } | undefined;
     return response?.success || false;
   } catch (error) {
     console.error('[EchoType] Failed to copy:', error);
@@ -283,20 +309,15 @@ async function copyToClipboard(text: string): Promise<boolean> {
 
 async function loadInitialState(): Promise<void> {
   try {
-    // Get current status
-    const statusResponse = await sendMessage<{ status: DictationStatus }>({
-      type: MSG.CMD_GET_STATUS,
-    });
-    if (statusResponse?.status) {
-      currentStatus = statusResponse.status;
-      updateStatusUI(statusResponse.status);
-    }
+    // Get current status from Background (Single Source of Truth)
+    const status = await getStatusFromBackground();
+    updateStatusUI(status);
 
     // Get last history item
-    const historyResponse = await sendMessage<{ items: HistoryItem[] }>({
+    const historyResponse = await chrome.runtime.sendMessage({
       type: MSG.HISTORY_GET,
-    });
-    if (historyResponse?.items?.length > 0) {
+    }) as { items: HistoryItem[] } | undefined;
+    if (historyResponse?.items?.length) {
       updateResultUI(historyResponse.items[0]);
     }
   } catch (error) {
@@ -309,55 +330,53 @@ async function loadInitialState(): Promise<void> {
 // Event Handlers
 // ============================================================================
 
-// Track current status for toggle logic
-let currentStatus: DictationStatus = 'idle';
-
 function setupEventListeners(): void {
   // Theme toggle
   elements.btnTheme.addEventListener('click', toggleTheme);
   
   // Toggle button: Start if idle, Submit if recording
   elements.btnToggle.addEventListener('click', async () => {
-    const isRecording = currentStatus === 'recording' || currentStatus === 'listening';
+    // CRITICAL: Always query Background for current state (Single Source of Truth)
+    const currentlyRecording = await isRecording();
     
-    if (isRecording) {
+    if (currentlyRecording) {
       // Submit dictation
       try {
         updateStatusUI('processing');
-        const response = await sendMessage<{ type: string; addedText?: string; error?: { message: string } }>(
+        const response = await chrome.runtime.sendMessage(
           createMessage.cmdSubmit()
-        );
+        ) as { type: string; addedText?: string; error?: { message: string } } | undefined;
+        
         if (response?.type === MSG.RESULT_READY) {
-          // CRITICAL: Reset status to idle after successful submit
-          currentStatus = 'idle';
-          updateStatusUI('idle');
+          // Refresh status from Background after submit
+          const newStatus = await getStatusFromBackground();
+          updateStatusUI(newStatus);
           if (response.addedText) {
             showToast('Captured successfully!');
           }
         } else if (response?.error) {
-          // Reset to idle on error as well
-          currentStatus = 'idle';
-          updateStatusUI('idle');
+          const newStatus = await getStatusFromBackground();
+          updateStatusUI(newStatus);
           showError('Submit Failed', response.error.message);
         }
       } catch (error) {
         console.error('[EchoType] Submit failed:', error);
-        // Reset to idle on exception
-        currentStatus = 'idle';
-        updateStatusUI('idle');
+        const newStatus = await getStatusFromBackground();
+        updateStatusUI(newStatus);
         showToast('Submit failed');
       }
     } else {
       // Start dictation
       try {
         hideError();
-        const response = await sendMessage<{ ok: boolean; error?: { message: string } }>(
+        const response = await chrome.runtime.sendMessage(
           createMessage.cmdStart()
-        );
+        ) as { ok: boolean; error?: { message: string } } | undefined;
+        
         if (response?.ok) {
-          // CRITICAL: Update status to recording after successful start
-          currentStatus = 'recording';
-          updateStatusUI('recording');
+          // Refresh status from Background after start
+          const newStatus = await getStatusFromBackground();
+          updateStatusUI(newStatus);
         } else if (response?.error) {
           showError('Start Failed', response.error.message);
         }
@@ -371,16 +390,15 @@ function setupEventListeners(): void {
   // Cancel button: Stop recording and clear
   elements.btnCancel.addEventListener('click', async () => {
     try {
-      await sendMessage(createMessage.cmdPause());
-      // CRITICAL: Reset status to idle after cancel
-      currentStatus = 'idle';
-      updateStatusUI('idle');
+      await chrome.runtime.sendMessage(createMessage.cmdPause());
+      // Refresh status from Background after cancel
+      const newStatus = await getStatusFromBackground();
+      updateStatusUI(newStatus);
       showToast('Cancelled');
     } catch (error) {
       console.error('[EchoType] Cancel failed:', error);
-      // Reset to idle on error as well
-      currentStatus = 'idle';
-      updateStatusUI('idle');
+      const newStatus = await getStatusFromBackground();
+      updateStatusUI(newStatus);
       showToast('Cancel failed');
     }
   });
@@ -410,15 +428,17 @@ function setupEventListeners(): void {
 }
 
 // ============================================================================
-// Message Listener
+// Message Listener (for real-time updates from Background)
 // ============================================================================
 
 function setupMessageListener(): void {
   chrome.runtime.onMessage.addListener((message) => {
+    // Handle status changes from Background
     if (message.type === MSG.STATUS_CHANGED) {
-      currentStatus = message.status;
       updateStatusUI(message.status);
     }
+    
+    // Handle result broadcasts
     if (message.type === MSG.BROADCAST_RESULT || message.type === MSG.RESULT_READY) {
       if (message.historyItem) {
         updateResultUI(message.historyItem);
@@ -460,4 +480,3 @@ async function init(): Promise<void> {
 
 // Start the application
 init().catch(console.error);
-

@@ -28,6 +28,7 @@ import { updateBadge, showSuccessBadge, showErrorBadge, initBadge } from './badg
 import { playStartSound, playSuccessSound, playErrorSound } from './audio';
 import './keepalive'; // Keep service worker alive via alarms
 import { startHeartbeat, getLastHeartbeat, isServiceWorkerHealthy, getFormattedUptime } from './heartbeat';
+import { notifyStatusChange } from './messaging';
 
 // ============================================================================
 // Initialization
@@ -90,13 +91,65 @@ let currentSettings = {
   historySize: 5,
 };
 
-// Current dictation status (tracked from ChatGPT content script)
+// ============================================================================
+// Dictation Status Management (Persistent via chrome.storage.session)
+// ============================================================================
+
+const STORAGE_KEY_DICTATION_STATUS = 'echotype_dictation_status';
+
+// In-memory cache (synced with storage)
 let currentDictationStatus: 'idle' | 'listening' | 'recording' | 'processing' | 'unknown' = 'idle';
 
-// Initialize settings, badge, and heartbeat asynchronously
+type DictationStatusType = 'idle' | 'listening' | 'recording' | 'processing' | 'unknown';
+
+const VALID_STATUSES: DictationStatusType[] = ['idle', 'listening', 'recording', 'processing', 'unknown'];
+
+function isValidStatus(status: unknown): status is DictationStatusType {
+  return typeof status === 'string' && VALID_STATUSES.includes(status as DictationStatusType);
+}
+
+/**
+ * Get dictation status from persistent storage.
+ * Service Workers are ephemeral - global variables can be reset on termination.
+ * Using chrome.storage.session ensures state survives SW restarts.
+ */
+async function getDictationStatus(): Promise<DictationStatusType> {
+  try {
+    const result = await chrome.storage.session.get(STORAGE_KEY_DICTATION_STATUS);
+    const status = result[STORAGE_KEY_DICTATION_STATUS];
+    if (isValidStatus(status)) {
+      currentDictationStatus = status;
+      return status;
+    }
+  } catch (error) {
+    console.warn('[EchoType] Failed to get status from storage:', error);
+  }
+  return currentDictationStatus;
+}
+
+/**
+ * Set dictation status to both memory and persistent storage.
+ * This ensures consistency across SW terminations.
+ */
+async function setDictationStatus(status: DictationStatusType): Promise<void> {
+  currentDictationStatus = status;
+  try {
+    await chrome.storage.session.set({ [STORAGE_KEY_DICTATION_STATUS]: status });
+    console.log('[EchoType] Status persisted:', status);
+  } catch (error) {
+    console.warn('[EchoType] Failed to persist status:', error);
+  }
+}
+
+// Initialize settings, badge, status, and heartbeat asynchronously
 (async () => {
   currentSettings = await loadSettings();
   console.log('[EchoType] Settings loaded:', currentSettings);
+  
+  // Restore status from storage (survives SW termination)
+  await getDictationStatus();
+  console.log('[EchoType] Restored status:', currentDictationStatus);
+  
   await initBadge();
   await startHeartbeat(); // Start heartbeat tracking
 })();
@@ -164,7 +217,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
 
   if (result?.ok) {
     console.log('[EchoType] Dictation started successfully');
-    currentDictationStatus = 'recording';
+    await setDictationStatus('recording');
     await updateBadge('recording');
     await playStartSound();
 
@@ -223,6 +276,7 @@ async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeE
 
   if (result?.ok) {
     console.log('[EchoType] Dictation paused');
+    await setDictationStatus('idle');
     await updateBadge('idle');
     return { ok: true };
   }
@@ -290,13 +344,13 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
     });
 
     // CRITICAL: Reset dictation status to idle after successful submit
-    currentDictationStatus = 'idle';
+    // Use setDictationStatus to persist to storage (survives SW termination)
+    await setDictationStatus('idle');
     await updateBadge('idle');
     
     // Forward status change to popup (ensures UI sync)
-    chrome.runtime.sendMessage(createMessage.statusChanged('idle')).catch(() => {
-      // Popup may not be open, ignore error
-    });
+    // Using reliable messaging module for better error handling
+    notifyStatusChange(createMessage.statusChanged('idle'));
 
     // Only process if we have added text
     if (addedText) {
@@ -448,19 +502,23 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Handle status changes from ChatGPT content script
   if (message.type === MSG.STATUS_CHANGED) {
     const statusMessage = message as StatusChangedPayload;
-    currentDictationStatus = statusMessage.status as typeof currentDictationStatus;
+    // Persist status to storage (async, but don't block)
+    setDictationStatus(statusMessage.status as typeof currentDictationStatus);
     console.log('[EchoType] Status changed:', currentDictationStatus);
     
     // Forward status change to popup (fixes state sync bug)
-    chrome.runtime.sendMessage(statusMessage).catch(() => {
-      // Popup may not be open, ignore error
-    });
+    // Using reliable messaging module for better error handling
+    notifyStatusChange(statusMessage);
     return false;
   }
 
   if (message.type === MSG.CMD_GET_STATUS || message.type === MSG.GET_STATUS) {
-    sendResponse({ status: currentDictationStatus });
-    return false;
+    // Return status from memory (already synced from storage on SW start)
+    // Also refresh from storage to ensure consistency
+    getDictationStatus().then(() => {
+      sendResponse({ status: currentDictationStatus });
+    });
+    return true; // Async response
   }
 
   // Handle status requests from popup
