@@ -60,6 +60,7 @@ export const MSG = {
   INSPECT_DOM: 'INSPECT_DOM',
   DEV_FORWARD: 'DEV_FORWARD',
   DEV_HANDSHAKE: 'DEV_HANDSHAKE',
+  GET_DIAGNOSTIC: 'GET_DIAGNOSTIC',
 } as const;
 
 export type MessageType = (typeof MSG)[keyof typeof MSG];

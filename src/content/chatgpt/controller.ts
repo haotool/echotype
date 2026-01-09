@@ -93,11 +93,21 @@ export async function startDictation(): Promise<{
   ok: boolean;
   error?: EchoTypeError;
   baseline: string;
+  debug?: {
+    loginStatus: { loggedIn: boolean; reason: string };
+    voiceAvailable: boolean;
+    health: unknown;
+    buttonClicked: boolean;
+  };
 }> {
+  console.log('[EchoType:Controller] startDictation called');
+  
   // Check login status first
   const loginStatus = checkLoginStatus();
+  console.log('[EchoType:Controller] Login status:', loginStatus);
+  
   if (!loginStatus.loggedIn) {
-    console.warn('[EchoType] User not logged in:', loginStatus.reason);
+    console.warn('[EchoType:Controller] User not logged in:', loginStatus.reason);
     return {
       ok: false,
       error: {
@@ -106,12 +116,21 @@ export async function startDictation(): Promise<{
         detail: 'Voice dictation requires an active ChatGPT session. Please log in and try again.',
       },
       baseline: '',
+      debug: {
+        loginStatus,
+        voiceAvailable: false,
+        health: null,
+        buttonClicked: false,
+      },
     };
   }
 
   // Check if voice input is available
-  if (!isVoiceInputAvailable()) {
-    console.warn('[EchoType] Voice input not available');
+  const voiceAvailable = isVoiceInputAvailable();
+  console.log('[EchoType:Controller] Voice input available:', voiceAvailable);
+  
+  if (!voiceAvailable) {
+    console.warn('[EchoType:Controller] Voice input not available');
     return {
       ok: false,
       error: {
@@ -120,37 +139,79 @@ export async function startDictation(): Promise<{
         detail: 'The voice dictation button was not found. This feature may not be available in your region or browser.',
       },
       baseline: '',
+      debug: {
+        loginStatus,
+        voiceAvailable,
+        health: null,
+        buttonClicked: false,
+      },
     };
   }
 
   // Health check
   let health = performHealthCheck();
+  console.log('[EchoType:Controller] Initial health check:', health);
+  
   if (!health.healthy && health.missing.includes('composer')) {
+    console.log('[EchoType:Controller] Waiting for composer...');
     await waitForComposer();
     health = performHealthCheck();
+    console.log('[EchoType:Controller] Health check after wait:', health);
   }
+  
   if (!health.healthy) {
-    return { ok: false, error: health.error, baseline: '' };
+    return {
+      ok: false,
+      error: health.error,
+      baseline: '',
+      debug: {
+        loginStatus,
+        voiceAvailable,
+        health,
+        buttonClicked: false,
+      },
+    };
   }
 
   // Snapshot baseline
   state.baselineText = readComposerText();
   state.isActive = true;
+  console.log('[EchoType:Controller] Baseline text:', state.baselineText.substring(0, 100));
 
   // Click start button
+  console.log('[EchoType:Controller] Clicking start button...');
   const clicked = clickStartButton();
+  console.log('[EchoType:Controller] Button clicked:', clicked);
+  
   if (!clicked) {
     return {
       ok: false,
       error: {
         code: 'SELECTOR_NOT_FOUND',
-        message: 'Could not find start button',
+        message: 'Could not find or click start button',
+        detail: 'The start button was found but could not be clicked. It may be disabled or obscured.',
       },
       baseline: state.baselineText,
+      debug: {
+        loginStatus,
+        voiceAvailable,
+        health,
+        buttonClicked: false,
+      },
     };
   }
 
-  return { ok: true, baseline: state.baselineText };
+  console.log('[EchoType:Controller] Dictation started successfully');
+  return {
+    ok: true,
+    baseline: state.baselineText,
+    debug: {
+      loginStatus,
+      voiceAvailable,
+      health,
+      buttonClicked: true,
+    },
+  };
 }
 
 /**

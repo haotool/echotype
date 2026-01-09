@@ -576,7 +576,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       const payload = message.message;
       if (
         !payload ||
-        (payload.type !== MSG.INSPECT_DOM && payload.type !== MSG.DEV_HANDSHAKE)
+        (payload.type !== MSG.INSPECT_DOM && 
+         payload.type !== MSG.DEV_HANDSHAKE &&
+         payload.type !== MSG.GET_DIAGNOSTIC)
       ) {
         sendResponse({ ok: false, error: 'unsupported-dev-message' });
         return;

@@ -5,6 +5,31 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.6] - 2026-01-10
+
+### 🐛 Bug Fixes
+- **Enhanced Button Click Reliability** - Added multiple click strategies (direct click, focus+click, mouse events) for better button interaction
+- **Improved Diagnostics** - Added comprehensive diagnostic info for Developer Mode debugging
+
+### 🔧 Technical Improvements
+- **New `getDiagnosticInfo()` function** - Returns detailed DOM state including:
+  - Button status (found, disabled, element HTML)
+  - Composer status
+  - All SVG hrefs in buttons
+  - Relevant aria-labels
+  - Health check results
+- **Enhanced logging** - Added detailed console logs for startDictation flow
+- **New GET_DIAGNOSTIC message type** - Allows Options page to fetch DOM diagnostic info
+- **Options Page Updates** - Added "Get Full Diagnostic" button in Developer Mode
+
+### 📚 Developer Mode Enhancements
+- Full diagnostic output panel with JSON display
+- SVG href inspection for selector debugging
+- Button element HTML preview
+- Real-time health status
+
+---
+
 ## [0.8.5] - 2026-01-10
 
 ### 🐛 Critical Bug Fixes
