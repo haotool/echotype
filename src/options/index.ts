@@ -59,8 +59,10 @@ const elements = {
   btnInspectDom: document.getElementById('btn-inspect-dom') as HTMLButtonElement,
   btnHandshake: document.getElementById('btn-handshake') as HTMLButtonElement,
   btnHealthCheck: document.getElementById('btn-health-check') as HTMLButtonElement,
+  btnGetDiagnostic: document.getElementById('btn-get-diagnostic') as HTMLButtonElement,
   btnClearStorage: document.getElementById('btn-clear-storage') as HTMLButtonElement,
   btnReloadExt: document.getElementById('btn-reload-ext') as HTMLButtonElement,
+  diagnosticOutput: document.getElementById('diagnostic-output') as HTMLElement,
   
   // Toast
   statusToast: document.getElementById('statusToast') as HTMLElement,
@@ -524,6 +526,43 @@ function reloadExtension(): void {
   chrome.runtime.reload();
 }
 
+async function getDiagnostic(): Promise<void> {
+  showToast('Getting diagnostic info...');
+  try {
+    const response = await chrome.runtime.sendMessage(
+      createMessage.devForward({ type: MSG.GET_DIAGNOSTIC })
+    );
+    
+    if (response?.ok && response?.response?.diagnostic) {
+      const diagnostic = response.response.diagnostic;
+      elements.diagnosticOutput.style.display = 'block';
+      elements.diagnosticOutput.textContent = JSON.stringify(diagnostic, null, 2);
+      elements.debugError.textContent = 'None';
+      showToast('Diagnostic info retrieved');
+      
+      // Update debug display with diagnostic info
+      if (diagnostic.buttons) {
+        const startStatus = diagnostic.buttons.start.found ? 'Found' : 'Not found';
+        const stopStatus = diagnostic.buttons.stop.found ? 'Found' : 'Not found';
+        const submitStatus = diagnostic.buttons.submit.found ? 'Found' : 'Not found';
+        console.log('[EchoType] Button status:', { startStatus, stopStatus, submitStatus });
+      }
+    } else {
+      const error = response?.error ?? 'unknown';
+      elements.diagnosticOutput.style.display = 'block';
+      elements.diagnosticOutput.textContent = `Error: ${error}\n\nResponse: ${JSON.stringify(response, null, 2)}`;
+      elements.debugError.textContent = String(error);
+      showToast(`Diagnostic failed: ${error}`);
+    }
+  } catch (error) {
+    elements.diagnosticOutput.style.display = 'block';
+    elements.diagnosticOutput.textContent = `Exception: ${String(error)}`;
+    elements.debugError.textContent = String(error);
+    showToast('Failed to get diagnostic');
+    console.error('[EchoType] Diagnostic error:', error);
+  }
+}
+
 // ============================================================================
 // Toast
 // ============================================================================
@@ -565,6 +604,7 @@ function setupEventListeners(): void {
   elements.btnInspectDom?.addEventListener('click', inspectDom);
   elements.btnHandshake?.addEventListener('click', runHandshake);
   elements.btnHealthCheck?.addEventListener('click', runHealthCheck);
+  elements.btnGetDiagnostic?.addEventListener('click', getDiagnostic);
   elements.btnClearStorage?.addEventListener('click', clearStorage);
   elements.btnReloadExt?.addEventListener('click', reloadExtension);
   

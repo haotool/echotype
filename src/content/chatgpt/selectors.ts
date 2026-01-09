@@ -598,6 +598,7 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
 
 /**
  * Click the start dictation button.
+ * Uses multiple click strategies for better reliability.
  *
  * @returns True if button was clicked
  */
@@ -606,13 +607,70 @@ export function clickStartButton(): boolean {
   if (el) {
     if (el.disabled || el.getAttribute('aria-disabled') === 'true') {
       log('Start button is disabled');
+      console.warn('[EchoType:Selectors] Start button is disabled, cannot click');
       return false;
     }
+    
     log('Clicking start button');
-    el.click();
+    console.log('[EchoType:Selectors] Found start button:', el.outerHTML.substring(0, 200));
+    
+    // Strategy 1: Direct click
+    try {
+      el.click();
+      console.log('[EchoType:Selectors] Direct click executed');
+    } catch (error) {
+      console.warn('[EchoType:Selectors] Direct click failed:', error);
+    }
+    
+    // Strategy 2: Focus and click (for buttons that require focus)
+    try {
+      el.focus();
+      el.click();
+      console.log('[EchoType:Selectors] Focus + click executed');
+    } catch (error) {
+      console.warn('[EchoType:Selectors] Focus + click failed:', error);
+    }
+    
+    // Strategy 3: Dispatch mouse events (for buttons with custom event handlers)
+    try {
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      el.dispatchEvent(new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: centerX,
+        clientY: centerY,
+      }));
+      
+      el.dispatchEvent(new MouseEvent('mouseup', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: centerX,
+        clientY: centerY,
+      }));
+      
+      el.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: centerX,
+        clientY: centerY,
+      }));
+      
+      console.log('[EchoType:Selectors] Mouse events dispatched');
+    } catch (error) {
+      console.warn('[EchoType:Selectors] Mouse event dispatch failed:', error);
+    }
+    
     return true;
   }
+  
   log('Start button not found');
+  console.warn('[EchoType:Selectors] Start button not found. Selector:', SELECTORS.startBtn.substring(0, 100));
   return false;
 }
 
@@ -657,8 +715,96 @@ export function clickSubmitButton(): boolean {
 }
 
 // ============================================================================
-// DOM Inspector (Development)
+// DOM Inspector (Development & Production Debug)
 // ============================================================================
+
+/**
+ * Detailed diagnostic info for debugging.
+ */
+export interface DiagnosticInfo {
+  timestamp: string;
+  url: string;
+  readyState: string;
+  buttons: {
+    start: { found: boolean; selector: string; element?: string; disabled?: boolean };
+    stop: { found: boolean; selector: string; element?: string; disabled?: boolean };
+    submit: { found: boolean; selector: string; element?: string; disabled?: boolean };
+  };
+  composer: {
+    found: boolean;
+    selector: string;
+    tagName?: string;
+    contentLength?: number;
+  };
+  svgHrefs: string[];
+  ariaLabels: string[];
+  health: HealthCheckResult;
+}
+
+/**
+ * Get detailed diagnostic information.
+ * Used by Developer Mode for debugging.
+ */
+export function getDiagnosticInfo(): DiagnosticInfo {
+  // Find all SVG use hrefs in buttons
+  const svgHrefs: string[] = [];
+  const ariaLabels: string[] = [];
+  
+  document.querySelectorAll('button').forEach((btn) => {
+    const label = btn.getAttribute('aria-label');
+    if (label) ariaLabels.push(label);
+    
+    const svgUse = btn.querySelector('svg use');
+    if (svgUse) {
+      const href = svgUse.getAttribute('href') || svgUse.getAttribute('xlink:href');
+      if (href) svgHrefs.push(href);
+    }
+  });
+
+  const startBtn = findStartButton();
+  const stopBtn = findStopButton();
+  const submitBtn = findSubmitButton();
+  const composer = getComposerElement();
+
+  return {
+    timestamp: new Date().toISOString(),
+    url: location.href,
+    readyState: document.readyState,
+    buttons: {
+      start: {
+        found: Boolean(startBtn),
+        selector: SELECTORS.startBtn.substring(0, 100) + '...',
+        element: startBtn?.outerHTML.substring(0, 200),
+        disabled: startBtn?.disabled || startBtn?.getAttribute('aria-disabled') === 'true',
+      },
+      stop: {
+        found: Boolean(stopBtn),
+        selector: SELECTORS.stopBtn.substring(0, 100) + '...',
+        element: stopBtn?.outerHTML.substring(0, 200),
+        disabled: stopBtn?.disabled || stopBtn?.getAttribute('aria-disabled') === 'true',
+      },
+      submit: {
+        found: Boolean(submitBtn),
+        selector: SELECTORS.submitBtn.substring(0, 100) + '...',
+        element: submitBtn?.outerHTML.substring(0, 200),
+        disabled: submitBtn?.disabled || submitBtn?.getAttribute('aria-disabled') === 'true',
+      },
+    },
+    composer: {
+      found: Boolean(composer),
+      selector: SELECTORS.composer,
+      tagName: composer?.tagName,
+      contentLength: composer?.textContent?.length,
+    },
+    svgHrefs,
+    ariaLabels: ariaLabels.filter(l => 
+      l.includes('聽寫') || l.includes('录') || l.includes('voice') || 
+      l.includes('dictation') || l.includes('停止') || l.includes('提交') ||
+      l.includes('傳送') || l.includes('录音')
+    ),
+    health: performHealthCheck(),
+  };
+}
 
 /**
  * Inspect DOM for dictation-related elements.
@@ -680,9 +826,21 @@ export function inspectDOM(force = false): void {
       label?.toLowerCase().includes('dictation') ||
       label?.includes('聽寫') ||
       label?.includes('錄音') ||
-      label?.includes('語音')
+      label?.includes('語音') ||
+      label?.includes('停止') ||
+      label?.includes('提交')
     ) {
-      console.log(`  Found: "${label}"`);
+      console.log(`  Found: "${label}"`, btn);
+    }
+  });
+
+  // Find all SVG use elements with href
+  const svgUses = document.querySelectorAll('button svg use[href]');
+  console.log('SVG use elements in buttons:', svgUses.length);
+  svgUses.forEach((use) => {
+    const href = use.getAttribute('href');
+    if (href) {
+      console.log(`  SVG href: "${href}"`);
     }
   });
 
@@ -694,6 +852,10 @@ export function inspectDOM(force = false): void {
     composer?.tagName,
     composer?.className
   );
+
+  // Get full diagnostic
+  const diagnostic = getDiagnosticInfo();
+  console.log('Full diagnostic:', diagnostic);
 
   // Check health
   const health = performHealthCheck();

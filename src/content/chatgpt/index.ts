@@ -15,7 +15,7 @@ import {
   getStatus,
   resetController,
 } from './controller';
-import { inspectDOM, performHealthCheck } from './selectors';
+import { inspectDOM, performHealthCheck, getDiagnosticInfo } from './selectors';
 
 // ============================================================================
 // Initialization
@@ -80,6 +80,13 @@ function safeSendMessage(message: unknown): void {
       url: location.href,
       readyState: document.readyState,
     });
+    return false;
+  }
+
+  // Get diagnostic info for Developer Mode
+  if (message.type === MSG.GET_DIAGNOSTIC) {
+    const diagnostic = getDiagnosticInfo();
+    sendResponse({ ok: true, diagnostic });
     return false;
   }
 
