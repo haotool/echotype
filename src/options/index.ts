@@ -9,6 +9,7 @@
 import type { EchoTypeSettings, HistoryItem } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/types';
 import { MSG, createMessage } from '@shared/protocol';
+import { applyI18n, getMessage } from '@shared/i18n';
 
 // ============================================================================
 // Constants
@@ -176,7 +177,7 @@ async function loadSettings(): Promise<EchoTypeSettings> {
 
 async function saveSettings(settings: EchoTypeSettings): Promise<void> {
   await chrome.storage.sync.set({ [STORAGE_KEY]: settings });
-  showToast('Settings saved');
+  showToast(getMessage('saved'));
 }
 
 async function loadUI(): Promise<void> {
@@ -269,7 +270,7 @@ function renderHistory(items: HistoryItem[]): void {
           <path d="M3 3v5h5"/>
           <path d="M12 7v5l4 2"/>
         </svg>
-        <p>No dictation history yet</p>
+        <p>${getMessage('historyEmpty')}</p>
       </div>
     `;
     return;
@@ -282,7 +283,7 @@ function renderHistory(items: HistoryItem[]): void {
         <div class="history-time">${formatTime(item.timestamp)}</div>
       </div>
       <div class="history-actions">
-        <button class="btn-copy-small" data-index="${index}">Copy</button>
+        <button class="btn-copy-small" data-index="${index}">${getMessage('btnCopy')}</button>
       </div>
     </div>
   `).join('');
@@ -306,12 +307,12 @@ function renderHistory(items: HistoryItem[]): void {
 }
 
 async function clearHistoryData(): Promise<void> {
-  if (!confirm('Clear all dictation history?')) return;
+  if (!confirm(getMessage('confirmClearHistory'))) return;
   
   try {
     await chrome.runtime.sendMessage({ type: MSG.HISTORY_CLEAR });
     await loadHistory();
-    showToast('History cleared');
+    showToast(getMessage('historyCleared'));
   } catch (error) {
     console.error('[EchoType] Failed to clear history:', error);
   }
@@ -323,17 +324,17 @@ function formatTime(ts: number): string {
   const diff = now.getTime() - date.getTime();
   
   if (diff < 60 * 1000) {
-    return 'Just now';
+    return getMessage('justNow');
   }
   if (diff < 60 * 60 * 1000) {
     const mins = Math.floor(diff / 60000);
-    return `${mins}m ago`;
+    return getMessage('minutesAgo', String(mins));
   }
   if (date.toDateString() === now.toDateString()) {
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   }
   
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
 function escapeHtml(text: string): string {
@@ -627,6 +628,9 @@ async function init(): Promise<void> {
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', uiLang);
   }
+  
+  // Apply i18n translations to all elements with data-i18n attributes
+  applyI18n();
   
   await loadTheme();
   await loadLanguage();

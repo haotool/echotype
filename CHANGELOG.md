@@ -5,6 +5,27 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.8] - 2026-01-10
+
+### 🌐 Internationalization (i18n) Improvements
+- **Full i18n Support for Popup** - Added `data-i18n` attributes to all UI text elements
+- **Full i18n Support for Options** - Added `data-i18n` attributes to settings page
+- **Dynamic Status Labels** - Status messages now use localized strings
+- **Localized Toast Messages** - All toast notifications now support i18n
+- **Localized Error Messages** - Error dialogs now use localized strings
+
+### 🔧 Technical Improvements
+- Added `applyI18n()` call to both Popup and Options initialization
+- Replaced hardcoded English strings with `getMessage()` calls
+- Added new i18n message keys: `toggleTheme`, `statusLabel`, `errorStartFailed`, `errorSubmitFailed`, `errorCancelFailed`, `languageSection`, `interfaceLanguage`, `interfaceLanguageDesc`, `languageNote`, `devBadge`, `confirmClearHistory`, `historyCleared`
+- Updated both English and Traditional Chinese message files
+
+### 📝 Documentation
+- Updated language note to clarify that Chrome Extension language is determined by browser settings
+- Version bump to 0.8.8
+
+---
+
 ## [0.8.7] - 2026-01-10
 
 ### 🐛 Critical Bug Fixes

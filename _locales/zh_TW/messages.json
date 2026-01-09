@@ -236,5 +236,53 @@
   "copyFailed": {
     "message": "複製失敗",
     "description": "複製失敗時的提示"
+  },
+  "toggleTheme": {
+    "message": "切換主題",
+    "description": "主題切換按鈕標題"
+  },
+  "statusLabel": {
+    "message": "狀態",
+    "description": "狀態標籤"
+  },
+  "errorStartFailed": {
+    "message": "啟動失敗",
+    "description": "啟動失敗時的錯誤標題"
+  },
+  "errorSubmitFailed": {
+    "message": "提交失敗",
+    "description": "提交失敗時的錯誤"
+  },
+  "errorCancelFailed": {
+    "message": "取消失敗",
+    "description": "取消失敗時的錯誤"
+  },
+  "languageSection": {
+    "message": "語言",
+    "description": "語言設定區塊"
+  },
+  "interfaceLanguage": {
+    "message": "介面語言",
+    "description": "介面語言設定標籤"
+  },
+  "interfaceLanguageDesc": {
+    "message": "語言由瀏覽器設定決定",
+    "description": "介面語言描述"
+  },
+  "languageNote": {
+    "message": "提示：語言由瀏覽器設定決定（chrome://settings/languages）",
+    "description": "關於瀏覽器設定的語言提示"
+  },
+  "devBadge": {
+    "message": "開發",
+    "description": "開發者徽章文字"
+  },
+  "confirmClearHistory": {
+    "message": "確定要清除所有聽寫記錄嗎？",
+    "description": "清除記錄時的確認訊息"
+  },
+  "historyCleared": {
+    "message": "記錄已清除",
+    "description": "記錄清除時的提示"
   }
 }

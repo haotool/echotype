@@ -13,6 +13,7 @@
 
 import type { HistoryItem, DictationStatus } from '../shared/types';
 import { MSG, createMessage } from '../shared/protocol';
+import { applyI18n, getMessage } from '../shared/i18n';
 
 // ============================================================================
 // Constants
@@ -21,14 +22,21 @@ import { MSG, createMessage } from '../shared/protocol';
 const STORAGE_KEY_THEME = 'echotype_theme';
 const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
 
-const STATUS_LABELS: Record<DictationStatus, string> = {
-  idle: 'Ready',
-  listening: 'Listening...',
-  recording: 'Recording',
-  processing: 'Processing...',
-  error: 'Error',
-  unknown: 'Checking...',
-};
+/**
+ * Get localized status labels.
+ * Must be called after i18n is initialized.
+ */
+function getStatusLabel(status: DictationStatus): string {
+  const labels: Record<DictationStatus, string> = {
+    idle: getMessage('statusReady'),
+    listening: getMessage('statusListening'),
+    recording: getMessage('statusRecording'),
+    processing: getMessage('statusProcessing'),
+    error: getMessage('statusError'),
+    unknown: getMessage('statusUnknown'),
+  };
+  return labels[status] || status;
+}
 
 // ============================================================================
 // DOM Elements
@@ -164,7 +172,7 @@ async function isRecording(): Promise<boolean> {
 function updateStatusUI(status: DictationStatus): void {
   // Update badge
   elements.statusBadge.className = 'status-badge ' + getStatusClass(status);
-  elements.statusText.textContent = STATUS_LABELS[status];
+  elements.statusText.textContent = getStatusLabel(status);
   
   // Update waveform
   const isActive = status === 'recording' || status === 'listening';
@@ -183,7 +191,7 @@ function updateStatusUI(status: DictationStatus): void {
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
       </svg>
-      <span class="btn-text">Submit</span>
+      <span class="btn-text">${getMessage('btnSubmit')}</span>
     `;
     elements.btnToggle.disabled = false;
     
@@ -200,7 +208,7 @@ function updateStatusUI(status: DictationStatus): void {
         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
         <line x1="12" x2="12" y1="19" y2="22"/>
       </svg>
-      <span class="btn-text">Record</span>
+      <span class="btn-text">${getMessage('btnRecord')}</span>
     `;
     elements.btnToggle.disabled = isProcessing;
     
@@ -254,7 +262,7 @@ function updateResultUI(item: HistoryItem | null): void {
     elements.resultTime.textContent = formatTime(item.timestamp);
     elements.btnCopy.disabled = false;
   } else {
-    elements.resultText.innerHTML = '<span class="result-empty">No dictation yet</span>';
+    elements.resultText.innerHTML = `<span class="result-empty">${getMessage('noResult')}</span>`;
     elements.resultTime.textContent = '';
     elements.btnCopy.disabled = true;
   }
@@ -322,7 +330,7 @@ async function loadInitialState(): Promise<void> {
     }
   } catch (error) {
     console.error('[EchoType] Failed to load initial state:', error);
-    showError('Connection Error', 'Unable to connect to ChatGPT. Please ensure ChatGPT is open in a tab.');
+    showError(getMessage('errorNoChatGPT'), getMessage('errorNoChatGPTDesc'));
   }
 }
 
@@ -352,18 +360,18 @@ function setupEventListeners(): void {
           const newStatus = await getStatusFromBackground();
           updateStatusUI(newStatus);
           if (response.addedText) {
-            showToast('Captured successfully!');
+            showToast(getMessage('submitSuccess'));
           }
         } else if (response?.error) {
           const newStatus = await getStatusFromBackground();
           updateStatusUI(newStatus);
-          showError('Submit Failed', response.error.message);
+          showError(getMessage('errorSubmitFailed'), response.error.message);
         }
       } catch (error) {
         console.error('[EchoType] Submit failed:', error);
         const newStatus = await getStatusFromBackground();
         updateStatusUI(newStatus);
-        showToast('Submit failed');
+        showToast(getMessage('errorSubmitFailed'));
       }
     } else {
       // Start dictation
@@ -378,11 +386,11 @@ function setupEventListeners(): void {
           const newStatus = await getStatusFromBackground();
           updateStatusUI(newStatus);
         } else if (response?.error) {
-          showError('Start Failed', response.error.message);
+          showError(getMessage('errorStartFailed'), response.error.message);
         }
       } catch (error) {
         console.error('[EchoType] Start failed:', error);
-        showError('Start Failed', 'Unable to start dictation. Is ChatGPT open?');
+        showError(getMessage('errorNoChatGPT'), getMessage('errorNoChatGPTDesc'));
       }
     }
   });
@@ -394,12 +402,12 @@ function setupEventListeners(): void {
       // Refresh status from Background after cancel
       const newStatus = await getStatusFromBackground();
       updateStatusUI(newStatus);
-      showToast('Cancelled');
+      showToast(getMessage('cancelSuccess'));
     } catch (error) {
       console.error('[EchoType] Cancel failed:', error);
       const newStatus = await getStatusFromBackground();
       updateStatusUI(newStatus);
-      showToast('Cancel failed');
+      showToast(getMessage('errorCancelFailed'));
     }
   });
   
@@ -407,7 +415,7 @@ function setupEventListeners(): void {
   elements.btnCopy.addEventListener('click', async () => {
     if (lastResult) {
       const success = await copyToClipboard(lastResult.text);
-      showToast(success ? 'Copied!' : 'Copy failed');
+      showToast(success ? getMessage('copied') : getMessage('copyFailed'));
     }
   });
   
@@ -442,7 +450,7 @@ function setupMessageListener(): void {
     if (message.type === MSG.BROADCAST_RESULT || message.type === MSG.RESULT_READY) {
       if (message.historyItem) {
         updateResultUI(message.historyItem);
-        showToast('Dictation captured!');
+        showToast(getMessage('submitSuccess'));
       } else if (message.addedText) {
         updateResultUI({
           id: `${Date.now()}`,
@@ -450,7 +458,7 @@ function setupMessageListener(): void {
           timestamp: Date.now(),
           createdAt: new Date().toISOString(),
         });
-        showToast('Dictation captured!');
+        showToast(getMessage('submitSuccess'));
       }
     }
   });
@@ -467,6 +475,9 @@ async function init(): Promise<void> {
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', uiLang);
   }
+  
+  // Apply i18n translations to all elements with data-i18n attributes
+  applyI18n();
   
   await Promise.all([
     loadTheme(),

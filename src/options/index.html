@@ -678,12 +678,12 @@
           </svg>
         </div>
         <div class="brand-info">
-          <h1>EchoType</h1>
-          <span class="version">v0.6.2</span>
+          <h1 data-i18n="optionsTitle">EchoType</h1>
+          <span class="version">v0.8.8</span>
         </div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="btn-theme" title="Toggle theme">
+        <button class="icon-btn" id="btn-theme" data-i18n-title="toggleTheme" title="Toggle theme">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
           </svg>
@@ -698,14 +698,14 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
           </svg>
-          Automation
+          <span data-i18n="settingsAutomation">Automation</span>
         </span>
       </div>
       <div class="card-body">
         <div class="setting-row">
           <div class="setting-info">
-            <div class="setting-label">Auto Copy</div>
-            <div class="setting-description">Automatically copy result to clipboard after dictation</div>
+            <div class="setting-label" data-i18n="autoCopy">Auto Copy</div>
+            <div class="setting-description" data-i18n="autoCopyDesc">Automatically copy result to clipboard after dictation</div>
           </div>
           <label class="toggle">
             <input type="checkbox" id="autoCopyToClipboard" checked>
@@ -715,8 +715,8 @@
 
         <div class="setting-row">
           <div class="setting-info">
-            <div class="setting-label">Auto Paste</div>
-            <div class="setting-description">Paste result to the focused input field automatically</div>
+            <div class="setting-label" data-i18n="autoPaste">Auto Paste</div>
+            <div class="setting-description" data-i18n="autoPasteDesc">Paste result to the focused input field automatically</div>
           </div>
           <label class="toggle">
             <input type="checkbox" id="autoPasteToActiveTab">
@@ -726,8 +726,8 @@
 
         <div class="setting-row">
           <div class="setting-info">
-            <div class="setting-label">Return Focus</div>
-            <div class="setting-description">Return to original tab after starting dictation</div>
+            <div class="setting-label" data-i18n="returnFocus">Return Focus</div>
+            <div class="setting-description" data-i18n="returnFocusDesc">Return to original tab after starting dictation</div>
           </div>
           <label class="toggle">
             <input type="checkbox" id="returnFocusAfterStart">
@@ -746,14 +746,14 @@
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
             <path d="M2 12h20"/>
           </svg>
-          Language
+          <span data-i18n="languageSection">Language</span>
         </span>
       </div>
       <div class="card-body">
         <div class="setting-row">
           <div class="setting-info">
-            <div class="setting-label">Interface Language</div>
-            <div class="setting-description">Select your preferred language for the extension interface</div>
+            <div class="setting-label" data-i18n="interfaceLanguage">Interface Language</div>
+            <div class="setting-description" data-i18n="interfaceLanguageDesc">Select your preferred language for the extension interface</div>
           </div>
           <select class="language-select" id="languageSelect">
             <option value="en">English</option>
@@ -783,7 +783,7 @@
             <option value="sv">Svenska</option>
           </select>
         </div>
-        <p class="language-note">Note: Changing the language will reload the extension pages</p>
+        <p class="language-note" data-i18n="languageNote">Note: Language is determined by your browser settings (chrome://settings/languages)</p>
       </div>
     </section>
 
@@ -797,26 +797,26 @@
             <path d="M8 12h.001"/><path d="M12 12h.001"/><path d="M16 12h.001"/>
             <path d="M7 16h10"/>
           </svg>
-          Keyboard Shortcuts
+          <span data-i18n="shortcuts">Keyboard Shortcuts</span>
         </span>
       </div>
       <div class="card-body">
         <div class="shortcuts-grid" id="shortcutsContainer">
           <div class="shortcut-item">
-            <span class="shortcut-label">Toggle dictation (Start/Submit)</span>
+            <span class="shortcut-label" data-i18n="shortcutToggle">Toggle dictation (Start/Submit)</span>
             <span class="shortcut-key" id="shortcut-toggle-dictation">Alt+Shift+S</span>
           </div>
           <div class="shortcut-item">
-            <span class="shortcut-label">Cancel dictation</span>
+            <span class="shortcut-label" data-i18n="shortcutCancel">Cancel dictation</span>
             <span class="shortcut-key" id="shortcut-cancel-dictation">Alt+Shift+C</span>
           </div>
           <div class="shortcut-item">
-            <span class="shortcut-label">Paste last result</span>
+            <span class="shortcut-label" data-i18n="shortcutPaste">Paste last result</span>
             <span class="shortcut-key" id="shortcut-paste-last-result">Alt+Shift+P</span>
           </div>
         </div>
-        <button class="btn-customize" id="customizeShortcuts">Customize Shortcuts</button>
-        <p class="shortcuts-note">Opens Chrome's extension shortcuts settings</p>
+        <button class="btn-customize" id="customizeShortcuts" data-i18n="customizeShortcuts">Customize Shortcuts</button>
+        <p class="shortcuts-note" data-i18n="shortcutsNote">Opens Chrome's extension shortcuts settings</p>
       </div>
     </section>
 
@@ -829,7 +829,7 @@
             <path d="M3 3v5h5"/>
             <path d="M12 7v5l4 2"/>
           </svg>
-          History
+          <span data-i18n="historySection">History</span>
         </span>
       </div>
       <div class="card-body">
@@ -840,10 +840,10 @@
               <path d="M3 3v5h5"/>
               <path d="M12 7v5l4 2"/>
             </svg>
-            <p>No dictation history yet</p>
+            <p data-i18n="historyEmpty">No dictation history yet</p>
           </div>
         </div>
-        <button class="btn-clear" id="clearHistory" disabled>Clear All History</button>
+        <button class="btn-clear" id="clearHistory" disabled data-i18n="clearAll">Clear All History</button>
       </div>
     </section>
 
@@ -854,9 +854,9 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
           </svg>
-          Developer Mode
+          <span data-i18n="devMode">Developer Mode</span>
         </span>
-        <span class="dev-badge">DEV</span>
+        <span class="dev-badge" data-i18n="devBadge">DEV</span>
       </div>
       <div class="card-body">
         <div class="debug-info" id="debugInfo">
@@ -914,8 +914,8 @@
       <div class="card-body">
         <div class="setting-row">
           <div class="setting-info">
-            <div class="setting-label">Developer Mode</div>
-            <div class="setting-description">Enable advanced debugging tools and diagnostics</div>
+            <div class="setting-label" data-i18n="devMode">Developer Mode</div>
+            <div class="setting-description" data-i18n="devModeDesc">Enable advanced debugging tools and diagnostics</div>
           </div>
           <label class="toggle">
             <input type="checkbox" id="devMode">
@@ -927,7 +927,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>EchoType v0.8.7 • <a href="https://github.com/haotool/echotype" target="_blank">GitHub</a></p>
+      <p>EchoType v0.8.8 • <a href="https://github.com/haotool/echotype" target="_blank">GitHub</a></p>
     </footer>
   </div>
 

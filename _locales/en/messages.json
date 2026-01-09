@@ -236,5 +236,53 @@
   "copyFailed": {
     "message": "Copy failed",
     "description": "Toast when copy fails"
+  },
+  "toggleTheme": {
+    "message": "Toggle theme",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Status",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Start Failed",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Submit failed",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Cancel failed",
+    "description": "Error when cancel fails"
+  },
+  "languageSection": {
+    "message": "Language",
+    "description": "Language settings section"
+  },
+  "interfaceLanguage": {
+    "message": "Interface Language",
+    "description": "Interface language setting label"
+  },
+  "interfaceLanguageDesc": {
+    "message": "Language is determined by your browser settings",
+    "description": "Interface language description"
+  },
+  "languageNote": {
+    "message": "Note: Language is determined by your browser settings (chrome://settings/languages)",
+    "description": "Language note about browser settings"
+  },
+  "devBadge": {
+    "message": "DEV",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Clear all dictation history?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "History cleared",
+    "description": "Toast when history is cleared"
   }
 }
