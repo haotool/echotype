@@ -34,6 +34,9 @@ const SVG_HREFS = {
   submit: ['#fa1dbd', '#send-icon', '#check-icon'],
 } as const;
 
+const PROCESSING_ICON_HREFS = ['#4944fe'] as const;
+const PROCESSING_SPINNER_SELECTOR = 'svg.motion-safe\\:animate-spin, svg[class*="animate-spin"]';
+
 /**
  * Multi-language aria-label selectors for dictation buttons.
  * ChatGPT uses different labels based on user's language setting.
@@ -264,7 +267,10 @@ function buildButtonSelector(
   ariaLabels: readonly string[]
 ): string {
   // SVG href selectors (priority)
-  const svgSelectors = svgHrefs.map((href) => `button:has(svg use[href*="${href}"])`);
+  const svgSelectors = svgHrefs.flatMap((href) => [
+    `button:has(svg use[href*="${href}"])`,
+    `button:has(svg use[xlink\\:href*="${href}"])`,
+  ]);
 
   // Aria-label selectors (fallback)
   const ariaSelectors = ariaLabels.map((label) => `button[aria-label="${label}"]`);
@@ -428,7 +434,9 @@ export function findSubmitButton(): HTMLButtonElement | null {
  * @returns Current status
  */
 export function detectStatus(): DictationStatus {
+  if (isProcessingState()) return 'processing';
   if (findStopButton()) return 'listening';
+  if (findSubmitButton()) return 'recording';
   if (findStartButton()) return 'idle';
   return 'unknown';
 }
@@ -496,7 +504,7 @@ export function performHealthCheck(): HealthCheckResult {
   // 1. User is not logged in
   // 2. Voice input is not available in this region
   // 3. DOM has changed
-  if (!startBtnFound && !stopBtnFound) {
+  if (!startBtnFound && !stopBtnFound && !submitBtnFound) {
     // This is a warning, not a critical error
     // User might need to log in or enable voice input
     warnings.push('dictation buttons not found (login may be required)');
@@ -538,7 +546,7 @@ export function performHealthCheck(): HealthCheckResult {
  * This requires user to be logged in and have voice input enabled.
  */
 export function isVoiceInputAvailable(): boolean {
-  return Boolean(findStartButton() || findStopButton());
+  return Boolean(findStartButton() || findStopButton() || findSubmitButton());
 }
 
 /**
@@ -622,7 +630,9 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
  *
  * @returns True if button was clicked
  */
-export function clickStartButton(): boolean {
+export function clickStartButton(
+  strategy: 'direct' | 'focus' | 'mouse' = 'direct'
+): boolean {
   const el = findStartButton();
   if (el) {
     if (el.disabled || el.getAttribute('aria-disabled') === 'true') {
@@ -634,63 +644,103 @@ export function clickStartButton(): boolean {
     log('Clicking start button');
     console.log('[EchoType:Selectors] Found start button:', el.outerHTML.substring(0, 200));
     
-    // Strategy 1: Direct click
-    try {
-      el.click();
-      console.log('[EchoType:Selectors] Direct click executed');
-    } catch (error) {
-      console.warn('[EchoType:Selectors] Direct click failed:', error);
+    switch (strategy) {
+      case 'focus':
+        try {
+          el.focus();
+          el.click();
+          console.log('[EchoType:Selectors] Focus + click executed');
+          return true;
+        } catch (error) {
+          console.warn('[EchoType:Selectors] Focus + click failed:', error);
+          return false;
+        }
+      case 'mouse':
+        try {
+          const rect = el.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          
+          el.dispatchEvent(new MouseEvent('mousedown', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+            clientX: centerX,
+            clientY: centerY,
+          }));
+          
+          el.dispatchEvent(new MouseEvent('mouseup', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+            clientX: centerX,
+            clientY: centerY,
+          }));
+          
+          el.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+            clientX: centerX,
+            clientY: centerY,
+          }));
+          
+          console.log('[EchoType:Selectors] Mouse events dispatched');
+          return true;
+        } catch (error) {
+          console.warn('[EchoType:Selectors] Mouse event dispatch failed:', error);
+          return false;
+        }
+      case 'direct':
+      default:
+        try {
+          el.click();
+          console.log('[EchoType:Selectors] Direct click executed');
+          return true;
+        } catch (error) {
+          console.warn('[EchoType:Selectors] Direct click failed:', error);
+          return false;
+        }
     }
-    
-    // Strategy 2: Focus and click (for buttons that require focus)
-    try {
-      el.focus();
-      el.click();
-      console.log('[EchoType:Selectors] Focus + click executed');
-    } catch (error) {
-      console.warn('[EchoType:Selectors] Focus + click failed:', error);
-    }
-    
-    // Strategy 3: Dispatch mouse events (for buttons with custom event handlers)
-    try {
-      const rect = el.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      el.dispatchEvent(new MouseEvent('mousedown', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: centerX,
-        clientY: centerY,
-      }));
-      
-      el.dispatchEvent(new MouseEvent('mouseup', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: centerX,
-        clientY: centerY,
-      }));
-      
-      el.dispatchEvent(new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: centerX,
-        clientY: centerY,
-      }));
-      
-      console.log('[EchoType:Selectors] Mouse events dispatched');
-    } catch (error) {
-      console.warn('[EchoType:Selectors] Mouse event dispatch failed:', error);
-    }
-    
-    return true;
   }
   
   log('Start button not found');
   console.warn('[EchoType:Selectors] Start button not found. Selector:', SELECTORS.startBtn.substring(0, 100));
+  return false;
+}
+
+// ========================================================================
+// Status Helpers
+// ========================================================================
+
+function isButtonDisabled(el: HTMLButtonElement | null): boolean {
+  if (!el) return false;
+  return el.disabled || el.getAttribute('aria-disabled') === 'true';
+}
+
+function hasProcessingSpinner(root: Element | null): boolean {
+  if (!root) return false;
+  if (root.querySelector(PROCESSING_SPINNER_SELECTOR)) return true;
+  return PROCESSING_ICON_HREFS.some((href) =>
+    Boolean(
+      root.querySelector(`use[href*="${href}"]`) ||
+        root.querySelector(`use[xlink\\:href*="${href}"]`)
+    )
+  );
+}
+
+function isProcessingState(): boolean {
+  const stopBtn = findStopButton();
+  const submitBtn = findSubmitButton();
+
+  if (isButtonDisabled(stopBtn) || isButtonDisabled(submitBtn)) {
+    return true;
+  }
+
+  if (hasProcessingSpinner(stopBtn) || hasProcessingSpinner(submitBtn)) {
+    return true;
+  }
+
   return false;
 }
 

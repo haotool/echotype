@@ -143,6 +143,7 @@ describe('createMessage', () => {
       const msg = createMessage.offscreenClipboardWrite('test');
       expect(msg.type).toBe(MSG.OFFSCREEN_CLIPBOARD_WRITE);
       expect(msg.text).toBe('test');
+      expect(msg.target).toBe('offscreen');
     });
   });
 });

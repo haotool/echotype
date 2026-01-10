@@ -303,13 +303,15 @@ export async function isTabValid(tabId: number): Promise<boolean> {
 export async function refreshTabIfNeeded(tabId: number): Promise<boolean> {
   try {
     const tab = await chrome.tabs.get(tabId);
-    
-    // Check if tab needs refresh (error page, stale, etc.)
-    if (tab.url && !tab.url.startsWith('https://chatgpt.com')) {
+    const url = tab.url || '';
+    const needsChatGPT =
+      !url.startsWith('https://chatgpt.com') || !url.includes('temporary-chat=true');
+
+    if (needsChatGPT) {
       await chrome.tabs.update(tabId, { url: CHATGPT_URL });
       return await waitForTabComplete(tabId);
     }
-    
+
     return true;
   } catch (error) {
     console.error('[EchoType] Failed to refresh tab:', error);

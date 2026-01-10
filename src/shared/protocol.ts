@@ -158,6 +158,7 @@ export interface PasteLastResultPayload {
 export interface OffscreenClipboardWritePayload {
   type: typeof MSG.OFFSCREEN_CLIPBOARD_WRITE;
   text: string;
+  target: 'offscreen';
 }
 
 export interface OffscreenClipboardResultPayload {
@@ -316,6 +317,7 @@ export const createMessage = {
   offscreenClipboardWrite: (text: string): OffscreenClipboardWritePayload => ({
     type: MSG.OFFSCREEN_CLIPBOARD_WRITE,
     text,
+    target: 'offscreen',
   }),
 
   historyGet: (): HistoryGetPayload => ({

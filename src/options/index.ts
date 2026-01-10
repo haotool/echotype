@@ -9,7 +9,7 @@
 import type { EchoTypeSettings, HistoryItem } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/types';
 import { MSG, createMessage } from '@shared/protocol';
-import { applyI18n, getMessage } from '@shared/i18n';
+import { applyI18n, getMessage, initI18n, setLocaleOverride } from '@shared/i18n';
 
 // ============================================================================
 // Constants
@@ -33,6 +33,7 @@ const elements = {
   autoCopyToClipboard: document.getElementById('autoCopyToClipboard') as HTMLInputElement,
   autoPasteToActiveTab: document.getElementById('autoPasteToActiveTab') as HTMLInputElement,
   returnFocusAfterStart: document.getElementById('returnFocusAfterStart') as HTMLInputElement,
+  audioFeedbackEnabled: document.getElementById('audioFeedbackEnabled') as HTMLInputElement,
   
   // Language
   languageSelect: document.getElementById('languageSelect') as HTMLSelectElement,
@@ -91,6 +92,17 @@ async function loadTheme(): Promise<void> {
   applyTheme();
 }
 
+function applyDirection(lang: string): void {
+  const normalized = lang.toLowerCase();
+  if (normalized.startsWith('ar') || normalized.startsWith('he') || normalized.startsWith('fa')) {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', lang);
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.documentElement.setAttribute('lang', lang);
+  }
+}
+
 function applyTheme(): void {
   elements.body.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
   updateThemeIcon();
@@ -147,14 +159,10 @@ async function handleLanguageChange(): Promise<void> {
   
   try {
     await chrome.storage.local.set({ [STORAGE_KEY_LANGUAGE]: selectedLang });
-    showToast(`Language changed to ${elements.languageSelect.selectedOptions[0]?.text || selectedLang}`);
-    
-    // Note: Chrome extensions don't support dynamic language switching
-    // The user needs to reload the extension pages or restart Chrome
-    // We show a note about this in the UI
-    
-    // Optionally reload the page to apply changes
-    // setTimeout(() => location.reload(), 1500);
+    await setLocaleOverride(selectedLang);
+    applyDirection(selectedLang);
+    applyI18n();
+    showToast(getMessage('saved'));
   } catch (error) {
     console.error('[EchoType] Failed to save language preference:', error);
     showToast('Failed to save language preference');
@@ -186,6 +194,7 @@ async function loadUI(): Promise<void> {
   elements.autoCopyToClipboard.checked = settings.autoCopyToClipboard;
   elements.autoPasteToActiveTab.checked = settings.autoPasteToActiveTab;
   elements.returnFocusAfterStart.checked = settings.returnFocusAfterStart;
+  elements.audioFeedbackEnabled.checked = settings.audioFeedbackEnabled;
   
   await loadShortcuts();
   await loadHistory();
@@ -196,6 +205,7 @@ async function handleSettingChange(): Promise<void> {
     autoCopyToClipboard: elements.autoCopyToClipboard.checked,
     autoPasteToActiveTab: elements.autoPasteToActiveTab.checked,
     returnFocusAfterStart: elements.returnFocusAfterStart.checked,
+    audioFeedbackEnabled: elements.audioFeedbackEnabled.checked,
     historySize: DEFAULT_SETTINGS.historySize,
   };
   await saveSettings(settings);
@@ -588,6 +598,7 @@ function setupEventListeners(): void {
   elements.autoCopyToClipboard.addEventListener('change', handleSettingChange);
   elements.autoPasteToActiveTab.addEventListener('change', handleSettingChange);
   elements.returnFocusAfterStart.addEventListener('change', handleSettingChange);
+  elements.audioFeedbackEnabled.addEventListener('change', handleSettingChange);
   
   // Language
   elements.languageSelect?.addEventListener('change', handleLanguageChange);
@@ -617,17 +628,34 @@ function setupEventListeners(): void {
   });
 }
 
+function setupStorageListener(): void {
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes[STORAGE_KEY_LANGUAGE]?.newValue) {
+      const nextLocale = String(changes[STORAGE_KEY_LANGUAGE].newValue || '');
+      const localeForUi = nextLocale || chrome.i18n.getUILanguage();
+      setLocaleOverride(nextLocale).then(() => {
+        applyDirection(localeForUi);
+        applyI18n();
+        loadUI();
+      });
+    }
+
+    if (area === 'session' && changes['echotype_history']?.newValue) {
+      loadHistory();
+    }
+  });
+}
+
 // ============================================================================
 // Initialization
 // ============================================================================
 
 async function init(): Promise<void> {
+  await initI18n();
   // Set RTL direction for RTL languages
-  const uiLang = chrome.i18n.getUILanguage();
-  if (uiLang.startsWith('ar') || uiLang.startsWith('he') || uiLang.startsWith('fa')) {
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', uiLang);
-  }
+  const storedLang = await chrome.storage.local.get(STORAGE_KEY_LANGUAGE);
+  const uiLang = (storedLang[STORAGE_KEY_LANGUAGE] as string | undefined) || chrome.i18n.getUILanguage();
+  applyDirection(uiLang);
   
   // Apply i18n translations to all elements with data-i18n attributes
   applyI18n();
@@ -637,6 +665,7 @@ async function init(): Promise<void> {
   await loadUI();
   await loadDevMode();
   setupEventListeners();
+  setupStorageListener();
 }
 
 init().catch(console.error);

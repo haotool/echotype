@@ -14,11 +14,97 @@
  * @param substitutions - Optional substitution values
  * @returns The localized message string
  */
+type LocaleMessages = Record<string, { message: string }>;
+
+const STORAGE_KEY_LANGUAGE = 'echotype_language';
+let overrideMessages: LocaleMessages | null = null;
+
+function applySubstitutions(
+  message: string,
+  substitutions?: string | string[]
+): string {
+  if (!substitutions) return message;
+  const values = Array.isArray(substitutions) ? substitutions : [substitutions];
+  let result = message;
+  values.forEach((value, index) => {
+    result = result.replace(new RegExp(`\\$${index + 1}`, 'g'), value);
+  });
+
+  const namedPlaceholders = result.match(/\$[A-Z0-9_]+\$/g);
+  if (namedPlaceholders) {
+    namedPlaceholders.forEach((placeholder, index) => {
+      if (values[index]) {
+        result = result.replace(new RegExp(placeholder.replace(/\$/g, '\\$&'), 'g'), values[index]);
+      }
+    });
+  }
+
+  return result;
+}
+
+function normalizeLocale(locale: string): string {
+  return locale.replace('-', '_');
+}
+
+function getLocaleCandidates(locale: string): string[] {
+  const normalized = normalizeLocale(locale);
+  const base = normalized.split('_')[0];
+  const candidates = [normalized];
+  if (base && base !== normalized) {
+    candidates.push(base);
+  }
+  return Array.from(new Set(candidates));
+}
+
+async function loadLocaleMessages(locale: string): Promise<LocaleMessages | null> {
+  try {
+    const url = chrome.runtime.getURL(`_locales/${locale}/messages.json`);
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return (await response.json()) as LocaleMessages;
+  } catch {
+    return null;
+  }
+}
+
+export async function setLocaleOverride(locale: string | null): Promise<boolean> {
+  if (!locale) {
+    overrideMessages = null;
+    return false;
+  }
+
+  for (const candidate of getLocaleCandidates(locale)) {
+    const messages = await loadLocaleMessages(candidate);
+    if (messages) {
+      overrideMessages = messages;
+      return true;
+    }
+  }
+
+  overrideMessages = null;
+  return false;
+}
+
+export async function initI18n(): Promise<void> {
+  try {
+    const result = await chrome.storage.local.get(STORAGE_KEY_LANGUAGE);
+    const saved = result[STORAGE_KEY_LANGUAGE] as string | undefined;
+    if (saved) {
+      await setLocaleOverride(saved);
+    }
+  } catch {
+    // Ignore storage access errors in non-extension contexts
+  }
+}
+
 export function getMessage(
   key: string,
   substitutions?: string | string[]
 ): string {
   try {
+    if (overrideMessages?.[key]?.message) {
+      return applySubstitutions(overrideMessages[key].message, substitutions);
+    }
     const message = chrome.i18n.getMessage(key, substitutions);
     return message || key;
   } catch {
@@ -61,7 +147,7 @@ export function applyI18n(): void {
   const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
   placeholderElements.forEach((element) => {
     const key = element.getAttribute('data-i18n-placeholder');
-    if (key && element instanceof HTMLInputElement) {
+    if (key && (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement)) {
       element.placeholder = getMessage(key);
     }
   });

@@ -20,6 +20,8 @@ export interface EchoTypeSettings {
   autoPasteToActiveTab: boolean;
   /** Return focus to original tab after starting dictation */
   returnFocusAfterStart: boolean;
+  /** Enable audio feedback sounds */
+  audioFeedbackEnabled: boolean;
   /** Maximum history items to keep */
   historySize: number;
 }
@@ -28,6 +30,7 @@ export const DEFAULT_SETTINGS: EchoTypeSettings = {
   autoCopyToClipboard: true,
   autoPasteToActiveTab: false,
   returnFocusAfterStart: false,
+  audioFeedbackEnabled: true,
   historySize: 5,
 };
 

@@ -246,6 +246,14 @@
         transition: all var(--duration-fast) var(--ease-out);
       }
 
+      .status-timer {
+        display: none;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        opacity: 0.9;
+      }
+
       .status-badge.idle {
         background: var(--status-idle-bg);
         color: var(--status-idle-text);
@@ -691,6 +699,7 @@
         <div class="status-badge idle" id="status-badge">
           <span class="status-dot"></span>
           <span id="status-text" data-i18n="statusReady">Ready</span>
+          <span class="status-timer" id="status-timer"></span>
         </div>
         <span class="status-label" data-i18n="statusLabel">Status</span>
       </div>

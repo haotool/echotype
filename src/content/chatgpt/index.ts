@@ -116,7 +116,7 @@ function safeSendMessage(message: unknown): void {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['aria-label'],
+    attributeFilter: ['aria-label', 'aria-disabled', 'disabled', 'class'],
   });
 
 // ============================================================================

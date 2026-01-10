@@ -25,7 +25,7 @@ const BADGE_CONFIGS: Record<DictationStatus, BadgeConfig> = {
     color: '#888888',
   },
   listening: {
-    text: '🎤',
+    text: 'REC',
     color: '#E94560',
   },
   recording: {

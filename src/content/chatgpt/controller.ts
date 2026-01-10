@@ -6,7 +6,7 @@
  * Orchestrates selectors, capture, diff, and clear modules.
  */
 
-import { normalizeText } from '@shared/utils';
+import { normalizeText, sleep } from '@shared/utils';
 import { MSG, createMessage } from '@shared/protocol';
 import type {
   DictationStatus,
@@ -75,6 +75,23 @@ export function checkStatusChange(): StatusChangedPayload | null {
   return null;
 }
 
+async function waitForExpectedStatus(
+  expected: DictationStatus[],
+  timeoutMs = 2000
+): Promise<DictationStatus | null> {
+  const start = performance.now();
+
+  while (performance.now() - start < timeoutMs) {
+    const current = detectStatus();
+    if (expected.includes(current)) {
+      return current;
+    }
+    await sleep(100);
+  }
+
+  return null;
+}
+
 // ============================================================================
 // Commands
 // ============================================================================
@@ -93,11 +110,14 @@ export async function startDictation(): Promise<{
   ok: boolean;
   error?: EchoTypeError;
   baseline: string;
+  status?: DictationStatus;
   debug?: {
     loginStatus: { loggedIn: boolean; reason: string };
     voiceAvailable: boolean;
     health: unknown;
     buttonClicked: boolean;
+    status?: DictationStatus;
+    attempts?: number;
   };
 }> {
   console.log('[EchoType:Controller] startDictation called');
@@ -178,12 +198,28 @@ export async function startDictation(): Promise<{
   state.isActive = true;
   console.log('[EchoType:Controller] Baseline text:', state.baselineText.substring(0, 100));
 
-  // Click start button
+  // Click start button with verification and fallback
   console.log('[EchoType:Controller] Clicking start button...');
-  const clicked = clickStartButton();
-  console.log('[EchoType:Controller] Button clicked:', clicked);
-  
+  const strategies: Array<'direct' | 'focus' | 'mouse'> = ['direct', 'focus', 'mouse'];
+  let clicked = false;
+  let status: DictationStatus | null = null;
+  let attempts = 0;
+
+  for (const strategy of strategies) {
+    attempts += 1;
+    if (!clickStartButton(strategy)) {
+      continue;
+    }
+    clicked = true;
+    status = await waitForExpectedStatus(['listening', 'recording', 'processing']);
+    if (status) {
+      break;
+    }
+  }
+
   if (!clicked) {
+    state.baselineText = '';
+    state.isActive = false;
     return {
       ok: false,
       error: {
@@ -191,12 +227,34 @@ export async function startDictation(): Promise<{
         message: 'Could not find or click start button',
         detail: 'The start button was found but could not be clicked. It may be disabled or obscured.',
       },
-      baseline: state.baselineText,
+      baseline: '',
       debug: {
         loginStatus,
         voiceAvailable,
         health,
         buttonClicked: false,
+        attempts,
+      },
+    };
+  }
+
+  if (!status) {
+    state.baselineText = '';
+    state.isActive = false;
+    return {
+      ok: false,
+      error: {
+        code: 'TIMEOUT',
+        message: 'Start button click did not change status',
+        detail: 'No transition to listening/recording was detected after clicking start.',
+      },
+      baseline: '',
+      debug: {
+        loginStatus,
+        voiceAvailable,
+        health,
+        buttonClicked: true,
+        attempts,
       },
     };
   }
@@ -205,11 +263,14 @@ export async function startDictation(): Promise<{
   return {
     ok: true,
     baseline: state.baselineText,
+    status,
     debug: {
       loginStatus,
       voiceAvailable,
       health,
       buttonClicked: true,
+      status,
+      attempts,
     },
   };
 }
@@ -223,6 +284,11 @@ export async function startDictation(): Promise<{
 export function cancelDictation(): { ok: boolean } {
   const clicked = clickStopButton();
   cancelCapture(); // Cancel any pending capture
+  if (clicked) {
+    state.baselineText = '';
+    state.isActive = false;
+    state.lastStatus = 'idle';
+  }
   return { ok: clicked };
 }
 

@@ -13,7 +13,7 @@
 
 import type { HistoryItem, DictationStatus } from '../shared/types';
 import { MSG, createMessage } from '../shared/protocol';
-import { applyI18n, getMessage } from '../shared/i18n';
+import { applyI18n, getMessage, initI18n, setLocaleOverride } from '../shared/i18n';
 
 // ============================================================================
 // Constants
@@ -21,6 +21,8 @@ import { applyI18n, getMessage } from '../shared/i18n';
 
 const STORAGE_KEY_THEME = 'echotype_theme';
 const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
+const STORAGE_KEY_HISTORY = 'echotype_history';
+const STORAGE_KEY_LANGUAGE = 'echotype_language';
 
 /**
  * Get localized status labels.
@@ -50,6 +52,7 @@ const elements = {
   // Status
   statusBadge: document.getElementById('status-badge') as HTMLElement,
   statusText: document.getElementById('status-text') as HTMLElement,
+  statusTimer: document.getElementById('status-timer') as HTMLElement,
   waveform: document.getElementById('waveform') as HTMLElement,
   
   // Error
@@ -85,6 +88,36 @@ const elements = {
 let lastResult: HistoryItem | null = null;
 let isDarkTheme = false;
 let isDevMode = false;
+let recordingStartedAt: number | null = null;
+let timerIntervalId: number | null = null;
+
+function formatDuration(seconds: number): string {
+  return `SEC ${String(seconds).padStart(2, '0')}`;
+}
+
+function updateRecordingTimer(): void {
+  if (recordingStartedAt === null) return;
+  const elapsedSeconds = Math.floor((Date.now() - recordingStartedAt) / 1000);
+  elements.statusTimer.textContent = formatDuration(elapsedSeconds);
+}
+
+function startRecordingTimer(): void {
+  if (recordingStartedAt !== null) return;
+  recordingStartedAt = Date.now();
+  elements.statusTimer.style.display = 'inline-flex';
+  updateRecordingTimer();
+  timerIntervalId = window.setInterval(updateRecordingTimer, 1000);
+}
+
+function stopRecordingTimer(): void {
+  if (timerIntervalId !== null) {
+    window.clearInterval(timerIntervalId);
+    timerIntervalId = null;
+  }
+  recordingStartedAt = null;
+  elements.statusTimer.textContent = '';
+  elements.statusTimer.style.display = 'none';
+}
 
 // ============================================================================
 // Theme Management
@@ -112,6 +145,17 @@ function updateThemeIcon(): void {
     ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
     : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
   elements.btnTheme.innerHTML = icon;
+}
+
+function applyDirection(lang: string): void {
+  const normalized = lang.toLowerCase();
+  if (normalized.startsWith('ar') || normalized.startsWith('he') || normalized.startsWith('fa')) {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', lang);
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.documentElement.setAttribute('lang', lang);
+  }
 }
 
 async function toggleTheme(): Promise<void> {
@@ -181,6 +225,12 @@ function updateStatusUI(status: DictationStatus): void {
   // Determine if recording
   const isRecordingState = status === 'recording' || status === 'listening';
   const isProcessing = status === 'processing';
+
+  if (isRecordingState) {
+    startRecordingTimer();
+  } else {
+    stopRecordingTimer();
+  }
   
   // Update toggle button based on state
   if (isRecordingState) {
@@ -270,7 +320,8 @@ function updateResultUI(item: HistoryItem | null): void {
 
 function formatTime(ts: number): string {
   const date = new Date(ts);
-  return date.toLocaleTimeString('en-US', {
+  const locale = chrome.i18n.getUILanguage();
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
@@ -327,6 +378,8 @@ async function loadInitialState(): Promise<void> {
     }) as { items: HistoryItem[] } | undefined;
     if (historyResponse?.items?.length) {
       updateResultUI(historyResponse.items[0]);
+    } else {
+      updateResultUI(null);
     }
   } catch (error) {
     console.error('[EchoType] Failed to load initial state:', error);
@@ -460,6 +513,27 @@ function setupMessageListener(): void {
         });
         showToast(getMessage('submitSuccess'));
       }
+      getStatusFromBackground().then(updateStatusUI).catch(() => {});
+    }
+  });
+}
+
+function setupStorageListener(): void {
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'session' && changes[STORAGE_KEY_HISTORY]?.newValue) {
+      const items = changes[STORAGE_KEY_HISTORY].newValue as HistoryItem[];
+      updateResultUI(items?.[0] ?? null);
+    }
+
+    if (area === 'local' && changes[STORAGE_KEY_LANGUAGE]?.newValue) {
+      const nextLocale = String(changes[STORAGE_KEY_LANGUAGE].newValue || '');
+      const localeForUi = nextLocale || chrome.i18n.getUILanguage();
+      setLocaleOverride(nextLocale).then(() => {
+        applyDirection(localeForUi);
+        applyI18n();
+        getStatusFromBackground().then(updateStatusUI).catch(() => {});
+        updateResultUI(lastResult);
+      });
     }
   });
 }
@@ -469,12 +543,11 @@ function setupMessageListener(): void {
 // ============================================================================
 
 async function init(): Promise<void> {
+  await initI18n();
   // Set RTL direction for RTL languages
-  const uiLang = chrome.i18n.getUILanguage();
-  if (uiLang.startsWith('ar') || uiLang.startsWith('he') || uiLang.startsWith('fa')) {
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', uiLang);
-  }
+  const storedLang = await chrome.storage.local.get(STORAGE_KEY_LANGUAGE);
+  const uiLang = (storedLang[STORAGE_KEY_LANGUAGE] as string | undefined) || chrome.i18n.getUILanguage();
+  applyDirection(uiLang);
   
   // Apply i18n translations to all elements with data-i18n attributes
   applyI18n();
@@ -486,6 +559,7 @@ async function init(): Promise<void> {
   
   setupEventListeners();
   setupMessageListener();
+  setupStorageListener();
   await loadInitialState();
 }
 

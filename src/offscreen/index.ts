@@ -21,12 +21,30 @@ console.log('[EchoType] Offscreen document loaded');
 
 // Audio context for sound generation
 let audioContext: AudioContext | null = null;
+let workletReady: Promise<void> | null = null;
 
 function getAudioContext(): AudioContext {
   if (!audioContext) {
     audioContext = new AudioContext();
   }
   return audioContext;
+}
+
+async function ensureAudioWorklet(ctx: AudioContext): Promise<void> {
+  if (!('audioWorklet' in ctx)) {
+    throw new Error('AudioWorklet not supported');
+  }
+
+  if (ctx.state === 'suspended') {
+    await ctx.resume();
+  }
+
+  if (!workletReady) {
+    const url = new URL('./tone-worklet.ts', import.meta.url);
+    workletReady = ctx.audioWorklet.addModule(url);
+  }
+
+  await workletReady;
 }
 
 // ============================================================================
@@ -36,30 +54,55 @@ function getAudioContext(): AudioContext {
 /**
  * Play a simple beep sound using Web Audio API
  */
-function playBeep(
+async function playBeep(
   frequency: number,
   duration: number,
   type: OscillatorType = 'sine'
-): void {
+): Promise<void> {
   try {
     const ctx = getAudioContext();
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
+    await ensureAudioWorklet(ctx);
 
-    oscillator.type = type;
-    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
-    
-    // Fade out to avoid click
-    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
+    const node = new AudioWorkletNode(ctx, 'tone-processor', {
+      numberOfOutputs: 1,
+      outputChannelCount: [1],
+    });
 
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
+    node.port.postMessage({
+      frequency,
+      durationMs: duration,
+      waveType: type,
+    });
 
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + duration / 1000);
+    node.connect(ctx.destination);
+    node.port.onmessage = (event) => {
+      if (event.data?.type === 'done') {
+        node.disconnect();
+        node.port.close();
+      }
+    };
   } catch (error) {
     console.error('[EchoType] Audio playback error:', error);
+    try {
+      const ctx = getAudioContext();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+      
+      // Fade out to avoid click
+      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + duration / 1000);
+    } catch (fallbackError) {
+      console.error('[EchoType] Audio fallback error:', fallbackError);
+    }
   }
 }
 
@@ -156,7 +199,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Handle sound playback request
   if (message.type === MSG.OFFSCREEN_PLAY_SOUND) {
     const { frequency, duration, type } = message.data;
-    playBeep(frequency, duration, type);
+    void playBeep(frequency, duration, type);
     sendResponse({ ok: true });
     return false;
   }

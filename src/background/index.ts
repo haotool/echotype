@@ -17,14 +17,16 @@ import type { HistoryItem, EchoTypeError } from '@shared/types';
 import { loadSettings, onSettingsChange } from './settings';
 import {
   ensureChatGPTTab,
+  refreshTabIfNeeded,
   sendToChatGPTTab,
   returnToPreviousTab,
   getCurrentTab,
+  getChatGPTTabInfo,
   waitForTabComplete,
 } from './tab-manager';
 import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
-import { updateBadge, showSuccessBadge, showErrorBadge, initBadge } from './badge';
+import { updateBadge, showSuccessBadge, initBadge } from './badge';
 import { playStartSound, playSuccessSound, playErrorSound } from './audio';
 import './keepalive'; // Keep service worker alive via alarms
 import { startHeartbeat, getLastHeartbeat, isServiceWorkerHealthy, getFormattedUptime } from './heartbeat';
@@ -88,8 +90,13 @@ let currentSettings = {
   autoCopyToClipboard: true,
   autoPasteToActiveTab: false,
   returnFocusAfterStart: false,
+  audioFeedbackEnabled: true,
   historySize: 5,
 };
+
+function canPlayAudio(): boolean {
+  return currentSettings.audioFeedbackEnabled;
+}
 
 // ============================================================================
 // Dictation Status Management (Persistent via chrome.storage.session)
@@ -98,11 +105,99 @@ let currentSettings = {
 const STORAGE_KEY_DICTATION_STATUS = 'echotype_dictation_status';
 
 // In-memory cache (synced with storage)
-let currentDictationStatus: 'idle' | 'listening' | 'recording' | 'processing' | 'unknown' = 'idle';
+let currentDictationStatus: 'idle' | 'listening' | 'recording' | 'processing' | 'error' | 'unknown' = 'idle';
 
-type DictationStatusType = 'idle' | 'listening' | 'recording' | 'processing' | 'unknown';
+type DictationStatusType = 'idle' | 'listening' | 'recording' | 'processing' | 'error' | 'unknown';
 
-const VALID_STATUSES: DictationStatusType[] = ['idle', 'listening', 'recording', 'processing', 'unknown'];
+const VALID_STATUSES: DictationStatusType[] = ['idle', 'listening', 'recording', 'processing', 'error', 'unknown'];
+
+const STATUS_TRANSITIONS: Record<DictationStatusType, DictationStatusType[]> = {
+  idle: ['listening', 'recording', 'processing', 'error', 'unknown'],
+  listening: ['processing', 'idle', 'error', 'unknown', 'recording'],
+  recording: ['processing', 'idle', 'error', 'unknown', 'listening'],
+  processing: ['idle', 'error', 'unknown'],
+  error: ['idle', 'unknown', 'listening', 'recording', 'processing'],
+  unknown: ['idle', 'listening', 'recording', 'processing', 'error'],
+};
+
+function isValidTransition(
+  from: DictationStatusType,
+  to: DictationStatusType
+): boolean {
+  if (from === to) return true;
+  return STATUS_TRANSITIONS[from]?.includes(to) ?? false;
+}
+
+async function setStatusAndNotify(status: DictationStatusType): Promise<void> {
+  if (currentDictationStatus === status) {
+    return;
+  }
+  await setDictationStatus(status);
+  await updateBadge(status);
+  notifyStatusChange(createMessage.statusChanged(status));
+}
+
+let resyncInFlight = false;
+
+async function requestStatusResync(reason: string): Promise<DictationStatusType | null> {
+  if (resyncInFlight) return null;
+  resyncInFlight = true;
+  try {
+    const tabInfo = getChatGPTTabInfo();
+    if (!tabInfo) {
+      console.warn('[EchoType] Status resync skipped (no ChatGPT tab):', reason);
+      return null;
+    }
+
+    const ready = await waitForTabComplete(tabInfo.tabId, 3000);
+    if (ready) {
+      await ensureChatGPTContentScript(tabInfo.tabId);
+    }
+
+    const response = await sendToChatGPTTab<{ status?: DictationStatusType }>(
+      createMessage.cmdGetStatus()
+    );
+    if (isValidStatus(response?.status)) {
+      return response.status;
+    }
+  } catch (error) {
+    console.warn('[EchoType] Status resync failed:', error);
+  } finally {
+    resyncInFlight = false;
+  }
+
+  return null;
+}
+
+async function applyIncomingStatus(status: DictationStatusType, source: string): Promise<void> {
+  if (!isValidStatus(status)) {
+    console.warn('[EchoType] Ignoring invalid status:', status, source);
+    return;
+  }
+
+  if (status === 'unknown') {
+    const resynced = await requestStatusResync(`${source}:unknown`);
+    if (resynced) {
+      await setStatusAndNotify(resynced);
+      return;
+    }
+    await setStatusAndNotify('error');
+    return;
+  }
+
+  if (!isValidTransition(currentDictationStatus, status)) {
+    console.warn('[EchoType] Invalid status transition:', currentDictationStatus, '->', status, source);
+    const resynced = await requestStatusResync(`${source}:invalid`);
+    if (resynced && isValidTransition(currentDictationStatus, resynced)) {
+      await setStatusAndNotify(resynced);
+      return;
+    }
+    await setStatusAndNotify('error');
+    return;
+  }
+
+  await setStatusAndNotify(status);
+}
 
 function isValidStatus(status: unknown): status is DictationStatusType {
   return typeof status === 'string' && VALID_STATUSES.includes(status as DictationStatusType);
@@ -151,6 +246,8 @@ async function setDictationStatus(status: DictationStatusType): Promise<void> {
   console.log('[EchoType] Restored status:', currentDictationStatus);
   
   await initBadge();
+  await updateBadge(currentDictationStatus);
+  notifyStatusChange(createMessage.statusChanged(currentDictationStatus));
   await startHeartbeat(); // Start heartbeat tracking
 })();
 
@@ -175,8 +272,10 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   const tabInfo = await ensureChatGPTTab(true);
   if (!tabInfo) {
     console.error('[EchoType] Failed to get ChatGPT tab');
-    await showErrorBadge();
-    await playErrorSound();
+    await setStatusAndNotify('error');
+    if (canPlayAudio()) {
+      await playErrorSound();
+    }
     return {
       ok: false,
       error: {
@@ -185,6 +284,8 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
       },
     };
   }
+
+  await refreshTabIfNeeded(tabInfo.tabId);
 
   // Wait for tab to be fully ready
   const ready = await waitForTabComplete(tabInfo.tabId, 8000);
@@ -196,8 +297,10 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   const injected = await ensureChatGPTContentScript(tabInfo.tabId);
   if (!injected) {
     console.error('[EchoType] Failed to inject content script');
-    await showErrorBadge();
-    await playErrorSound();
+    await setStatusAndNotify('error');
+    if (canPlayAudio()) {
+      await playErrorSound();
+    }
     return {
       ok: false,
       error: {
@@ -210,16 +313,31 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   // Small delay to ensure content script is initialized
   await new Promise((resolve) => setTimeout(resolve, 300));
 
+  const preStatus = await requestStatusResync('start-check');
+  if (preStatus && preStatus !== 'idle') {
+    console.warn('[EchoType] Start blocked, current status:', preStatus);
+    await applyIncomingStatus(preStatus, 'start-precheck');
+    return {
+      ok: false,
+      error: {
+        code: 'UNKNOWN_ERROR',
+        message: `Dictation is not idle (${preStatus}).`,
+      },
+    };
+  }
+
   // Send start command with retry logic (handled by sendToChatGPTTab)
-  const result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError }>(
+  const result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError; status?: DictationStatusType }>(
     createMessage.cmdStart('snapshot')
   );
 
   if (result?.ok) {
     console.log('[EchoType] Dictation started successfully');
-    await setDictationStatus('recording');
-    await updateBadge('recording');
-    await playStartSound();
+    const nextStatus = isValidStatus(result.status) ? result.status : 'recording';
+    await applyIncomingStatus(nextStatus, 'start');
+    if (canPlayAudio()) {
+      await playStartSound();
+    }
 
     // Return to previous tab if setting enabled
     if (currentSettings.returnFocusAfterStart) {
@@ -229,8 +347,10 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   } else {
     const errorMessage = result?.error?.message || 'No response from ChatGPT tab';
     console.error('[EchoType] Failed to start dictation:', errorMessage);
-    await showErrorBadge();
-    await playErrorSound();
+    await setStatusAndNotify('error');
+    if (canPlayAudio()) {
+      await playErrorSound();
+    }
     return {
       ok: false,
       error: result?.error ?? {
@@ -276,10 +396,10 @@ async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeE
 
   if (result?.ok) {
     console.log('[EchoType] Dictation paused');
-    await setDictationStatus('idle');
-    await updateBadge('idle');
+    await setStatusAndNotify('idle');
     return { ok: true };
   }
+  await setStatusAndNotify('error');
   return {
     ok: false,
     error: {
@@ -294,7 +414,7 @@ async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeE
  */
 async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayload> {
   console.log('[EchoType] Submit dictation command');
-  await updateBadge('processing');
+  await setStatusAndNotify('processing');
 
   const tabInfo = await ensureChatGPTTab(false);
   if (!tabInfo) {
@@ -329,8 +449,10 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
 
   if (result.type === MSG.ERROR) {
     console.error('[EchoType] Dictation error:', result.error);
-    await showErrorBadge();
-    await playErrorSound();
+    await setStatusAndNotify('error');
+    if (canPlayAudio()) {
+      await playErrorSound();
+    }
     return result;
   }
 
@@ -345,19 +467,16 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
 
     // CRITICAL: Reset dictation status to idle after successful submit
     // Use setDictationStatus to persist to storage (survives SW termination)
-    await setDictationStatus('idle');
-    await updateBadge('idle');
-    
-    // Forward status change to popup (ensures UI sync)
-    // Using reliable messaging module for better error handling
-    notifyStatusChange(createMessage.statusChanged('idle'));
+    await setStatusAndNotify('idle');
 
     // Only process if we have added text
     if (addedText) {
       // Add to history
       const historyItem = await addToHistory(addedText);
       await showSuccessBadge();
-      await playSuccessSound();
+      if (canPlayAudio()) {
+        await playSuccessSound();
+      }
 
       // Auto-copy to clipboard if enabled
       if (currentSettings.autoCopyToClipboard) {
@@ -451,6 +570,9 @@ chrome.commands.onCommand.addListener(async (command) => {
   switch (command) {
     case 'toggle-dictation':
       // Toggle: Start if idle, Submit if recording
+      if (currentDictationStatus === 'processing') {
+        return;
+      }
       if (currentDictationStatus === 'recording' || currentDictationStatus === 'listening') {
         await handleSubmitDictation();
       } else {
@@ -502,13 +624,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Handle status changes from ChatGPT content script
   if (message.type === MSG.STATUS_CHANGED) {
     const statusMessage = message as StatusChangedPayload;
-    // Persist status to storage (async, but don't block)
-    setDictationStatus(statusMessage.status as typeof currentDictationStatus);
-    console.log('[EchoType] Status changed:', currentDictationStatus);
-    
-    // Forward status change to popup (fixes state sync bug)
-    // Using reliable messaging module for better error handling
-    notifyStatusChange(statusMessage);
+    applyIncomingStatus(statusMessage.status as DictationStatusType, 'content-status');
     return false;
   }
 
