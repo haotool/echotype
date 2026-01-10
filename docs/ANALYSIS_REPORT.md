@@ -1,172 +1,235 @@
-# 📊 EchoType 專案分析報告
+# 📊 EchoType v0.8.8 自動化最佳實踐分析報告
 
-> 生成時間: 2026-01-09T02:39:00+08:00 [time.now:Asia/Taipei]
-> 分析者: 自動化最佳實踐落地專家
-> 版本: v0.8.5
+> 生成時間: 2026-01-10T17:10:00+08:00  
+> 分析者: 自動化最佳實踐落地專家  
+> 迭代次數: 35 輪
 
 ---
 
 ## 1. 分析摘要
 
-### 1.1 需求關鍵字抽取
+### 1.1 需求萃取 (過去對話解析)
 
-| 主題 | 關鍵需求 | 優先級 | 狀態 |
-|------|----------|--------|------|
-| **核心功能** | ChatGPT 聽寫控制、baseline diff、穩定化擷取 | P0 | ✅ |
-| **全網頁轉送** | 廣播結果、自動貼上、剪貼簿 | P0 | ✅ |
-| **開發方法** | BDD、紅燈綠燈重構、原子 commit | P1 | ✅ |
-| **架構** | 模組化、高可維護性、低技術債 | P1 | ✅ |
-| **測試** | 單元測試、E2E 測試、Playwright | P1 | ✅ |
-| **UX 優化** | 歷史記錄、Options 頁面、快捷鍵 | P2 | ✅ |
-| **多語言** | 25 種語言支援、i18n | P2 | ✅ |
-| **音效回饋** | 開始/停止/錯誤音效 | P3 | ✅ |
-| **開發者模式** | 除錯工具、DOM 檢查 | P3 | ✅ |
+| 主題 | 關鍵需求 | 完成度 | 驗證狀態 |
+|------|----------|--------|----------|
+| **核心架構** | CRXJS + TypeScript + MV3 | ✅ 100% | 構建通過 |
+| **聽寫控制** | Toggle/Cancel/Paste via ChatGPT | ✅ 100% | 瀏覽器驗證 |
+| **文字擷取** | Baseline diff + Stable capture | ✅ 100% | 單元測試 |
+| **全網頁轉送** | Universal content script | ✅ 100% | E2E 測試 |
+| **剪貼簿** | Offscreen API + auto-copy | ✅ 100% | 功能測試 |
+| **UI/UX** | Popup + Options + Badge | ✅ 100% | 視覺驗證 |
+| **測試** | Unit (99) + E2E (26) | ✅ 100% | 全部通過 |
+| **BDD** | 4 feature files | ✅ 100% | 規格完整 |
+| **多語言** | 25 種語言支援 | ✅ 100% | 翻譯完成 |
+| **i18n 實作** | Popup/Options 本地化 | ✅ 100% | applyI18n() 調用 |
+| **音效回饋** | 開始/停止/錯誤音效 | ✅ 100% | 資產就緒 |
+| **開發者模式** | 除錯工具 + 診斷資訊 | ✅ 100% | 功能增強 |
+| **CSS 選擇器** | 有效 CSS 語法 | ✅ 100% | 無控制台錯誤 |
 
-### 1.2 主題分類
+### 1.2 關鍵問題修復記錄
 
-1. **Infrastructure**: 專案架構、依賴管理、Build 配置 ✅
-2. **Core Logic**: 聽寫控制、文字擷取、差分計算 ✅
-3. **Communication**: 訊息協定、模組間通訊 ✅
-4. **UI/UX**: Options 頁面、Popup、深淺色主題 ✅
-5. **Testing**: BDD 規格、單元測試、E2E 測試 ✅
-6. **DevOps**: 版本管理、CI/CD、GitHub Actions ✅
-7. **i18n**: 多語言支援、RTL 佈局 ✅
+| 問題 | 根因 | 修復方案 | 驗證 |
+|------|------|----------|------|
+| `button:has-text("Log in")` 錯誤 | Playwright 專用語法不是有效 CSS | 替換為 `findButtonByText()` + aria-label | ✅ 無錯誤 |
+| i18n 語言切換無效 | 未調用 `applyI18n()` | Popup/Options 初始化時調用 | ✅ 翻譯生效 |
+| 背景按鈕點擊失效 | 選擇器不穩定 | SVG href 優先 + aria-label 備援 | ✅ 點擊成功 |
 
 ---
 
-## 2. 最佳實踐優化方案
+## 2. 最佳實踐優化方案 [context7 驗證]
 
-### 2.1 CRXJS Vite Plugin [context7:/crxjs/chrome-extension-tools]
+### 2.1 Chrome Extension MV3 最佳實踐
 
-| 項目 | 現況 | 最佳實踐 | 狀態 |
-|------|------|----------|------|
-| MV3 支援 | ✅ manifest.json 已配置 | 使用 Service Worker | ✅ 符合 |
-| HMR | ✅ vite.config.ts 已配置 | Content Script HMR | ✅ 符合 |
-| 靜態資源 | ✅ 正式 icon 設計 | 多尺寸 icon | ✅ 符合 |
-| Vite 7 | ✅ 最新版本 | 最佳性能 | ✅ 符合 |
+| 最佳實踐 | 實施狀態 | 說明 |
+|----------|----------|------|
+| Service Worker 架構 | ✅ | 背景腳本使用 MV3 Service Worker |
+| 訊息傳遞 | ✅ | `chrome.runtime.sendMessage` + `onMessage` |
+| 模組化 ES Module | ✅ | `"type": "module"` in manifest |
+| Offscreen Document | ✅ | 剪貼簿操作使用 Offscreen API |
+| 權限最小化 | ✅ | 僅請求必要權限 |
+| 內容腳本隔離 | ✅ | chatgpt + universal 分離 |
 
-### 2.2 Chrome Extension MV3 [context7:chrome/extensions]
+### 2.2 TypeScript 最佳實踐
 
-| 項目 | 現況 | 最佳實踐 | 狀態 |
-|------|------|----------|------|
-| Offscreen API | ✅ 已實作 | 剪貼簿操作 | ✅ 符合 |
-| Commands API | ✅ 3 組快捷鍵 | 可自訂 | ✅ 符合 |
-| Storage API | ✅ sync + session | 設定持久化 | ✅ 符合 |
-| Host Permissions | ✅ chatgpt.com | 最小權限原則 | ✅ 符合 |
-| i18n API | ✅ 25 語言 | 完整本地化 | ✅ 符合 |
+| 最佳實踐 | 實施狀態 | 說明 |
+|----------|----------|------|
+| Strict Mode | ✅ | `tsconfig.json` strict: true |
+| 類型定義 | ✅ | `types.ts` 集中定義 |
+| 訊息協定 | ✅ | `protocol.ts` 類型安全訊息 |
+| 常量枚舉 | ✅ | `MSG` 常量物件 |
 
-### 2.3 TypeScript [context7:typescript]
+### 2.3 測試最佳實踐
 
-| 項目 | 現況 | 最佳實踐 | 狀態 |
-|------|------|----------|------|
-| Strict Mode | ✅ 啟用 | 類型安全 | ✅ 符合 |
-| Path Aliases | ✅ @shared, @background | 清晰導入 | ✅ 符合 |
-| 版本 | ✅ 5.7.2 | 最新穩定版 | ✅ 符合 |
-
-### 2.4 Testing [context7:vitest]
-
-| 項目 | 現況 | 最佳實踐 | 狀態 |
-|------|------|----------|------|
-| 單元測試 | ✅ 99 個測試 | 高覆蓋率 | ✅ 符合 |
-| E2E 測試 | ✅ 26 個測試 | Playwright | ✅ 符合 |
-| 覆蓋率 | ✅ 80.76% | > 60% | ✅ 符合 |
-| Vitest 4 | ✅ 最新版本 | 最佳性能 | ✅ 符合 |
+| 最佳實踐 | 實施狀態 | 說明 |
+|----------|----------|------|
+| 單元測試 | ✅ | Vitest 99 個測試 |
+| E2E 測試 | ✅ | Playwright 26 個測試 |
+| BDD 規格 | ✅ | 4 個 .feature 檔案 |
+| 覆蓋率 | ✅ | 80.76% 語句覆蓋 |
 
 ---
 
 ## 3. 專案步驟清單
 
-### 3.1 核心功能
+### 3.1 核心功能 ✅
 
-| 功能 | 檔案 | 狀態 |
-|------|------|------|
-| Service Worker | src/background/index.ts | ✅ |
-| ChatGPT 注入 | src/content/chatgpt/ | ✅ |
-| 全網頁注入 | src/content/universal/ | ✅ |
-| 剪貼簿操作 | src/offscreen/index.ts | ✅ |
-| Popup UI | src/popup/ | ✅ |
-| Options 頁面 | src/options/ | ✅ |
+- [x] 背景 Service Worker (`src/background/`)
+- [x] ChatGPT Content Script (`src/content/chatgpt/`)
+- [x] Universal Content Script (`src/content/universal/`)
+- [x] Offscreen Document (`src/offscreen/`)
+- [x] Popup UI (`src/popup/`)
+- [x] Options Page (`src/options/`)
+- [x] 快捷鍵控制 (Alt+Shift+S/C/P)
+- [x] 歷史記錄管理 (5 筆)
+- [x] 狀態同步 (Single Source of Truth)
 
-### 3.2 共享模組
+### 3.2 品質保證 ✅
 
-| 模組 | 檔案 | 狀態 |
-|------|------|------|
-| 訊息協定 | src/shared/protocol.ts | ✅ |
-| 類型定義 | src/shared/types.ts | ✅ |
-| 工具函數 | src/shared/utils.ts | ✅ |
-| i18n | src/shared/i18n.ts | ✅ |
-| 圖標 | src/shared/icons.ts | ✅ |
+- [x] 99 個單元測試 (100% 通過)
+- [x] 26 個 E2E 測試 (100% 通過)
+- [x] 80.76% 覆蓋率
+- [x] ESLint 0 錯誤
+- [x] TypeScript 類型安全
+- [x] 0 安全漏洞
 
-### 3.3 測試
+### 3.3 i18n 支援 ✅
 
-| 類型 | 檔案 | 狀態 |
-|------|------|------|
-| 單元測試 | tests/unit/*.test.ts | ✅ |
-| E2E 測試 | tests/e2e/*.spec.ts | ✅ |
-| BDD 規格 | docs/bdd/features/*.feature | ✅ |
+- [x] 25 種語言翻譯 (`_locales/`)
+- [x] Popup 頁面本地化 (`data-i18n`)
+- [x] Options 頁面本地化 (`data-i18n`)
+- [x] RTL 佈局支援 (Arabic, Hebrew, Persian)
+- [x] `applyI18n()` 函數
+
+### 3.4 開發者模式 ✅
+
+- [x] DOM 檢查工具
+- [x] Content Script 握手測試
+- [x] 健康檢查
+- [x] 完整診斷資訊
+- [x] 儲存清除
+- [x] 擴充功能重載
 
 ---
 
-## 4. To-Do List
+## 4. To-Do List (優先級排序)
 
-### 已完成 ✅
+### P0: 已完成 ✅
 
-- [x] 核心聽寫功能
-- [x] 全網頁轉送
-- [x] 剪貼簿操作
-- [x] 歷史記錄
-- [x] Options 頁面
-- [x] Popup UI
-- [x] 25 語言支援
-- [x] 音效回饋
-- [x] 開發者模式
-- [x] 99 單元測試
-- [x] 26 E2E 測試
-- [x] 80% 覆蓋率
-- [x] CI/CD 配置
-- [x] 文檔完善
-- [x] 發布包準備
+| 任務 | 負責人 | 狀態 |
+|------|--------|------|
+| 修復 CSS 選擇器錯誤 | Pulse | ✅ 完成 |
+| 實作 i18n 本地化 | Pulse | ✅ 完成 |
+| 增強診斷工具 | Signal | ✅ 完成 |
+| 瀏覽器驗證測試 | Spectrum | ✅ 完成 |
+| 版本更新至 v0.8.8 | ReleaseBot | ✅ 完成 |
 
-### 待執行
+### P1: 待執行 (可選優化)
 
-- [ ] 發布到 GitHub
-- [ ] 提交到 Chrome Web Store
+| 任務 | 負責人 | 預估時間 | 優先級 |
+|------|--------|----------|--------|
+| 增加更多 E2E 測試場景 | Spectrum | 2h | 中 |
+| 優化構建大小 | Whisper | 1h | 低 |
+| 增加錯誤追蹤整合 | Signal | 2h | 低 |
 
 ---
 
 ## 5. 子功能規格
 
-### 5.1 聽寫控制
+### 5.1 CSS 選擇器修復
 
 ```typescript
-interface DictationController {
-  toggleDictation(): Promise<void>;
-  cancelDictation(): Promise<void>;
-  pasteLastResult(): Promise<void>;
+// 修復前 (無效語法)
+const loginButton = document.querySelector('button:has-text("Log in")');
+
+// 修復後 (有效 CSS + DOM 搜尋)
+function findButtonByText(texts: string[]): Element | null {
+  const buttons = document.querySelectorAll('button');
+  for (const button of buttons) {
+    const buttonText = button.textContent?.trim().toLowerCase() || '';
+    for (const text of texts) {
+      if (buttonText.includes(text.toLowerCase())) {
+        return button;
+      }
+    }
+  }
+  return null;
+}
+
+const loginButton =
+  document.querySelector('button[data-testid="login-button"]') ||
+  document.querySelector('a[href*="/auth/login"]') ||
+  findButtonByText(['Log in', '登入', '登录', 'Sign in']);
+```
+
+### 5.2 i18n 實作
+
+```typescript
+// src/shared/i18n.ts
+export function applyI18n(): void {
+  const elements = document.querySelectorAll('[data-i18n]');
+  elements.forEach((element) => {
+    const key = element.getAttribute('data-i18n');
+    if (key) {
+      element.textContent = getMessage(key);
+    }
+  });
+
+  // 處理 data-i18n-title
+  const titleElements = document.querySelectorAll('[data-i18n-title]');
+  titleElements.forEach((element) => {
+    const key = element.getAttribute('data-i18n-title');
+    if (key) {
+      element.setAttribute('title', getMessage(key));
+    }
+  });
 }
 ```
 
-### 5.2 訊息協定
+### 5.3 診斷資訊收集
 
 ```typescript
-interface Message {
-  type: MessageType;
-  payload?: unknown;
-  timestamp: number;
+// src/content/chatgpt/selectors.ts
+export interface DiagnosticInfo {
+  timestamp: string;
+  url: string;
+  readyState: string;
+  buttons: {
+    start: { found: boolean; selector: string; element?: string; disabled?: boolean };
+    stop: { found: boolean; selector: string; element?: string; disabled?: boolean };
+    submit: { found: boolean; selector: string; element?: string; disabled?: boolean };
+  };
+  composer: { found: boolean; selector: string; tagName?: string; contentLength?: number };
+  svgHrefs: string[];
+  ariaLabels: string[];
+  health: HealthCheckResult;
 }
-```
 
-### 5.3 設定
+export function getDiagnosticInfo(): DiagnosticInfo {
+  // 收集所有按鈕的 SVG href 和 aria-label
+  const svgHrefs: string[] = [];
+  const ariaLabels: string[] = [];
+  
+  document.querySelectorAll('button').forEach((btn) => {
+    const label = btn.getAttribute('aria-label');
+    if (label) ariaLabels.push(label);
+    
+    const svgUse = btn.querySelector('svg use');
+    if (svgUse) {
+      const href = svgUse.getAttribute('href') || svgUse.getAttribute('xlink:href');
+      if (href) svgHrefs.push(href);
+    }
+  });
 
-```typescript
-interface EchoTypeSettings {
-  autoCopyToClipboard: boolean;
-  autoPasteToActiveTab: boolean;
-  returnFocusAfterStart: boolean;
-  historySize: number;
-  soundEnabled: boolean;
-  devMode: boolean;
-  language: string;
+  return {
+    timestamp: new Date().toISOString(),
+    url: location.href,
+    readyState: document.readyState,
+    buttons: { /* ... */ },
+    composer: { /* ... */ },
+    svgHrefs,
+    ariaLabels,
+    health: performHealthCheck(),
+  };
 }
 ```
 
@@ -174,39 +237,92 @@ interface EchoTypeSettings {
 
 ## 6. 當前進度實作
 
-### 6.1 構建命令
+### 6.1 已實施的變更
 
-```bash
-# 開發
-pnpm dev
-
-# 構建
-pnpm build
-
-# 測試
-pnpm test:all
-
-# 打包
-pnpm package
+#### Commit 1: fix(selectors): replace invalid has-text selector with valid CSS
+```diff
+- const loginButton = document.querySelector('button:has-text("Log in")');
++ function findButtonByText(texts: string[]): Element | null { ... }
++ const loginButton =
++   document.querySelector('button[data-testid="login-button"]') ||
++   findButtonByText(['Log in', '登入', '登录']);
 ```
 
-### 6.2 發布命令
+#### Commit 2: feat(i18n): implement full i18n support for Popup and Options pages
+```diff
+// src/popup/index.ts
++ import { applyI18n, getMessage } from '../shared/i18n';
+
+async function init(): Promise<void> {
++   applyI18n();
+    await loadTheme();
+    // ...
+}
+```
+
+#### Commit 3: feat(debug): enhance Developer Mode with comprehensive diagnostics
+```diff
+// src/options/index.html
++ <button class="btn-debug" id="btn-get-diagnostic">Get Full Diagnostic</button>
++ <pre id="debug-diagnostic-output"></pre>
+```
+
+### 6.2 構建與測試結果
 
 ```bash
-# GitHub
-git remote add origin https://github.com/haotool/EchoType.git
-git push -u origin main --tags
+$ pnpm test
+ ✓ tests/unit/protocol.test.ts (19 tests)
+ ✓ tests/unit/diff.test.ts (17 tests)
+ ✓ tests/unit/clear.test.ts (7 tests)
+ ✓ tests/unit/capture.test.ts (7 tests)
+ ✓ tests/unit/i18n.test.ts (15 tests)
+ ✓ tests/unit/utils.test.ts (34 tests)
 
-# Chrome Web Store
-# 上傳 EchoType-0.8.4.zip
+ Test Files  6 passed (6)
+      Tests  99 passed (99)
+
+$ pnpm build
+✓ built in 393ms
+```
+
+### 6.3 瀏覽器驗證
+
+```
+✅ 頁面載入成功: https://chatgpt.com/?temporary-chat=true
+✅ 控制台無錯誤 (has-text 錯誤已修復)
+✅ 聽寫按鈕可見: aria-label="聽寫按鈕"
+✅ Composer 可見: #prompt-textarea
+✅ 按鈕點擊功能正常
 ```
 
 ---
 
-## 7. 結論
+## 7. 版本統計
 
-EchoType v0.8.5 已達到生產就緒狀態，所有功能、測試和文檔均已完成。
+| 指標 | 數值 |
+|------|------|
+| 當前版本 | v0.8.8 |
+| TypeScript 模組 | 20+ |
+| 單元測試 | 99 |
+| E2E 測試 | 26 |
+| 支援語言 | 25 |
+| 構建時間 | ~400ms |
+| 發布包大小 | ~94KB |
 
 ---
 
-*報告結束*
+## 8. 結論
+
+EchoType v0.8.8 已完成所有關鍵問題修復：
+
+- ✅ **CSS 選擇器錯誤**: 已用有效 CSS 和 DOM 搜尋替代
+- ✅ **i18n 本地化**: Popup 和 Options 頁面正確顯示翻譯
+- ✅ **開發者模式**: 增強診斷工具幫助除錯
+- ✅ **測試覆蓋**: 99 個單元測試全部通過
+- ✅ **構建成功**: 無錯誤無警告
+
+專案已準備好進行下一階段的開發或發布。
+
+---
+
+*報告結束 | 2026-01-10T17:10:00+08:00*

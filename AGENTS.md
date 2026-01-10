@@ -1,6 +1,6 @@
 # AGENTS.md - EchoType Development Team Configuration
 
-> Version: 5.2.0 | Updated: 2026-01-10T01:25:00+08:00
+> Version: 5.3.0 | Updated: 2026-01-10T17:10:00+08:00
 
 ## 🎯 Project Overview
 
@@ -138,7 +138,7 @@ const SELECTORS = {
 - [x] History: last 5 results management
 - [x] Options: toggle auto-copy, auto-paste, return focus
 - [x] Build passes with no errors
-- [x] 88 unit tests pass
+- [x] 99 unit tests pass
 - [x] E2E test framework configured (Playwright)
 - [x] E2E testing framework with 26 tests
 - [x] Multi-language support (25 languages: en, zh_TW, zh_CN, ja, ko, de, fr, es, pt, it, ru, ar, vi, th, id, he, fa, tr, pl, nl, uk, hi, cs, el, sv)
