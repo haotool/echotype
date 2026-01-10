@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "ยกเลิกล้มเหลว",
     "description": "แจ้งเตือนเมื่อยกเลิกล้มเหลว"
+  },
+  "audioFeedback": {
+    "message": "การแจ้งเตือนด้วยเสียง",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "เล่นเสียงเมื่อเริ่มต้น สำเร็จ และเกิดข้อผิดพลาด",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "ภาษา",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "ภาษาของอินเทอร์เฟซ",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "เลือกภาษาที่ใช้สำหรับอินเทอร์เฟซของส่วนขยาย",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "การเปลี่ยนแปลงมีผลทันทีในหน้าตัวเลือกและป๊อปอัป",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "หยุดชั่วคราว",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "บันทึก",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "สลับธีม",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "สถานะ",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "การเริ่มต้นล้มเหลว",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "การส่งล้มเหลว",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "การยกเลิกล้มเหลว",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "นักพัฒนา",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "ล้างประวัติการป้อนตามคำบอกทั้งหมดหรือไม่",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "ล้างประวัติแล้ว",
+    "description": "Toast when history is cleared"
   }
 }

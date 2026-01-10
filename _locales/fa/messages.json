@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "لغو ناموفق",
     "description": "اعلان وقتی لغو ناموفق است"
+  },
+  "audioFeedback": {
+    "message": "بازخورد صوتی",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "در شروع، موفقیت و خطا صدا پخش می‌کند",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "زبان",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "زبان رابط کاربری",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "زبان مورد استفاده در رابط افزونه را انتخاب کنید",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "تغییرات بلافاصله در صفحه تنظیمات و پنجره پاپ‌آپ اعمال می‌شود",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "مکث",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "ضبط",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "تغییر پوسته",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "وضعیت",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "شروع انجام نشد",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "ارسال انجام نشد",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "لغو انجام نشد",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "توسعه",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "کل تاریخچه دیکته پاک شود؟",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "تاریخچه پاک شد",
+    "description": "Toast when history is cleared"
   }
 }

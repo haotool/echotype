@@ -266,11 +266,11 @@
     "description": "Interface language setting label"
   },
   "interfaceLanguageDesc": {
-    "message": "Language is determined by your browser settings",
+    "message": "Select the language used for the extension interface",
     "description": "Interface language description"
   },
   "languageNote": {
-    "message": "Note: Language is determined by your browser settings (chrome://settings/languages)",
+    "message": "Changes apply immediately to the Options and Popup pages",
     "description": "Language note about browser settings"
   },
   "devBadge": {
@@ -284,5 +284,13 @@
   "historyCleared": {
     "message": "History cleared",
     "description": "Toast when history is cleared"
+  },
+  "audioFeedback": {
+    "message": "Audio Feedback",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Play sounds for start, success, and error",
+    "description": "Toggle description for audio feedback"
   }
 }

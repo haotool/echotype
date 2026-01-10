@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Zrušení selhalo",
     "description": "Toast zpráva když zrušení selhalo"
+  },
+  "audioFeedback": {
+    "message": "Zvuková zpětná vazba",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Přehrává zvuky při startu, úspěchu a chybě",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Jazyk",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Jazyk rozhraní",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Vyberte jazyk používaný v rozhraní rozšíření",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Změny se projeví okamžitě na stránkách Nastavení a Popup",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Pozastavit",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Nahrát",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Přepnout motiv",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Stav",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Spuštění se nezdařilo",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Odeslání se nezdařilo",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Zrušení se nezdařilo",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "VÝVOJ",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Vymazat veškerou historii diktování?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Historie vymazána",
+    "description": "Toast when history is cleared"
   }
 }

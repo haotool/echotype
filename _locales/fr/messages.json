@@ -236,5 +236,61 @@
   "copyFailed": {
     "message": "Échec de la copie",
     "description": "Toast échec copie"
+  },
+  "audioFeedback": {
+    "message": "Retour audio",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Joue des sons au démarrage, en cas de succès et d’erreur",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Langue",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Langue de l’interface",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Sélectionnez la langue utilisée pour l’interface de l’extension",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Les changements s’appliquent immédiatement aux pages Options et Popup",
+    "description": ""
+  },
+  "toggleTheme": {
+    "message": "Changer de thème",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Statut",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Le démarrage a échoué",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "L'envoi a échoué",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "L'annulation a échoué",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "DÉV",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Effacer tout l'historique de dictée ?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Historique effacé",
+    "description": "Toast when history is cleared"
   }
 }

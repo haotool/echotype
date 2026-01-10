@@ -236,5 +236,61 @@
   "copyFailed": {
     "message": "复制失败",
     "description": "复制失败提示"
+  },
+  "audioFeedback": {
+    "message": "音效反馈",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "在开始、成功和错误时播放音效",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "语言",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "界面语言",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "选择扩展程序界面使用的语言",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "更改会立即应用到设置和弹出页面",
+    "description": ""
+  },
+  "toggleTheme": {
+    "message": "切换主题",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "状态",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "启动失败",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "提交失败",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "取消失败",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "开发",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "清除所有听写历史记录？",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "历史记录已清除",
+    "description": "Toast when history is cleared"
   }
 }

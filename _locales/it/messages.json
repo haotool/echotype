@@ -236,5 +236,61 @@
   "copyFailed": {
     "message": "Copia fallita",
     "description": "Toast copia fallita"
+  },
+  "audioFeedback": {
+    "message": "Feedback audio",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Riproduce suoni all'avvio, al successo e all'errore",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Lingua",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Lingua dell’interfaccia",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Seleziona la lingua usata nell’interfaccia dell’estensione",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Le modifiche si applicano subito alle pagine Opzioni e Popup",
+    "description": ""
+  },
+  "toggleTheme": {
+    "message": "Cambia tema",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Stato",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Avvio fallito",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Invio fallito",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Annullamento fallito",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "SVIL",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Cancellare tutta la cronologia delle dettature?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Cronologia cancellata",
+    "description": "Toast when history is cleared"
   }
 }

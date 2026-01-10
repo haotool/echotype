@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "キャンセルに失敗しました",
     "description": "キャンセル失敗時のトースト"
+  },
+  "audioFeedback": {
+    "message": "サウンドフィードバック",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "開始・成功・エラー時に音を再生します",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "言語",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "インターフェース言語",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "拡張機能のインターフェースで使用する言語を選択します",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "変更は設定ページとポップアップにすぐ反映されます",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "一時停止",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "録音",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "テーマを切り替え",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "ステータス",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "開始に失敗しました",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "送信に失敗しました",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "キャンセルに失敗しました",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "開発",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "すべてのディクテーション履歴をクリアしますか？",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "履歴がクリアされました",
+    "description": "Toast when history is cleared"
   }
 }

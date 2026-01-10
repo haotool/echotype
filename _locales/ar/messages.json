@@ -236,5 +236,61 @@
   "copyFailed": {
     "message": "فشل النسخ",
     "description": "إشعار فشل النسخ"
+  },
+  "audioFeedback": {
+    "message": "تنبيه صوتي",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "يشغل أصواتًا عند البدء والنجاح والخطأ",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "اللغة",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "لغة الواجهة",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "اختر اللغة المستخدمة في واجهة الإضافة",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "تُطبق التغييرات فورًا على صفحتي الخيارات والنافذة المنبثقة",
+    "description": ""
+  },
+  "toggleTheme": {
+    "message": "تبديل المظهر",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "الحالة",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "فشل البدء",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "فشل الإرسال",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "فشل الإلغاء",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "مطور",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "هل تريد مسح كل سجل الإملاء؟",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "تم مسح السجل",
+    "description": "Toast when history is cleared"
   }
 }

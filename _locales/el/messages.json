@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Η ακύρωση απέτυχε",
     "description": "Μήνυμα toast όταν η ακύρωση αποτύχει"
+  },
+  "audioFeedback": {
+    "message": "Ηχητική ανάδραση",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Αναπαράγει ήχους στην έναρξη, επιτυχία και σφάλμα",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Γλώσσα",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Γλώσσα διεπαφής",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Επιλέξτε τη γλώσσα που χρησιμοποιείται στο περιβάλλον της επέκτασης",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Οι αλλαγές εφαρμόζονται άμεσα στις σελίδες Επιλογές και Popup",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Παύση",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Εγγραφή",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Εναλλαγή θέματος",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Κατάσταση",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Η έναρξη απέτυχε",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Η υποβολή απέτυχε",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Η ακύρωση απέτυχε",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "ΠΡΓ",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Να διαγραφεί όλο το ιστορικό υπαγόρευσης;",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Το ιστορικό διαγράφηκε",
+    "description": "Toast when history is cleared"
   }
 }

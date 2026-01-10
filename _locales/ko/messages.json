@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "취소 실패",
     "description": "취소 실패 시 토스트"
+  },
+  "audioFeedback": {
+    "message": "오디오 피드백",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "시작, 성공 및 오류 시 소리를 재생합니다",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "언어",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "인터페이스 언어",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "확장 프로그램 인터페이스에 사용할 언어를 선택합니다",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "변경 사항은 옵션 및 팝업 페이지에 즉시 적용됩니다",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "일시 정지",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "녹음",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "테마 전환",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "상태",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "시작 실패",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "제출 실패",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "취소 실패",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "개발",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "모든 받아쓰기 기록을 지우시겠습니까?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "기록 삭제됨",
+    "description": "Toast when history is cleared"
   }
 }

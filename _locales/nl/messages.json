@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Annuleren mislukt",
     "description": "Melding wanneer annuleren mislukt"
+  },
+  "audioFeedback": {
+    "message": "Audiofeedback",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Speelt geluiden af bij start, succes en fout",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Taal",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Interfacetaal",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Selecteer de taal die in de extensie-interface wordt gebruikt",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Wijzigingen worden direct toegepast op de Opties- en Popup-pagina",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Pauze",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Opnemen",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Thema wisselen",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Status",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Starten mislukt",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Verzenden mislukt",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Annuleren mislukt",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "ONTW",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Alle dicteergeschiedenis wissen?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Geschiedenis gewist",
+    "description": "Toast when history is cleared"
   }
 }

@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Abbrechen fehlgeschlagen",
     "description": "Toast bei fehlgeschlagenem Abbrechen"
+  },
+  "audioFeedback": {
+    "message": "Audio-Feedback",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Spielt Töne bei Start, Erfolg und Fehler ab",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Sprache",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Oberflächensprache",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Wählen Sie die Sprache für die Erweiterungsoberfläche",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Änderungen werden sofort auf die Optionen- und Popup-Seiten angewendet",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Pause",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Aufnahme",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Theme wechseln",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Status",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Start fehlgeschlagen",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Senden fehlgeschlagen",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Abbrechen fehlgeschlagen",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "ENTW",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Gesamten Diktierverlauf löschen?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Verlauf gelöscht",
+    "description": "Toast when history is cleared"
   }
 }

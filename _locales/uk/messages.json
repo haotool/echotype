@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Помилка скасування",
     "description": "Сповіщення коли скасування невдале"
+  },
+  "audioFeedback": {
+    "message": "Звуковий зворотний зв’язок",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Відтворює звуки під час початку, успіху та помилки",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Мова",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Мова інтерфейсу",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Виберіть мову інтерфейсу розширення",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Зміни одразу застосовуються на сторінках «Параметри» та «Спливаюче вікно»",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Пауза",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Запис",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Змінити тему",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Статус",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Помилка запуску",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Помилка надсилання",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Помилка скасування",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "РОЗР",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Очистити всю історію диктування?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Історія очищена",
+    "description": "Toast when history is cleared"
   }
 }

@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "रद्द करना विफल",
     "description": "रद्द करना विफल होने पर टोस्ट संदेश"
+  },
+  "audioFeedback": {
+    "message": "ऑडियो फीडबैक",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "शुरू, सफल होने और त्रुटि पर ध्वनि चलाता है",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "भाषा",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "इंटरफ़ेस भाषा",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "एक्सटेंशन इंटरफ़ेस के लिए भाषा चुनें",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "परिवर्तन तुरंत विकल्प और पॉपअप पृष्ठों पर लागू होते हैं",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "विराम दें",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "रिकॉर्ड",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "थीम बदलें",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "स्थिति",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "शुरू करना विफल रहा",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "सबमिट करना विफल रहा",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "रद्द करना विफल रहा",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "डेव",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "क्या सभी डिक्टेशन इतिहास को साफ़ करें?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "इतिहास साफ़ किया गया",
+    "description": "Toast when history is cleared"
   }
 }

@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Anulowanie nie powiodło się",
     "description": "Powiadomienie gdy anulowanie się nie powiodło"
+  },
+  "audioFeedback": {
+    "message": "Informacje dźwiękowe",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Odtwarza dźwięki przy starcie, sukcesie i błędzie",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Język",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Język interfejsu",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Wybierz język używany w interfejsie rozszerzenia",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Zmiany są stosowane natychmiast na stronach Opcje i Popup",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Pauza",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Nagraj",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Zmień motyw",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Status",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Uruchomienie nie powiodło się",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Wysłanie nie powiodło się",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Anulowanie nie powiodło się",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "DEW",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Wyczyścić całą historię dyktowania?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Historia wyczyszczona",
+    "description": "Toast when history is cleared"
   }
 }

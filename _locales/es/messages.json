@@ -236,5 +236,61 @@
   "copyFailed": {
     "message": "Error al copiar",
     "description": "Toast error al copiar"
+  },
+  "audioFeedback": {
+    "message": "Retroalimentación de audio",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Reproduce sonidos al iniciar, al tener éxito y al producirse errores",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Idioma",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Idioma de la interfaz",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Selecciona el idioma usado en la interfaz de la extensión",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Los cambios se aplican de inmediato en las páginas de Opciones y Popup",
+    "description": ""
+  },
+  "toggleTheme": {
+    "message": "Cambiar tema",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Estado",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Falló el inicio",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Falló el envío",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Falló la cancelación",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "DES",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "¿Borrar todo el historial de dictado?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Historial borrado",
+    "description": "Toast when history is cleared"
   }
 }

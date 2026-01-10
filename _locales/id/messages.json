@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Gagal membatalkan",
     "description": "Toast saat gagal membatalkan"
+  },
+  "audioFeedback": {
+    "message": "Umpan balik audio",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Memutar suara saat mulai, berhasil, dan error",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Bahasa",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Bahasa antarmuka",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Pilih bahasa yang digunakan untuk antarmuka ekstensi",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Perubahan langsung diterapkan pada halaman Opsi dan Popup",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Jeda",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Rekam",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Ganti tema",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Status",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Gagal memulai",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Gagal mengirim",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Gagal membatalkan",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "PENG",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Hapus semua riwayat dikte?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Riwayat dihapus",
+    "description": "Toast when history is cleared"
   }
 }

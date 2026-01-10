@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "הביטול נכשל",
     "description": "הודעה כאשר הביטול נכשל"
+  },
+  "audioFeedback": {
+    "message": "משוב קולי",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "משמיע צלילים בעת התחלה, הצלחה ושגיאה",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "שפה",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "שפת הממשק",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "בחר את השפה לשימוש בממשק ההרחבה",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "השינויים חלים מיד על דפי האפשרויות והחלונית הקופצת",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "השהה",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "הקלט",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "שנה ערכת נושא",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "מצב",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "ההפעלה נכשלה",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "השליחה נכשלה",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "הביטול נכשל",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "פיתוח",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "למחוק את כל היסטוריית ההכתבה?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "ההיסטוריה נמחקה",
+    "description": "Toast when history is cleared"
   }
 }

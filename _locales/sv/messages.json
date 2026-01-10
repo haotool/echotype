@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Avbrytning misslyckades",
     "description": "Toast-meddelande när avbrytning misslyckades"
+  },
+  "audioFeedback": {
+    "message": "Ljudfeedback",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Spelar upp ljud vid start, lyckat resultat och fel",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Språk",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Gränssnittsspråk",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Välj språket som används i tilläggets gränssnitt",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Ändringar tillämpas omedelbart på sidorna Alternativ och Popup",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Paus",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Spela in",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Växla tema",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Status",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Start misslyckades",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Skicka misslyckades",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Avbröt misslyckades",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "UTV",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Rensa all dikteringshistorik?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Historik rensad",
+    "description": "Toast when history is cleared"
   }
 }

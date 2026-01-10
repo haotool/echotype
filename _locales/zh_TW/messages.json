@@ -266,11 +266,11 @@
     "description": "介面語言設定標籤"
   },
   "interfaceLanguageDesc": {
-    "message": "語言由瀏覽器設定決定",
+    "message": "選擇擴充功能介面使用的語言",
     "description": "介面語言描述"
   },
   "languageNote": {
-    "message": "提示：語言由瀏覽器設定決定（chrome://settings/languages）",
+    "message": "變更會立即套用到設定與彈出視窗",
     "description": "關於瀏覽器設定的語言提示"
   },
   "devBadge": {
@@ -284,5 +284,13 @@
   "historyCleared": {
     "message": "記錄已清除",
     "description": "記錄清除時的提示"
+  },
+  "audioFeedback": {
+    "message": "音訊回饋",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "在開始、成功和錯誤時播放聲音",
+    "description": "Toggle description for audio feedback"
   }
 }

@@ -236,5 +236,61 @@
   "copyFailed": {
     "message": "Ошибка копирования",
     "description": "Уведомление ошибка копирования"
+  },
+  "audioFeedback": {
+    "message": "Звуковая обратная связь",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Воспроизводит звуки при начале, успехе и ошибке",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Язык",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Язык интерфейса",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Выберите язык интерфейса расширения",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Изменения сразу применяются на страницах «Параметры» и «Всплывающее окно»",
+    "description": ""
+  },
+  "toggleTheme": {
+    "message": "Сменить тему",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Статус",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Ошибка запуска",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Ошибка отправки",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Ошибка отмены",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "РАЗР",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Очистить всю историю диктовок?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "История очищена",
+    "description": "Toast when history is cleared"
   }
 }

@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "Hủy thất bại",
     "description": "Thông báo khi hủy thất bại"
+  },
+  "audioFeedback": {
+    "message": "Phản hồi âm thanh",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Phát âm thanh khi bắt đầu, thành công và lỗi",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Ngôn ngữ",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Ngôn ngữ giao diện",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Chọn ngôn ngữ dùng cho giao diện tiện ích",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Thay đổi áp dụng ngay cho trang Tùy chọn và Popup",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Tạm dừng",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Ghi âm",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Chuyển đổi chủ đề",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Trạng thái",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Khởi động không thành công",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Gửi không thành công",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "Hủy không thành công",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "PHT",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Xóa tất cả lịch sử đọc chính tả?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Đã xóa lịch sử",
+    "description": "Toast when history is cleared"
   }
 }

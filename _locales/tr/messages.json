@@ -232,5 +232,69 @@
   "cancelFailed": {
     "message": "İptal başarısız",
     "description": "İptal başarısız olduğunda bildirim"
+  },
+  "audioFeedback": {
+    "message": "Sesli geri bildirim",
+    "description": "Toggle label for audio feedback"
+  },
+  "audioFeedbackDesc": {
+    "message": "Başlatma, başarı ve hata durumlarında ses çalar",
+    "description": "Toggle description for audio feedback"
+  },
+  "languageSection": {
+    "message": "Dil",
+    "description": ""
+  },
+  "interfaceLanguage": {
+    "message": "Arayüz dili",
+    "description": ""
+  },
+  "interfaceLanguageDesc": {
+    "message": "Uzantı arayüzünde kullanılacak dili seçin",
+    "description": ""
+  },
+  "languageNote": {
+    "message": "Değişiklikler Seçenekler ve Popup sayfalarına hemen uygulanır",
+    "description": ""
+  },
+  "btnPause": {
+    "message": "Duraklat",
+    "description": "Pause button"
+  },
+  "btnRecord": {
+    "message": "Kaydet",
+    "description": "Record button text"
+  },
+  "toggleTheme": {
+    "message": "Temayı değiştir",
+    "description": "Theme toggle button title"
+  },
+  "statusLabel": {
+    "message": "Durum",
+    "description": "Status label"
+  },
+  "errorStartFailed": {
+    "message": "Başlatma başarısız oldu",
+    "description": "Error title when start fails"
+  },
+  "errorSubmitFailed": {
+    "message": "Gönderme başarısız oldu",
+    "description": "Error when submit fails"
+  },
+  "errorCancelFailed": {
+    "message": "İptal başarısız oldu",
+    "description": "Error when cancel fails"
+  },
+  "devBadge": {
+    "message": "GEL",
+    "description": "Developer badge text"
+  },
+  "confirmClearHistory": {
+    "message": "Tüm dikte geçmişini temizle?",
+    "description": "Confirmation message for clearing history"
+  },
+  "historyCleared": {
+    "message": "Geçmiş temizlendi",
+    "description": "Toast when history is cleared"
   }
 }
