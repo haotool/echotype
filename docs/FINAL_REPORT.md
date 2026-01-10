@@ -1,8 +1,8 @@
 # 📊 EchoType v0.8.8 完整分析報告
 
-> 生成時間: 2026-01-10T18:26:00+08:00 [time.now:Asia/Taipei]
+> 生成時間: 2026-01-10T18:27:00+08:00 [time.now:Asia/Taipei]
 > 分析者: 自動化最佳實踐落地專家
-> 迭代次數: 90 輪
+> 迭代次數: 91 輪
 
 ---
 
@@ -69,6 +69,7 @@
 | chrome.scripting | /websites/developer_chrome_extensions_reference_api | ✅ |
 | chrome.i18n | /websites/developer_chrome_extensions_reference_api | ✅ |
 | chrome.notifications | /websites/developer_chrome_extensions_reference_api | ✅ |
+| chrome.contextMenus | /websites/developer_chrome_extensions_reference_api | ✅ |
 
 ---
 
@@ -247,4 +248,4 @@ EchoType v0.8.8 已完成所有開發目標，達到生產就緒狀態：
 
 ---
 
-*報告結束 - 第 90 輪迭代*
+*報告結束 - 第 91 輪迭代*
