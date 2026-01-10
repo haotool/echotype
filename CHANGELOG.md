@@ -5,6 +5,38 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.10] - 2026-01-11
+
+### 🌐 Internationalization (i18n)
+- **Language Section Fixes** - Added and corrected translations for language labels and notes across all locales
+- **Hot Update Copy** - Updated interface language descriptions to reflect live updates
+
+### 🧹 Maintenance
+- Updated project metadata and version references to 0.8.10
+
+---
+
+## [0.8.9] - 2026-01-11
+
+### 🎛️ Settings & i18n
+- **Audio Feedback Toggle** - Added settings switch with hot updates and i18n coverage
+- **Live Language Updates** - Options/Popup now respond to language changes without reload
+
+### 🎙️ Audio & Offscreen
+- **AudioWorklet Migration** - Replaced deprecated audio path with AudioWorklet + safe fallback
+- **Clipboard Messaging Fix** - Offscreen clipboard payload now targets the offscreen document explicitly
+
+### 🔁 State Sync & UI
+- **SSOT Hardening** - Added status transition validation and resync on unknown states
+- **Processing Detection** - Recognize submit-only and processing spinner/disabled buttons
+- **Recording Timer** - Show professional SEC timer (no emoji) during recording
+- **Temporary Chat Enforcement** - Background ensures `?temporary-chat=true` before start
+
+### 📝 Documentation
+- Version bump to 0.8.9
+
+---
+
 ## [0.8.8] - 2026-01-10
 
 ### 🌐 Internationalization (i18n) Improvements
