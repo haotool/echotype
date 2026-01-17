@@ -42,3 +42,10 @@ pnpm-debug.log*
 
 # Playwright
 playwright-report/
+
+# One-off analysis reports
+docs/ANALYSIS_REPORT.md
+docs/FINAL_REPORT.md
+
+# Empty asset placeholders
+public/icons/
