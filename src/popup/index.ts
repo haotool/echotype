@@ -276,7 +276,7 @@ function updateStatusUI(status: DictationStatus): void {
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
       </svg>
-      <span class="btn-text">${getMessage('btnSubmit')}</span>
+      <span class="btn-text" data-i18n="btnSubmit">${getMessage('btnSubmit')}</span>
     `;
     elements.btnToggle.disabled = false;
     
@@ -293,7 +293,7 @@ function updateStatusUI(status: DictationStatus): void {
         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
         <line x1="12" x2="12" y1="19" y2="22"/>
       </svg>
-      <span class="btn-text">${getMessage('btnRecord')}</span>
+      <span class="btn-text" data-i18n="btnRecord">${getMessage('btnRecord')}</span>
     `;
     elements.btnToggle.disabled = isProcessing;
     

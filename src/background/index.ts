@@ -936,9 +936,4 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
  */
 chrome.runtime.onInstalled.addListener((details) => {
   console.log('[EchoType] Extension installed:', details.reason);
-
-  if (details.reason === 'install') {
-    // Open options page on first install
-    chrome.runtime.openOptionsPage();
-  }
 });

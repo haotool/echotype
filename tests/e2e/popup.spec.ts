@@ -105,7 +105,11 @@ test.describe('Popup UI', () => {
     await expect(settingsFrame).toHaveAttribute('src', /embed=popup/);
 
     const settingsFrameLocator = page.frameLocator('#settings-frame');
-    await expect(settingsFrameLocator.locator('#autoCopyToClipboard')).toBeVisible();
+    const autoCopyToggle = settingsFrameLocator
+      .locator('.toggle')
+      .filter({ has: settingsFrameLocator.locator('#autoCopyToClipboard') })
+      .locator('.toggle-slider');
+    await expect(autoCopyToggle).toBeVisible();
 
     await page.locator('#btn-settings').click();
     await expect(settingsView).toBeHidden();
