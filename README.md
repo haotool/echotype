@@ -3,11 +3,11 @@
 > Universal Voice Dictation Chrome Extension powered by ChatGPT Whisper
 
 [![CI](https://github.com/haotool/echotype/actions/workflows/ci.yml/badge.svg)](https://github.com/haotool/echotype/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/Version-0.8.10-brightgreen)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.8.14-brightgreen)](CHANGELOG.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF)](https://vite.dev/)
 [![Manifest V3](https://img.shields.io/badge/Chrome-MV3-green)](https://developer.chrome.com/docs/extensions/mv3/)
-[![Tests](https://img.shields.io/badge/Unit%20Tests-99%20passing-success)](tests/unit/)
+[![Tests](https://img.shields.io/badge/Unit%20Tests-100%20passing-success)](tests/unit/)
 [![E2E Tests](https://img.shields.io/badge/E2E%20Tests-26%20passing-success)](tests/e2e/)
 [![Coverage](https://img.shields.io/badge/Coverage-80%25-brightgreen)](coverage/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
@@ -52,26 +52,25 @@ pnpm build
 
 ### First Use
 
-1. Press `Ctrl+Shift+1` to start dictation
+1. Press `Alt+Shift+S` to start dictation
 2. ChatGPT opens and begins recording
 3. Speak your text
-4. Press `Ctrl+Shift+3` to finish
+4. Press `Alt+Shift+S` again to submit
 5. Text is copied to clipboard!
 
 ## ⌨️ Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|
-| `Ctrl+Shift+1` | Start dictation |
-| `Ctrl+Shift+2` | Pause dictation |
-| `Ctrl+Shift+3` | Finish & capture |
-| `Ctrl+Shift+4` | Paste last result |
+| `Alt+Shift+S` | Toggle dictation (start/submit) |
+| `Alt+Shift+C` | Cancel dictation |
+| `Alt+Shift+P` | Paste last result |
 
 > 💡 Customize shortcuts in `chrome://extensions/shortcuts`
 
 ## ⚙️ Settings
 
-Right-click the extension icon → **Options**
+Open the popup → **Settings**
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -105,8 +104,8 @@ EchoType/
 │   ├── options/         # Settings page
 │   └── shared/          # Shared utilities & types
 ├── tests/
-│   ├── unit/           # 86 Vitest unit tests
-│   └── e2e/            # 25 Playwright E2E tests
+│   ├── unit/           # 100 Vitest unit tests
+│   └── e2e/            # 26 Playwright E2E tests
 └── dist/               # Built extension (~38KB)
 ```
 

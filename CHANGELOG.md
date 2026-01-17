@@ -5,6 +5,70 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.14] - 2026-01-18
+
+### 🔁 Reliability
+- Persist capture origin to ensure auto-paste returns to the original tab after background processing
+- Skip auto-paste on the ChatGPT tab to avoid overwriting the composer
+
+### 🧭 UX Consistency
+- Popup settings view now fills the popup height and matches the main view layout
+- Embedded settings syncs theme/dev mode changes with the popup
+
+### 🧹 Maintenance
+- Removed generated analysis reports from version control and ignored them going forward
+
+---
+
+## [0.8.13] - 2026-01-17
+
+### 🔁 Reliability
+- Deferred submit flow now returns to the origin tab immediately, waits for processing, then briefly activates ChatGPT only for capture before returning
+- Auto copy/paste/return focus now execute on the original tab after background processing completes
+
+### 🧭 UX Consistency
+- Embedded settings view inside the popup to avoid options-page navigation
+- Unified header layout between popup and settings with shared structure and manifest-driven version labels
+- Synced theme/dev-mode changes across popup and embedded settings
+
+### 📝 Documentation
+- Updated README shortcuts, settings table, and test counts for current behavior
+
+---
+
+## [0.8.12] - 2026-01-16
+
+### 🔧 Critical Bug Fixes
+- **Fixed Dictation Root Detection** - `getDictationRoot()` now correctly finds the container element during recording state instead of returning a single button
+- **Fixed Health Check False Positives** - `performHealthCheck()` no longer reports `SELECTOR_NOT_FOUND` when composer is hidden during active dictation
+- **Added Dictation Mode Anchors** - New `getDictationModeAnchors()` function finds stop/submit buttons by aria-label when composer is replaced by wave canvas
+
+### 🔁 Reliability
+- **Enhanced Button Finder Fallback** - `findStartButton()`, `findStopButton()`, `findSubmitButton()` now fall back to document-wide search if not found in root
+- **Improved State Detection** - Status machine correctly identifies `listening`/`recording` states when wave canvas is active
+- **Background Tab DOM Capture Fix** - Tab activation now happens BEFORE text capture and returns AFTER completion, ensuring ChatGPT's DOM updates are captured correctly even when tab was inactive
+
+### 🐛 Bug Fixes
+- Fixed issue where clicking dictation button would immediately reset to idle state
+- Fixed `dictationRoot.tagName: "BUTTON"` incorrect detection during recording
+- Fixed health check blocking dictation flow due to missing composer
+
+### 🗑️ Removed
+- **Removed "Activate ChatGPT Tab" setting** - No longer needed; background execution now works seamlessly with automatic flash activation during text capture
+
+---
+
+## [0.8.11] - 2026-01-15
+
+### 🎛️ Settings
+- Added the **Activate ChatGPT Tab** toggle so the background can bring the ChatGPT tab forward before dictation, keeping the page active.
+
+### 🔁 Reliability
+- The background honors the new toggle to prevent `PAGE_INACTIVE` failures when starting dictation.
+
+### 🌐 Internationalization (i18n)
+- Added localization strings for the new option across all supported locales.
+
 ## [0.8.10] - 2026-01-11
 
 ### 🌐 Internationalization (i18n)

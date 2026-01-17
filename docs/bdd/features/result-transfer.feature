@@ -40,12 +40,12 @@ Feature: 結果轉送
   Scenario: 手動貼上最近結果
     Given 目前在任意網站的輸入框
     And 聽寫結果為 "測試文字"
-    When 按下貼上快捷鍵 "Ctrl+Shift+4"
+    When 按下貼上快捷鍵 "Alt+Shift+P"
     Then "測試文字" 應貼到目前焦點元素
 
   @paste @no-focus
   Scenario: 無焦點元素時貼上
     Given 目前頁面沒有焦點元素
-    When 按下貼上快捷鍵 "Ctrl+Shift+4"
+    When 按下貼上快捷鍵 "Alt+Shift+P"
     Then 應顯示「請先選擇輸入框」提示
     And 不應執行任何貼上動作
