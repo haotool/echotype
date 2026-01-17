@@ -35,12 +35,18 @@ interface TabManagerState {
   previousTabId: number | null;
   /** The window that was focused before switching */
   previousWindowId: number | null;
+  /** Origin tab to return to after deferred capture */
+  captureOriginTabId: number | null;
+  /** Origin window to return to after deferred capture */
+  captureOriginWindowId: number | null;
 }
 
 const state: TabManagerState = {
   chatgptTab: null,
   previousTabId: null,
   previousWindowId: null,
+  captureOriginTabId: null,
+  captureOriginWindowId: null,
 };
 
 // ============================================================================
@@ -167,15 +173,19 @@ export async function ensureChatGPTTab(
  *
  * @param tabInfo - Tab info to activate
  */
-export async function activateChatGPTTab(tabInfo: ChatGPTTabInfo): Promise<void> {
+export async function activateChatGPTTab(
+  tabInfo: ChatGPTTabInfo,
+  options: { trackPrevious?: boolean } = {}
+): Promise<void> {
   try {
+    const { trackPrevious = true } = options;
     // Store current active tab for later restoration
     const [currentTab] = await chrome.tabs.query({
       active: true,
       currentWindow: true,
     });
 
-    if (currentTab?.id && currentTab.id !== tabInfo.tabId) {
+    if (trackPrevious && currentTab?.id && currentTab.id !== tabInfo.tabId) {
       state.previousTabId = currentTab.id;
       state.previousWindowId = currentTab.windowId;
     }
@@ -211,6 +221,77 @@ export async function returnToPreviousTab(): Promise<void> {
     state.previousTabId = null;
     state.previousWindowId = null;
   }
+}
+
+/**
+ * Remember the currently active tab as the capture origin.
+ * Used to return after deferred capture completes.
+ * @param options.force - Overwrite existing origin when true.
+ */
+export async function rememberCaptureOrigin(
+  options: { force?: boolean } = {}
+): Promise<void> {
+  const { force = true } = options;
+  if (!force && state.captureOriginTabId !== null) {
+    return;
+  }
+
+  try {
+    const [currentTab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+
+    if (currentTab?.id) {
+      state.captureOriginTabId = currentTab.id;
+      state.captureOriginWindowId = currentTab.windowId ?? null;
+    }
+  } catch (error) {
+    console.warn('[EchoType] Failed to remember capture origin:', error);
+  }
+}
+
+/**
+ * Return focus to the remembered capture origin tab.
+ *
+ * @param clear - Whether to clear the stored origin after returning
+ */
+export async function returnToCaptureOrigin(clear = true): Promise<void> {
+  if (state.captureOriginTabId === null) return;
+
+  try {
+    await chrome.tabs.update(state.captureOriginTabId, { active: true });
+
+    if (state.captureOriginWindowId !== null) {
+      await chrome.windows.update(state.captureOriginWindowId, { focused: true });
+    }
+  } catch (error) {
+    console.warn('[EchoType] Could not return to capture origin:', error);
+  } finally {
+    if (clear) {
+      state.captureOriginTabId = null;
+      state.captureOriginWindowId = null;
+    }
+  }
+}
+
+/**
+ * Get the remembered capture origin.
+ */
+export function getCaptureOrigin(): { tabId: number; windowId: number | null } | null {
+  if (state.captureOriginTabId === null) return null;
+  return {
+    tabId: state.captureOriginTabId,
+    windowId: state.captureOriginWindowId,
+  };
+}
+
+/**
+ * Clear the remembered capture origin.
+ */
+export function clearCaptureOrigin(): void {
+  state.captureOriginTabId = null;
+  state.captureOriginWindowId = null;
 }
 
 /**
@@ -380,5 +461,9 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   }
   if (state.previousTabId === tabId) {
     state.previousTabId = null;
+  }
+  if (state.captureOriginTabId === tabId) {
+    state.captureOriginTabId = null;
+    state.captureOriginWindowId = null;
   }
 });

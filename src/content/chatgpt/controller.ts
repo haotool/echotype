@@ -14,7 +14,7 @@ import type {
   ClearResult,
   EchoTypeError,
 } from '@shared/types';
-import type { ResultReadyPayload, ErrorPayload, StatusChangedPayload } from '@shared/protocol';
+import type { CmdSubmitPayload, ResultReadyPayload, ErrorPayload, StatusChangedPayload } from '@shared/protocol';
 
 import {
   detectStatus,
@@ -27,7 +27,7 @@ import {
   checkLoginStatus,
   isVoiceInputAvailable,
 } from './selectors';
-import { readComposerText, captureAfterSubmit, cancelCapture } from './capture';
+import { readComposerText, captureAfterSubmit, cancelCapture, captureStableText } from './capture';
 import { computeAddedText } from './diff';
 import { clearComposerRobust } from './clear';
 
@@ -118,6 +118,7 @@ export async function startDictation(): Promise<{
     buttonClicked: boolean;
     status?: DictationStatus;
     attempts?: number;
+    visibilityState?: DocumentVisibilityState;
   };
 }> {
   console.log('[EchoType:Controller] startDictation called');
@@ -200,6 +201,7 @@ export async function startDictation(): Promise<{
 
   // Click start button with verification and fallback
   console.log('[EchoType:Controller] Clicking start button...');
+  const visibilityState = document.visibilityState;
   const strategies: Array<'direct' | 'focus' | 'mouse'> = ['direct', 'focus', 'mouse'];
   let clicked = false;
   let status: DictationStatus | null = null;
@@ -234,6 +236,7 @@ export async function startDictation(): Promise<{
         health,
         buttonClicked: false,
         attempts,
+        visibilityState,
       },
     };
   }
@@ -241,12 +244,17 @@ export async function startDictation(): Promise<{
   if (!status) {
     state.baselineText = '';
     state.isActive = false;
+    const isHidden = visibilityState === 'hidden';
     return {
       ok: false,
       error: {
-        code: 'TIMEOUT',
-        message: 'Start button click did not change status',
-        detail: 'No transition to listening/recording was detected after clicking start.',
+        code: isHidden ? 'PAGE_INACTIVE' : 'TIMEOUT',
+        message: isHidden
+          ? 'Page is inactive; dictation start may require an active tab'
+          : 'Start button click did not change status',
+        detail: isHidden
+          ? 'The ChatGPT tab is not active. Some UI actions may require an active tab or user gesture.'
+          : 'No transition to listening/recording was detected after clicking start.',
       },
       baseline: '',
       debug: {
@@ -255,6 +263,7 @@ export async function startDictation(): Promise<{
         health,
         buttonClicked: true,
         attempts,
+        visibilityState,
       },
     };
   }
@@ -271,6 +280,7 @@ export async function startDictation(): Promise<{
       buttonClicked: true,
       status,
       attempts,
+      visibilityState,
     },
   };
 }
@@ -312,7 +322,9 @@ export function pauseDictation(): { ok: boolean } {
  *
  * @returns Complete result with added text, capture info, and clear status
  */
-export async function submitDictation(): Promise<ResultReadyPayload | ErrorPayload> {
+export async function submitDictation(
+  requireChange = true
+): Promise<ResultReadyPayload | ErrorPayload> {
   // Health check
   let health = performHealthCheck();
   const submitAvailable = buttonExists('submit') || buttonExists('stop');
@@ -340,7 +352,9 @@ export async function submitDictation(): Promise<ResultReadyPayload | ErrorPaylo
   }
 
   // Capture stable text after submit
-  const capture: CaptureResult = await captureAfterSubmit(preSubmitText);
+  const capture: CaptureResult = await captureAfterSubmit(preSubmitText, {
+    requireChange,
+  });
 
   const finalText = normalizeText(capture.text);
   const addedText = computeAddedText(state.baselineText, finalText);
@@ -354,6 +368,69 @@ export async function submitDictation(): Promise<ResultReadyPayload | ErrorPaylo
   state.lastStatus = 'idle';
 
   // Notify background of status change to idle (critical for state sync)
+  try {
+    chrome.runtime.sendMessage(createMessage.statusChanged('idle')).catch(() => {
+      // Ignore if background is not available
+    });
+  } catch {
+    // Extension context may be invalidated
+  }
+
+  return createMessage.resultReady(addedText, finalText, capture, clear);
+}
+
+/**
+ * Submit dictation without capturing text.
+ * Used for deferred capture workflows.
+ */
+export async function submitOnlyDictation(): Promise<StatusChangedPayload | ErrorPayload> {
+  // Health check
+  let health = performHealthCheck();
+  const submitAvailable = buttonExists('submit') || buttonExists('stop');
+  if (!health.healthy && health.missing.includes('composer')) {
+    if (!submitAvailable) {
+      await waitForComposer();
+      health = performHealthCheck();
+    }
+  }
+  if (!health.healthy && !submitAvailable) {
+    return createMessage.error(health.error!);
+  }
+
+  const clicked = clickSubmitButton();
+  if (!clicked) {
+    return createMessage.error({
+      code: 'SELECTOR_NOT_FOUND',
+      message: 'Could not find submit button',
+    });
+  }
+
+  state.lastStatus = 'processing';
+  return createMessage.statusChanged('processing');
+}
+
+/**
+ * Capture the current dictation result without clicking submit.
+ * Intended for deferred capture after processing completes.
+ */
+export async function captureOnlyDictation(
+  requireChange = false
+): Promise<ResultReadyPayload | ErrorPayload> {
+  const preCaptureText = readComposerText();
+  const capture: CaptureResult = await captureStableText(preCaptureText, {
+    requireChange,
+    timeout: requireChange ? 9000 : 3200,
+  });
+
+  const finalText = normalizeText(capture.text);
+  const addedText = computeAddedText(state.baselineText, finalText);
+
+  const clear: ClearResult = await clearComposerRobust();
+
+  state.baselineText = '';
+  state.isActive = false;
+  state.lastStatus = 'idle';
+
   try {
     chrome.runtime.sendMessage(createMessage.statusChanged('idle')).catch(() => {
       // Ignore if background is not available
@@ -410,7 +487,19 @@ export async function handleCommand(
     }
 
     case MSG.CMD_SUBMIT: {
-      const result = await submitDictation();
+      const submitMessage = message as CmdSubmitPayload;
+      const mode = submitMessage.mode ?? 'submit-and-capture';
+      if (mode === 'submit-only') {
+        const result = await submitOnlyDictation();
+        sendResponse(result);
+        break;
+      }
+      if (mode === 'capture-only') {
+        const result = await captureOnlyDictation(submitMessage.requireChange ?? false);
+        sendResponse(result);
+        break;
+      }
+      const result = await submitDictation(submitMessage.requireChange ?? true);
       sendResponse(result);
       break;
     }

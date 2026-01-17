@@ -23,6 +23,11 @@ import {
   getCurrentTab,
   getChatGPTTabInfo,
   waitForTabComplete,
+  activateChatGPTTab,
+  rememberCaptureOrigin,
+  getCaptureOrigin,
+  returnToCaptureOrigin,
+  clearCaptureOrigin,
 } from './tab-manager';
 import { writeToClipboard } from './offscreen-bridge';
 import { addToHistory, loadHistory, getLastHistoryItem } from './history';
@@ -98,6 +103,8 @@ function canPlayAudio(): boolean {
   return currentSettings.audioFeedbackEnabled;
 }
 
+let submitInFlight = false;
+
 // ============================================================================
 // Dictation Status Management (Persistent via chrome.storage.session)
 // ============================================================================
@@ -128,6 +135,8 @@ function isValidTransition(
   return STATUS_TRANSITIONS[from]?.includes(to) ?? false;
 }
 
+const statusListeners = new Set<(status: DictationStatusType) => void>();
+
 async function setStatusAndNotify(status: DictationStatusType): Promise<void> {
   if (currentDictationStatus === status) {
     return;
@@ -135,6 +144,38 @@ async function setStatusAndNotify(status: DictationStatusType): Promise<void> {
   await setDictationStatus(status);
   await updateBadge(status);
   notifyStatusChange(createMessage.statusChanged(status));
+  for (const listener of statusListeners) {
+    try {
+      listener(status);
+    } catch (error) {
+      console.warn('[EchoType] Status listener error:', error);
+    }
+  }
+}
+
+async function waitForStatus(
+  expected: DictationStatusType[],
+  timeoutMs: number
+): Promise<DictationStatusType | null> {
+  if (expected.includes(currentDictationStatus)) {
+    return currentDictationStatus;
+  }
+
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      statusListeners.delete(onStatus);
+      resolve(null);
+    }, timeoutMs);
+
+    const onStatus = (status: DictationStatusType) => {
+      if (!expected.includes(status)) return;
+      clearTimeout(timeout);
+      statusListeners.delete(onStatus);
+      resolve(status);
+    };
+
+    statusListeners.add(onStatus);
+  });
 }
 
 let resyncInFlight = false;
@@ -203,6 +244,25 @@ function isValidStatus(status: unknown): status is DictationStatusType {
   return typeof status === 'string' && VALID_STATUSES.includes(status as DictationStatusType);
 }
 
+async function waitForProcessingCompletion(
+  timeoutMs = 14000
+): Promise<DictationStatusType | null> {
+  const status = await waitForStatus(['idle', 'error'], timeoutMs);
+  if (status) {
+    return status;
+  }
+
+  const resynced = await requestStatusResync('processing-timeout');
+  if (resynced) {
+    await applyIncomingStatus(resynced, 'processing-resync');
+    if (resynced === 'idle' || resynced === 'error') {
+      return resynced;
+    }
+  }
+
+  return null;
+}
+
 /**
  * Get dictation status from persistent storage.
  * Service Workers are ephemeral - global variables can be reset on termination.
@@ -268,8 +328,8 @@ onSettingsChange((settings) => {
 async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
   console.log('[EchoType] Start dictation command');
 
-  // Ensure ChatGPT tab exists and is active
-  const tabInfo = await ensureChatGPTTab(true);
+  // Ensure ChatGPT tab exists (activation optional based on settings)
+  const tabInfo = await ensureChatGPTTab(false);
   if (!tabInfo) {
     console.error('[EchoType] Failed to get ChatGPT tab');
     await setStatusAndNotify('error');
@@ -326,10 +386,25 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
     };
   }
 
+  await rememberCaptureOrigin({ force: true });
+
+  const shouldActivateForStart = currentSettings.returnFocusAfterStart;
+  if (shouldActivateForStart) {
+    await activateChatGPTTab(tabInfo, { trackPrevious: true });
+  }
+
   // Send start command with retry logic (handled by sendToChatGPTTab)
-  const result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError; status?: DictationStatusType }>(
+  let result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError; status?: DictationStatusType }>(
     createMessage.cmdStart('snapshot')
   );
+
+  if (!result?.ok && result?.error?.code === 'PAGE_INACTIVE' && !shouldActivateForStart) {
+    console.warn('[EchoType] Page inactive, activating tab and retrying start');
+    await activateChatGPTTab(tabInfo, { trackPrevious: false });
+    result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError; status?: DictationStatusType }>(
+      createMessage.cmdStart('snapshot')
+    );
+  }
 
   if (result?.ok) {
     console.log('[EchoType] Dictation started successfully');
@@ -340,7 +415,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
     }
 
     // Return to previous tab if setting enabled
-    if (currentSettings.returnFocusAfterStart) {
+    if (currentSettings.returnFocusAfterStart && shouldActivateForStart) {
       await returnToPreviousTab();
     }
     return result;
@@ -350,6 +425,10 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
     await setStatusAndNotify('error');
     if (canPlayAudio()) {
       await playErrorSound();
+    }
+    clearCaptureOrigin();
+    if (shouldActivateForStart) {
+      await returnToPreviousTab();
     }
     return {
       ok: false,
@@ -397,6 +476,7 @@ async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeE
   if (result?.ok) {
     console.log('[EchoType] Dictation paused');
     await setStatusAndNotify('idle');
+    clearCaptureOrigin();
     return { ok: true };
   }
   await setStatusAndNotify('error');
@@ -411,97 +491,203 @@ async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeE
 
 /**
  * Handle the submit-dictation command.
+ *
+ * Flow: submit in ChatGPT tab, return immediately, wait for processing,
+ * then activate briefly to capture results and return to origin.
  */
 async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayload> {
-  console.log('[EchoType] Submit dictation command');
-  await setStatusAndNotify('processing');
-
-  const tabInfo = await ensureChatGPTTab(false);
-  if (!tabInfo) {
-    return createMessage.error({
-      code: 'TAB_NOT_FOUND',
-      message: 'No ChatGPT tab available',
-    });
-  }
-
-  const ready = await waitForTabComplete(tabInfo.tabId);
-  if (ready) {
-    await ensureChatGPTContentScript(tabInfo.tabId);
-  }
-
-  let result = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
-    createMessage.cmdSubmit(true)
-  );
-  if (!result && ready) {
-    await ensureChatGPTContentScript(tabInfo.tabId);
-    result = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
-      createMessage.cmdSubmit(true)
-    );
-  }
-
-  if (!result) {
-    console.error('[EchoType] No response from ChatGPT tab');
+  if (submitInFlight) {
     return createMessage.error({
       code: 'UNKNOWN_ERROR',
-      message: 'No response from ChatGPT tab',
+      message: 'Dictation submit already in progress.',
     });
   }
 
-  if (result.type === MSG.ERROR) {
-    console.error('[EchoType] Dictation error:', result.error);
-    await setStatusAndNotify('error');
-    if (canPlayAudio()) {
-      await playErrorSound();
+  submitInFlight = true;
+  let originCleared = false;
+  let needsReturn = false;
+  let captureOrigin = null as { tabId: number; windowId: number | null } | null;
+  let pasteTargetTabId: number | null = null;
+
+  try {
+    console.log('[EchoType] Submit dictation command');
+    await setStatusAndNotify('processing');
+
+    const tabInfo = await ensureChatGPTTab(false);
+    if (!tabInfo) {
+      return createMessage.error({
+        code: 'TAB_NOT_FOUND',
+        message: 'No ChatGPT tab available',
+      });
     }
-    return result;
-  }
 
-  if (result.type === MSG.RESULT_READY) {
-    const { addedText, capture, clear } = result;
+    const ready = await waitForTabComplete(tabInfo.tabId);
+    if (ready) {
+      await ensureChatGPTContentScript(tabInfo.tabId);
+    }
 
-    console.log('[EchoType] Dictation result:', {
-      addedTextLength: addedText.length,
-      captureReason: capture.reason,
-      clearOk: clear.ok,
-    });
+    await rememberCaptureOrigin({ force: false });
+    captureOrigin = getCaptureOrigin();
+    pasteTargetTabId = captureOrigin?.tabId ?? null;
+    needsReturn = Boolean(captureOrigin && captureOrigin.tabId !== tabInfo.tabId);
 
-    // CRITICAL: Reset dictation status to idle after successful submit
-    // Use setDictationStatus to persist to storage (survives SW termination)
-    await setStatusAndNotify('idle');
+    if (needsReturn) {
+      await activateChatGPTTab(tabInfo, { trackPrevious: false });
+    }
 
-    // Only process if we have added text
-    if (addedText) {
-      // Add to history
-      const historyItem = await addToHistory(addedText);
-      await showSuccessBadge();
+    let submitAck = await sendToChatGPTTab<StatusChangedPayload | ErrorPayload>(
+      createMessage.cmdSubmit({ mode: 'submit-only' })
+    );
+
+    if (!submitAck && ready) {
+      await ensureChatGPTContentScript(tabInfo.tabId);
+      submitAck = await sendToChatGPTTab<StatusChangedPayload | ErrorPayload>(
+        createMessage.cmdSubmit({ mode: 'submit-only' })
+      );
+    }
+
+    if (!submitAck) {
+      console.error('[EchoType] No response from ChatGPT tab (submit)');
+      if (needsReturn) {
+        await returnToCaptureOrigin(true);
+        originCleared = true;
+      }
+      return createMessage.error({
+        code: 'UNKNOWN_ERROR',
+        message: 'No response from ChatGPT tab',
+      });
+    }
+
+    if (submitAck.type === MSG.ERROR) {
+      console.error('[EchoType] Submit error:', submitAck.error);
+      await setStatusAndNotify('error');
       if (canPlayAudio()) {
-        await playSuccessSound();
+        await playErrorSound();
+      }
+      if (needsReturn) {
+        await returnToCaptureOrigin(true);
+        originCleared = true;
+      }
+      return submitAck;
+    }
+
+    if (submitAck.type === MSG.STATUS_CHANGED) {
+      await applyIncomingStatus(submitAck.status as DictationStatusType, 'submit-ack');
+    }
+
+    if (needsReturn) {
+      await returnToCaptureOrigin(false);
+    }
+
+    const completionStatus = await waitForProcessingCompletion();
+    if (completionStatus === 'error') {
+      await setStatusAndNotify('error');
+      if (canPlayAudio()) {
+        await playErrorSound();
+      }
+      if (needsReturn) {
+        await returnToCaptureOrigin(true);
+        originCleared = true;
+      }
+      return createMessage.error({
+        code: 'UNKNOWN_ERROR',
+        message: 'Dictation processing failed.',
+      });
+    }
+    if (!completionStatus) {
+      console.warn('[EchoType] Processing completion timeout, capturing anyway');
+    }
+
+    if (needsReturn) {
+      await activateChatGPTTab(tabInfo, { trackPrevious: false });
+    }
+
+    const captureResult = await sendToChatGPTTab<ResultReadyPayload | ErrorPayload>(
+      createMessage.cmdSubmit({
+        mode: 'capture-only',
+        requireChange: completionStatus !== 'idle',
+      })
+    );
+
+    if (needsReturn) {
+      await returnToCaptureOrigin(true);
+      originCleared = true;
+    } else {
+      clearCaptureOrigin();
+      originCleared = true;
+    }
+
+    if (!captureResult) {
+      console.error('[EchoType] No response from ChatGPT tab (capture)');
+      return createMessage.error({
+        code: 'UNKNOWN_ERROR',
+        message: 'No response from ChatGPT tab',
+      });
+    }
+
+    if (captureResult.type === MSG.ERROR) {
+      console.error('[EchoType] Dictation error:', captureResult.error);
+      await setStatusAndNotify('error');
+      if (canPlayAudio()) {
+        await playErrorSound();
+      }
+      return captureResult;
+    }
+
+    if (captureResult.type === MSG.RESULT_READY) {
+      const { addedText, capture, clear } = captureResult;
+
+      console.log('[EchoType] Dictation result:', {
+        addedTextLength: addedText.length,
+        captureReason: capture.reason,
+        clearOk: clear.ok,
+      });
+
+      await setStatusAndNotify('idle');
+
+      if (addedText) {
+        const historyItem = await addToHistory(addedText);
+        await showSuccessBadge();
+        if (canPlayAudio()) {
+          await playSuccessSound();
+        }
+
+        if (currentSettings.autoCopyToClipboard) {
+          const copied = await writeToClipboard(addedText);
+          console.log('[EchoType] Auto-copied to clipboard:', copied);
+        }
+
+        broadcastResult(addedText, historyItem);
+
+        if (currentSettings.autoPasteToActiveTab) {
+          if (needsReturn && !originCleared) {
+            await returnToCaptureOrigin(true);
+            originCleared = true;
+          }
+          await handlePasteLastResult(pasteTargetTabId ?? undefined);
+        }
       }
 
-      // Auto-copy to clipboard if enabled
-      if (currentSettings.autoCopyToClipboard) {
-        const copied = await writeToClipboard(addedText);
-        console.log('[EchoType] Auto-copied to clipboard:', copied);
-      }
+      return captureResult;
+    }
 
-      // Broadcast result to universal content scripts
-      broadcastResult(addedText, historyItem);
-
-      // Auto-paste if enabled
-      if (currentSettings.autoPasteToActiveTab) {
-        await returnToPreviousTab();
-        await handlePasteLastResult();
+    return captureResult;
+  } finally {
+    submitInFlight = false;
+    if (!originCleared) {
+      if (needsReturn) {
+        await returnToCaptureOrigin(true);
+      } else {
+        clearCaptureOrigin();
       }
     }
-    return result;
   }
-  return result;
 }
 
 /**
  * Handle the paste-last-result command.
  */
-async function handlePasteLastResult(): Promise<void> {
+async function handlePasteLastResult(targetTabId?: number): Promise<void> {
   console.log('[EchoType] Paste last result command');
 
   const lastItem = await getLastHistoryItem();
@@ -510,15 +696,21 @@ async function handlePasteLastResult(): Promise<void> {
     return;
   }
 
-  const currentTabId = await getCurrentTab();
-  if (!currentTabId) {
+  const tabId = targetTabId ?? await getCurrentTab();
+  if (!tabId) {
     console.log('[EchoType] No active tab');
     return;
   }
 
-  // Send paste command to current tab
+  const chatgptTab = getChatGPTTabInfo();
+  if (chatgptTab?.tabId === tabId) {
+    console.log('[EchoType] Skipping auto paste into ChatGPT tab');
+    return;
+  }
+
+  // Send paste command to target tab
   try {
-    await chrome.tabs.sendMessage(currentTabId, createMessage.pasteText(lastItem.text));
+    await chrome.tabs.sendMessage(tabId, createMessage.pasteText(lastItem.text));
     console.log('[EchoType] Paste command sent');
   } catch (error) {
     console.error('[EchoType] Failed to send paste command:', error);

@@ -83,8 +83,10 @@ export interface CmdPausePayload {
 
 export interface CmdSubmitPayload {
   type: typeof MSG.CMD_SUBMIT;
+  /** Submit behavior mode */
+  mode?: 'submit-and-capture' | 'submit-only' | 'capture-only';
   /** Require content change before capturing */
-  requireChange: boolean;
+  requireChange?: boolean;
 }
 
 export interface CmdGetStatusPayload {
@@ -257,10 +259,23 @@ export const createMessage = {
     type: MSG.CMD_PAUSE,
   }),
 
-  cmdSubmit: (requireChange = true): CmdSubmitPayload => ({
-    type: MSG.CMD_SUBMIT,
-    requireChange,
-  }),
+  cmdSubmit: (
+    options: boolean | { mode?: CmdSubmitPayload['mode']; requireChange?: boolean } = true
+  ): CmdSubmitPayload => {
+    if (typeof options === 'boolean') {
+      return {
+        type: MSG.CMD_SUBMIT,
+        mode: 'submit-and-capture',
+        requireChange: options,
+      };
+    }
+
+    return {
+      type: MSG.CMD_SUBMIT,
+      mode: options.mode ?? 'submit-and-capture',
+      requireChange: options.requireChange ?? true,
+    };
+  },
 
   cmdGetStatus: (): CmdGetStatusPayload => ({
     type: MSG.CMD_GET_STATUS,

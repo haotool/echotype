@@ -19,12 +19,21 @@ import type {
 // Don't log on every page to avoid noise
 // console.log('[EchoType] Universal content script loaded');
 
-// ============================================================================
+// ============================================================================ 
 // State
 // ============================================================================
 
 /** The most recent result received via broadcast */
 let lastBroadcastedResult: string | null = null;
+
+interface FocusState {
+  element: HTMLElement;
+  selectionStart?: number;
+  selectionEnd?: number;
+  range?: Range;
+}
+
+let lastFocusState: FocusState | null = null;
 
 // ============================================================================
 // Focus Detection
@@ -35,35 +44,48 @@ let lastBroadcastedResult: string | null = null;
  *
  * @returns The focused element or null
  */
-function getFocusedEditableElement(): HTMLElement | null {
-  const activeElement = document.activeElement;
-
-  if (!activeElement || activeElement === document.body) {
-    return null;
+function isEditableElement(element: Element | null): element is HTMLElement {
+  if (!element) {
+    return false;
   }
 
-  // Check for input/textarea
-  if (
-    activeElement instanceof HTMLInputElement ||
-    activeElement instanceof HTMLTextAreaElement
-  ) {
-    // Skip non-text inputs
-    if (activeElement instanceof HTMLInputElement) {
-      const type = activeElement.type.toLowerCase();
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    if (element instanceof HTMLInputElement) {
+      const type = element.type.toLowerCase();
       const textTypes = ['text', 'search', 'url', 'email', 'tel', 'password', ''];
       if (!textTypes.includes(type)) {
-        return null;
+        return false;
       }
     }
+    return true;
+  }
+
+  return element instanceof HTMLElement && element.isContentEditable;
+}
+
+function recordFocusState(element: HTMLElement): void {
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    const selectionStart = element.selectionStart ?? element.value.length;
+    const selectionEnd = element.selectionEnd ?? element.value.length;
+    lastFocusState = { element, selectionStart, selectionEnd };
+    return;
+  }
+
+  if (element.isContentEditable) {
+    const selection = window.getSelection();
+    const range = selection && selection.rangeCount > 0 ? selection.getRangeAt(0).cloneRange() : undefined;
+    lastFocusState = { element, range };
+  }
+}
+
+function getFocusedEditableElement(): HTMLElement | null {
+  const activeElement = document.activeElement;
+  if (isEditableElement(activeElement)) {
     return activeElement;
   }
 
-  // Check for contenteditable
-  if (
-    activeElement instanceof HTMLElement &&
-    activeElement.isContentEditable
-  ) {
-    return activeElement;
+  if (lastFocusState?.element && document.contains(lastFocusState.element) && isEditableElement(lastFocusState.element)) {
+    return lastFocusState.element;
   }
 
   return null;
@@ -107,8 +129,6 @@ function pasteIntoInput(
  * @param text - Text to paste
  */
 function pasteIntoContentEditable(element: HTMLElement, text: string): void {
-  element.focus();
-
   // Use execCommand for better compatibility with editors
   const success = document.execCommand('insertText', false, text);
 
@@ -148,15 +168,31 @@ function pasteIntoFocusedElement(text: string): boolean {
     return false;
   }
 
+  if (element !== document.activeElement) {
+    element.focus();
+  }
+
   if (
     element instanceof HTMLInputElement ||
     element instanceof HTMLTextAreaElement
   ) {
+    if (lastFocusState?.element === element) {
+      const start = lastFocusState.selectionStart ?? element.selectionStart ?? element.value.length;
+      const end = lastFocusState.selectionEnd ?? element.selectionEnd ?? element.value.length;
+      element.setSelectionRange(start, end);
+    }
     pasteIntoInput(element, text);
     return true;
   }
 
   if (element.isContentEditable) {
+    if (lastFocusState?.element === element && lastFocusState.range) {
+      const selection = window.getSelection();
+      if (selection && document.contains(lastFocusState.range.commonAncestorContainer)) {
+        selection.removeAllRanges();
+        selection.addRange(lastFocusState.range);
+      }
+    }
     pasteIntoContentEditable(element, text);
     return true;
   }
@@ -200,6 +236,21 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   }
 
   return false;
+});
+
+// Track last focused editable element for paste-after-return flows
+document.addEventListener('focusin', (event) => {
+  const target = event.target as Element | null;
+  if (isEditableElement(target)) {
+    recordFocusState(target);
+  }
+});
+
+document.addEventListener('selectionchange', () => {
+  const active = document.activeElement;
+  if (isEditableElement(active)) {
+    recordFocusState(active);
+  }
 });
 
 // ============================================================================

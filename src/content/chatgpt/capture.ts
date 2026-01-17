@@ -185,6 +185,7 @@ export async function captureAfterSubmit(
   preSubmitText: string,
   config: Partial<CaptureConfig> = {}
 ): Promise<CaptureResult> {
+  const requireChange = config.requireChange ?? true;
   // First, quickly wait for a change signal
   // This prevents declaring stable on unchanged content
   await Promise.race([
@@ -197,6 +198,6 @@ export async function captureAfterSubmit(
   // Now do the full stable capture
   return captureStableText(preSubmitText, {
     ...config,
-    requireChange: true,
+    requireChange,
   });
 }

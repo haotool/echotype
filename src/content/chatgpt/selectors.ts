@@ -352,6 +352,123 @@ export function getComposerElement(): HTMLElement | null {
   return null;
 }
 
+function getDictationAnchors(): Element[] {
+  const anchors: Element[] = [];
+  const composer = getComposerElement();
+  if (composer) anchors.push(composer);
+
+  const plusButton = document.querySelector('button[data-testid="composer-plus-btn"]');
+  if (plusButton) anchors.push(plusButton);
+
+  const sendButton =
+    document.querySelector('button[data-testid="send-button"]') ||
+    document.querySelector('#composer-submit-button');
+  if (sendButton) anchors.push(sendButton);
+
+  return anchors;
+}
+
+/**
+ * Find anchors for dictation mode (when composer is replaced by wave canvas).
+ * Looks for stop/submit buttons by aria-label.
+ */
+function getDictationModeAnchors(): Element[] {
+  const anchors: Element[] = [];
+  
+  // Find stop button by aria-label
+  for (const label of DICTATION_LABELS.stop) {
+    const stopBtn = document.querySelector(`button[aria-label="${label}"]`);
+    if (stopBtn) {
+      anchors.push(stopBtn);
+      break;
+    }
+  }
+  
+  // Find submit button by aria-label
+  for (const label of DICTATION_LABELS.submit) {
+    const submitBtn = document.querySelector(`button[aria-label="${label}"]`);
+    if (submitBtn) {
+      anchors.push(submitBtn);
+      break;
+    }
+  }
+  
+  // Also look for canvas (wave visualization)
+  const canvas = document.querySelector('main canvas');
+  if (canvas) anchors.push(canvas);
+  
+  return anchors;
+}
+
+function getAncestors(el: Element): Element[] {
+  const ancestors: Element[] = [];
+  let current: Element | null = el;
+  while (current) {
+    ancestors.push(current);
+    current = current.parentElement;
+  }
+  return ancestors;
+}
+
+function findLowestCommonAncestor(anchors: Element[]): HTMLElement | null {
+  if (!anchors.length) return null;
+
+  const ancestorLists = anchors.map(getAncestors);
+  for (const candidate of ancestorLists[0]) {
+    if (ancestorLists.every((list) => list.includes(candidate))) {
+      return candidate as HTMLElement;
+    }
+  }
+
+  const fallback =
+    anchors[0].closest('form') ??
+    anchors[0].closest('[role="group"]') ??
+    anchors[0].parentElement;
+  return fallback instanceof HTMLElement ? fallback : null;
+}
+
+function getDictationRoot(): HTMLElement | null {
+  // First try normal anchors (composer, plus, send buttons)
+  const normalAnchors = getDictationAnchors();
+  if (normalAnchors.length > 0) {
+    const root = findLowestCommonAncestor(normalAnchors);
+    // Validate root is not a single button (too narrow scope)
+    if (root && root.tagName !== 'BUTTON') {
+      return root;
+    }
+  }
+  
+  // Fallback: try dictation mode anchors (stop, submit, canvas)
+  const dictationAnchors = getDictationModeAnchors();
+  if (dictationAnchors.length > 0) {
+    const root = findLowestCommonAncestor(dictationAnchors);
+    // Validate root is not a single button
+    if (root && root.tagName !== 'BUTTON') {
+      return root;
+    }
+    // If we only found one anchor, go up to find a suitable container
+    if (dictationAnchors.length === 1) {
+      const anchor = dictationAnchors[0];
+      // Look for a form or main container
+      const container = anchor.closest('form') ?? 
+                       anchor.closest('[role="group"]') ?? 
+                       anchor.closest('main') ??
+                       anchor.parentElement?.parentElement;
+      if (container instanceof HTMLElement) {
+        return container;
+      }
+    }
+  }
+  
+  // Last resort: find the main content area
+  const main = document.querySelector('main');
+  if (main instanceof HTMLElement) {
+    return main;
+  }
+  
+  return null;
+}
+
 /**
  * Read text content from the composer.
  *
@@ -403,25 +520,64 @@ export async function waitForComposer(timeoutMs = 3000): Promise<boolean> {
 /**
  * Find the start dictation button.
  */
-export function findStartButton(): HTMLButtonElement | null {
-  const el = $(SELECTORS.startBtn);
-  return el instanceof HTMLButtonElement ? el : null;
+export function findStartButton(root: Element | null = getDictationRoot()): HTMLButtonElement | null {
+  // Try with provided root first
+  let btn = findVisibleButton(SELECTORS.startBtn, {
+    root,
+    preferredLabels: DICTATION_LABELS.start,
+  });
+  
+  // Fallback: search entire document if not found in root
+  if (!btn) {
+    btn = findVisibleButton(SELECTORS.startBtn, {
+      root: null, // null means search entire document
+      preferredLabels: DICTATION_LABELS.start,
+    });
+  }
+  
+  return btn;
 }
 
 /**
  * Find the stop dictation button.
  */
-export function findStopButton(): HTMLButtonElement | null {
-  const el = $(SELECTORS.stopBtn);
-  return el instanceof HTMLButtonElement ? el : null;
+export function findStopButton(root: Element | null = getDictationRoot()): HTMLButtonElement | null {
+  // Try with provided root first
+  let btn = findVisibleButton(SELECTORS.stopBtn, {
+    root,
+    preferredLabels: DICTATION_LABELS.stop,
+  });
+  
+  // Fallback: search entire document if not found in root
+  if (!btn) {
+    btn = findVisibleButton(SELECTORS.stopBtn, {
+      root: null, // null means search entire document
+      preferredLabels: DICTATION_LABELS.stop,
+    });
+  }
+  
+  return btn;
 }
 
 /**
  * Find the submit dictation button.
  */
-export function findSubmitButton(): HTMLButtonElement | null {
-  const el = $(SELECTORS.submitBtn);
-  return el instanceof HTMLButtonElement ? el : null;
+export function findSubmitButton(root: Element | null = getDictationRoot()): HTMLButtonElement | null {
+  // Try with provided root first
+  let btn = findVisibleButton(SELECTORS.submitBtn, {
+    root,
+    preferredLabels: DICTATION_LABELS.submit,
+  });
+  
+  // Fallback: search entire document if not found in root
+  if (!btn) {
+    btn = findVisibleButton(SELECTORS.submitBtn, {
+      root: null, // null means search entire document
+      preferredLabels: DICTATION_LABELS.submit,
+    });
+  }
+  
+  return btn;
 }
 
 // ============================================================================
@@ -434,10 +590,16 @@ export function findSubmitButton(): HTMLButtonElement | null {
  * @returns Current status
  */
 export function detectStatus(): DictationStatus {
-  if (isProcessingState()) return 'processing';
-  if (findStopButton()) return 'listening';
-  if (findSubmitButton()) return 'recording';
-  if (findStartButton()) return 'idle';
+  const root = getDictationRoot();
+  const composer = getComposerElement();
+  const waveformActive = root ? Boolean(root.querySelector('canvas')) : false;
+  const stopBtn = findStopButton(root);
+  const submitBtn = findSubmitButton(root);
+
+  if (isProcessingState(stopBtn, submitBtn)) return 'processing';
+  if (stopBtn && (waveformActive || !composer)) return 'listening';
+  if (submitBtn && (waveformActive || !composer)) return 'recording';
+  if (findStartButton(root)) return 'idle';
   return 'unknown';
 }
 
@@ -448,13 +610,14 @@ export function detectStatus(): DictationStatus {
  * @returns True if button exists
  */
 export function buttonExists(type: 'start' | 'stop' | 'submit'): boolean {
+  const root = getDictationRoot();
   switch (type) {
     case 'start':
-      return Boolean(findStartButton());
+      return Boolean(findStartButton(root));
     case 'stop':
-      return Boolean(findStopButton());
+      return Boolean(findStopButton(root));
     case 'submit':
-      return Boolean(findSubmitButton());
+      return Boolean(findSubmitButton(root));
     default:
       return false;
   }
@@ -488,15 +651,19 @@ export function performHealthCheck(): HealthCheckResult {
   const warnings: string[] = [];
 
   const composerFound = Boolean(getComposerElement());
-  const startBtnFound = Boolean(findStartButton());
-  const stopBtnFound = Boolean(findStopButton());
-  const submitBtnFound = Boolean(findSubmitButton());
-  const dictationControlsFound = stopBtnFound || submitBtnFound;
-
-  // Check composer (required)
-  if (!composerFound) {
-    missing.push('composer');
-  }
+  const dictationRoot = getDictationRoot();
+  const waveformActive = dictationRoot ? Boolean(dictationRoot.querySelector('canvas')) : false;
+  const startBtnFound = Boolean(findStartButton(dictationRoot));
+  const stopBtnFound = Boolean(findStopButton(dictationRoot));
+  const submitBtnFound = Boolean(findSubmitButton(dictationRoot));
+  
+  // Dictation is active if we have stop/submit buttons (regardless of composer state)
+  const dictationActive = stopBtnFound || submitBtnFound;
+  
+  // Dictation controls are valid when we have the buttons AND either:
+  // 1. Waveform canvas is visible, OR
+  // 2. Composer is hidden (replaced by wave UI)
+  const dictationControlsValid = dictationActive && (waveformActive || !composerFound);
 
   // Check for dictation buttons
   // Note: Only start OR stop button needs to be present (not both)
@@ -510,14 +677,22 @@ export function performHealthCheck(): HealthCheckResult {
     warnings.push('dictation buttons not found (login may be required)');
   }
 
-  // If dictation is active, composer may be replaced by waveform canvas.
-  // Consider health OK when dictation controls are present.
-  if (!composerFound && dictationControlsFound) {
-    warnings.push('composer hidden during dictation');
+  // Determine health status:
+  // - Healthy if composer is found (idle state)
+  // - Healthy if dictation controls are valid (recording state)
+  // - Healthy if we're in dictation mode (stop/submit found, even without composer)
+  const healthy = composerFound || dictationControlsValid || dictationActive;
+
+  // Only add composer to missing if we're NOT in dictation mode
+  if (!composerFound && !dictationActive) {
+    missing.push('composer');
   }
 
-  // For MVP, we require composer unless dictation controls indicate active dictation
-  const healthy = composerFound || dictationControlsFound;
+  // If dictation is active, composer may be replaced by waveform canvas.
+  // This is expected behavior, not an error.
+  if (!composerFound && dictationActive) {
+    warnings.push('composer hidden during dictation (expected)');
+  }
 
   return {
     healthy,
@@ -718,6 +893,62 @@ function isButtonDisabled(el: HTMLButtonElement | null): boolean {
   return el.disabled || el.getAttribute('aria-disabled') === 'true';
 }
 
+function isElementVisible(el: Element): boolean {
+  const rect = el.getBoundingClientRect();
+  if (rect.width === 0 && rect.height === 0) {
+    return false;
+  }
+
+  const style = window.getComputedStyle(el);
+  if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+    return false;
+  }
+
+  if (el.getAttribute('aria-hidden') === 'true') {
+    return false;
+  }
+
+  if (el.closest('[aria-hidden="true"]')) {
+    return false;
+  }
+
+  return true;
+}
+
+function findVisibleButton(
+  selector: string,
+  options?: {
+    root?: Element | null;
+    preferredLabels?: readonly string[];
+  }
+): HTMLButtonElement | null {
+  const scope = options?.root ?? document;
+  const elements = scope.querySelectorAll(selector);
+  const visibleButtons: HTMLButtonElement[] = [];
+
+  for (const el of elements) {
+    if (el instanceof HTMLButtonElement && isElementVisible(el)) {
+      visibleButtons.push(el);
+    }
+  }
+
+  if (!visibleButtons.length) {
+    return null;
+  }
+
+  if (options?.preferredLabels?.length) {
+    const preferred = visibleButtons.find((btn) => {
+      const label = btn.getAttribute('aria-label') ?? '';
+      return options.preferredLabels?.includes(label);
+    });
+    if (preferred) {
+      return preferred;
+    }
+  }
+
+  return visibleButtons[0] ?? null;
+}
+
 function hasProcessingSpinner(root: Element | null): boolean {
   if (!root) return false;
   if (root.querySelector(PROCESSING_SPINNER_SELECTOR)) return true;
@@ -729,10 +960,10 @@ function hasProcessingSpinner(root: Element | null): boolean {
   );
 }
 
-function isProcessingState(): boolean {
-  const stopBtn = findStopButton();
-  const submitBtn = findSubmitButton();
-
+function isProcessingState(
+  stopBtn: HTMLButtonElement | null,
+  submitBtn: HTMLButtonElement | null
+): boolean {
   if (isButtonDisabled(stopBtn) || isButtonDisabled(submitBtn)) {
     return true;
   }
@@ -795,6 +1026,11 @@ export interface DiagnosticInfo {
   timestamp: string;
   url: string;
   readyState: string;
+  dictationRoot: {
+    found: boolean;
+    tagName?: string;
+    className?: string;
+  };
   buttons: {
     start: { found: boolean; selector: string; element?: string; disabled?: boolean };
     stop: { found: boolean; selector: string; element?: string; disabled?: boolean };
@@ -831,15 +1067,21 @@ export function getDiagnosticInfo(): DiagnosticInfo {
     }
   });
 
-  const startBtn = findStartButton();
-  const stopBtn = findStopButton();
-  const submitBtn = findSubmitButton();
+  const dictationRoot = getDictationRoot();
+  const startBtn = findStartButton(dictationRoot);
+  const stopBtn = findStopButton(dictationRoot);
+  const submitBtn = findSubmitButton(dictationRoot);
   const composer = getComposerElement();
 
   return {
     timestamp: new Date().toISOString(),
     url: location.href,
     readyState: document.readyState,
+    dictationRoot: {
+      found: Boolean(dictationRoot),
+      tagName: dictationRoot?.tagName,
+      className: dictationRoot?.className,
+    },
     buttons: {
       start: {
         found: Boolean(startBtn),
@@ -921,6 +1163,14 @@ export function inspectDOM(force = false): void {
     Boolean(composer),
     composer?.tagName,
     composer?.className
+  );
+
+  const dictationRoot = getDictationRoot();
+  console.log(
+    'Dictation root found:',
+    Boolean(dictationRoot),
+    dictationRoot?.tagName,
+    dictationRoot?.className
   );
 
   // Get full diagnostic

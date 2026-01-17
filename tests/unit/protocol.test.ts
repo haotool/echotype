@@ -45,12 +45,21 @@ describe('createMessage', () => {
     it('should create submit command with default requireChange', () => {
       const msg = createMessage.cmdSubmit();
       expect(msg.type).toBe(MSG.CMD_SUBMIT);
+      expect(msg.mode).toBe('submit-and-capture');
       expect(msg.requireChange).toBe(true);
     });
 
     it('should create submit command with specified requireChange', () => {
       const msg = createMessage.cmdSubmit(false);
+      expect(msg.mode).toBe('submit-and-capture');
       expect(msg.requireChange).toBe(false);
+    });
+
+    it('should create submit command with specified mode', () => {
+      const msg = createMessage.cmdSubmit({ mode: 'submit-only' });
+      expect(msg.type).toBe(MSG.CMD_SUBMIT);
+      expect(msg.mode).toBe('submit-only');
+      expect(msg.requireChange).toBe(true);
     });
   });
 
