@@ -40,7 +40,7 @@ async function ensureAudioWorklet(ctx: AudioContext): Promise<void> {
   }
 
   if (!workletReady) {
-    const url = new URL('./tone-worklet.ts', import.meta.url);
+    const url = chrome.runtime.getURL('tone-worklet.js');
     workletReady = ctx.audioWorklet.addModule(url);
   }
 

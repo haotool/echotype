@@ -1,40 +1,21 @@
-type AudioWorkletProcessorConstructor = new () => AudioWorkletProcessor;
-
-declare abstract class AudioWorkletProcessor {
-  readonly port: MessagePort;
-  constructor();
-  abstract process(
-    inputs: Float32Array[][],
-    outputs: Float32Array[][],
-    parameters: Record<string, Float32Array>
-  ): boolean;
-}
-
-declare const sampleRate: number;
-declare function registerProcessor(
-  name: string,
-  processorCtor: AudioWorkletProcessorConstructor
-): void;
-
 class ToneProcessor extends AudioWorkletProcessor {
-  private frequency = 440;
-  private phase = 0;
-  private waveType: OscillatorType = 'sine';
-  private remainingSamples = 0;
-  private totalSamples = 0;
-  private started = false;
-
   constructor() {
     super();
-    this.port.onmessage = (event: MessageEvent) => {
+    this.frequency = 440;
+    this.phase = 0;
+    this.waveType = 'sine';
+    this.remainingSamples = 0;
+    this.totalSamples = 0;
+    this.started = false;
+    this.port.onmessage = (event) => {
       const { frequency, durationMs, waveType } = event.data || {};
-      if (typeof frequency === 'number') {
+      if (typeof frequency === 'number' && !Number.isNaN(frequency)) {
         this.frequency = frequency;
       }
       if (typeof waveType === 'string') {
-        this.waveType = waveType as OscillatorType;
+        this.waveType = waveType;
       }
-      if (typeof durationMs === 'number') {
+      if (typeof durationMs === 'number' && !Number.isNaN(durationMs)) {
         this.totalSamples = Math.max(1, Math.floor((durationMs / 1000) * sampleRate));
         this.remainingSamples = this.totalSamples;
         this.started = true;
@@ -42,7 +23,7 @@ class ToneProcessor extends AudioWorkletProcessor {
     };
   }
 
-  private sampleValue(phase: number): number {
+  sampleValue(phase) {
     switch (this.waveType) {
       case 'square':
         return Math.sign(Math.sin(phase)) || 1;
@@ -56,11 +37,7 @@ class ToneProcessor extends AudioWorkletProcessor {
     }
   }
 
-  process(
-    _: Float32Array[][],
-    outputs: Float32Array[][],
-    _parameters: Record<string, Float32Array>
-  ): boolean {
+  process(_, outputs) {
     const output = outputs[0];
     const channel = output[0];
 
@@ -77,7 +54,7 @@ class ToneProcessor extends AudioWorkletProcessor {
     const fadeInSamples = Math.floor(sampleRate * 0.005);
     const phaseStep = (2 * Math.PI * this.frequency) / sampleRate;
 
-    for (let i = 0; i < channel.length; i++) {
+    for (let i = 0; i < channel.length; i += 1) {
       if (this.remainingSamples <= 0) {
         channel[i] = 0;
         continue;
