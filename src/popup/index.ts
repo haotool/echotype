@@ -48,6 +48,7 @@ const elements = {
   // Theme
   body: document.body,
   btnTheme: document.getElementById('btn-theme') as HTMLButtonElement,
+  popupVersion: document.getElementById('popupVersion') as HTMLElement,
   
   // Status
   statusBadge: document.getElementById('status-badge') as HTMLElement,
@@ -73,6 +74,8 @@ const elements = {
   btnSettings: document.getElementById('btn-settings') as HTMLButtonElement,
   linkOptions: document.getElementById('link-options') as HTMLAnchorElement,
   linkHistory: document.getElementById('link-history') as HTMLAnchorElement,
+  settingsView: document.getElementById('settings-view') as HTMLElement,
+  settingsFrame: document.getElementById('settings-frame') as HTMLIFrameElement,
   
   // Toast
   toast: document.getElementById('toast') as HTMLElement,
@@ -120,6 +123,32 @@ function stopRecordingTimer(): void {
 }
 
 // ============================================================================
+// Settings View
+// ============================================================================
+
+function openSettingsView(): void {
+  const currentSrc = elements.settingsFrame.getAttribute('src');
+  if (!currentSrc || currentSrc === 'about:blank' || !currentSrc.includes('embed=popup')) {
+    elements.settingsFrame.src = chrome.runtime.getURL('src/options/index.html?embed=popup');
+  }
+  elements.settingsView.hidden = false;
+  elements.body.classList.add('settings-open');
+}
+
+function closeSettingsView(): void {
+  elements.body.classList.remove('settings-open');
+  elements.settingsView.hidden = true;
+}
+
+function toggleSettingsView(): void {
+  if (elements.body.classList.contains('settings-open')) {
+    closeSettingsView();
+  } else {
+    openSettingsView();
+  }
+}
+
+// ============================================================================
 // Theme Management
 // ============================================================================
 
@@ -138,6 +167,12 @@ async function loadTheme(): Promise<void> {
 function applyTheme(): void {
   elements.body.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
   updateThemeIcon();
+}
+
+function loadVersion(): void {
+  if (!elements.popupVersion) return;
+  const version = chrome.runtime.getManifest().version;
+  elements.popupVersion.textContent = `v${version}`;
 }
 
 function updateThemeIcon(): void {
@@ -473,18 +508,16 @@ function setupEventListeners(): void {
   });
   
   // Navigation
-  elements.btnSettings.addEventListener('click', () => {
-    chrome.runtime.openOptionsPage();
-  });
+  elements.btnSettings.addEventListener('click', toggleSettingsView);
   
   elements.linkOptions.addEventListener('click', (e) => {
     e.preventDefault();
-    chrome.runtime.openOptionsPage();
+    toggleSettingsView();
   });
   
   elements.linkHistory.addEventListener('click', (e) => {
     e.preventDefault();
-    chrome.runtime.openOptionsPage();
+    openSettingsView();
   });
 }
 
@@ -520,6 +553,20 @@ function setupMessageListener(): void {
 
 function setupStorageListener(): void {
   chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes[STORAGE_KEY_THEME]?.newValue !== undefined) {
+      isDarkTheme = changes[STORAGE_KEY_THEME].newValue === 'dark';
+      applyTheme();
+    }
+
+    if (area === 'local' && changes[STORAGE_KEY_DEV_MODE]?.newValue !== undefined) {
+      isDevMode = changes[STORAGE_KEY_DEV_MODE].newValue === true;
+      if (isDevMode) {
+        elements.devBanner.classList.add('visible');
+      } else {
+        elements.devBanner.classList.remove('visible');
+      }
+    }
+
     if (area === 'session' && changes[STORAGE_KEY_HISTORY]?.newValue) {
       const items = changes[STORAGE_KEY_HISTORY].newValue as HistoryItem[];
       updateResultUI(items?.[0] ?? null);
@@ -551,6 +598,7 @@ async function init(): Promise<void> {
   
   // Apply i18n translations to all elements with data-i18n attributes
   applyI18n();
+  loadVersion();
   
   await Promise.all([
     loadTheme(),

@@ -39,11 +39,11 @@ test.describe('Popup UI', () => {
     await expect(toggleBtn).toBeVisible();
     await expect(toggleBtn).toBeEnabled();
     
-    // Toggle button should show "Record" in idle state
-    await expect(toggleBtn).toContainText('Record');
-    
     // Toggle button should have record-ready style (red)
     await expect(toggleBtn).toHaveClass(/btn-record-ready/);
+    
+    const toggleLabel = toggleBtn.locator('.btn-text');
+    await expect(toggleLabel).toHaveAttribute('data-i18n', 'btnRecord');
 
     // Check Cancel button (should be hidden initially)
     const cancelBtn = page.locator('#btn-cancel');
@@ -91,6 +91,24 @@ test.describe('Popup UI', () => {
     // Check History link
     const historyLink = page.locator('#link-history');
     await expect(historyLink).toBeVisible();
+  });
+
+  test('should open settings view in popup', async ({ context, extensionId }) => {
+    const page = await openPopupPage(context, extensionId);
+
+    await page.locator('#btn-settings').click();
+
+    const settingsView = page.locator('#settings-view');
+    await expect(settingsView).toBeVisible();
+
+    const settingsFrame = page.locator('#settings-frame');
+    await expect(settingsFrame).toHaveAttribute('src', /embed=popup/);
+
+    const settingsFrameLocator = page.frameLocator('#settings-frame');
+    await expect(settingsFrameLocator.locator('#autoCopyToClipboard')).toBeVisible();
+
+    await page.locator('#btn-settings').click();
+    await expect(settingsView).toBeHidden();
   });
 
   test('should have theme toggle button', async ({ context, extensionId }) => {

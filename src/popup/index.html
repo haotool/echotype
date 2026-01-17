@@ -127,6 +127,11 @@
         padding: 0;
       }
 
+      html,
+      body {
+        height: 100%;
+      }
+
       body {
         font-family: var(--font-sans);
         font-size: 14px;
@@ -136,8 +141,44 @@
         width: 340px;
         min-height: 420px;
         overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      body.settings-open {
+        overflow-y: hidden;
+      }
+
+      #main-view {
+        display: block;
+        flex: 1;
+        min-height: 0;
+      }
+
+      body.settings-open #main-view {
+        display: none;
+      }
+
+      .settings-view {
+        display: none;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        background: var(--bg-base);
+        overflow: hidden;
+      }
+
+      body.settings-open .settings-view {
+        display: block;
+      }
+
+      #settings-frame {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: transparent;
       }
 
       /* ============================================================================
@@ -156,6 +197,12 @@
         display: flex;
         align-items: center;
         gap: var(--space-3);
+      }
+
+      .brand-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
       }
 
       .brand-icon {
@@ -183,6 +230,12 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+      }
+
+      .version {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
       }
 
       .header-actions {
@@ -676,7 +729,10 @@
             <line x1="12" x2="12" y1="19" y2="22"/>
           </svg>
         </div>
-        <span class="brand-text" data-i18n="popupTitle">EchoType</span>
+        <div class="brand-meta">
+          <span class="brand-text" data-i18n="popupTitle">EchoType</span>
+          <span class="version" id="popupVersion">v0.8.14</span>
+        </div>
       </div>
       <div class="header-actions">
         <button class="icon-btn" id="btn-theme" data-i18n-title="toggleTheme" title="Toggle theme">
@@ -693,6 +749,7 @@
       </div>
     </header>
 
+    <div id="main-view">
     <!-- Status Card -->
     <div class="status-card">
       <div class="status-header">
@@ -806,6 +863,12 @@
 
     <!-- Toast -->
     <div class="toast" id="toast">Copied!</div>
+    </div>
+
+    <!-- Settings View -->
+    <div class="settings-view" id="settings-view" hidden>
+      <iframe id="settings-frame" title="EchoType Settings"></iframe>
+    </div>
 
     <script type="module" src="./index.ts"></script>
   </body>

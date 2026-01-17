@@ -123,7 +123,7 @@
     .container {
       max-width: 640px;
       margin: 0 auto;
-      padding: var(--space-6);
+      padding: var(--space-4);
     }
 
     /* ============================================================================
@@ -133,7 +133,20 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-8);
+      padding: 0;
+      border-bottom: 1px solid var(--border-muted);
+      background: var(--surface-1);
+      margin-bottom: 0;
+    }
+
+    .header-inner {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .brand {
@@ -143,29 +156,39 @@
     }
 
     .brand-icon {
-      width: 48px;
-      height: 48px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: linear-gradient(135deg, var(--primary-500), var(--accent-500));
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-lg);
       color: white;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
     }
 
     .brand-icon svg {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
     }
 
-    .brand-info h1 {
-      font-size: 1.5rem;
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-text {
+      font-size: 1.125rem;
       font-weight: 700;
       letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .brand-info .version {
+    .version {
       font-size: 0.75rem;
       color: var(--text-muted);
       font-family: var(--font-mono);
@@ -173,18 +196,19 @@
 
     .header-actions {
       display: flex;
+      align-items: center;
       gap: var(--space-2);
     }
 
     .icon-btn {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--surface-1);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-lg);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
       color: var(--text-muted);
       cursor: pointer;
       transition: all var(--duration-fast) var(--ease-out);
@@ -193,12 +217,42 @@
     .icon-btn:hover {
       background: var(--bg-muted);
       color: var(--text-primary);
-      border-color: var(--border-default);
     }
 
     .icon-btn svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ============================================================================
+       DEVELOPER MODE BANNER
+       ============================================================================ */
+    .dev-banner {
+      display: none;
+      padding: var(--space-2) var(--space-4);
+      background: linear-gradient(90deg, var(--accent-500), var(--primary-500));
+      color: white;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .dev-banner.visible {
+      display: block;
+    }
+
+    body.embed .dev-banner,
+    body.embed .header {
+      display: none;
+    }
+
+    body.embed .container {
+      padding-top: var(--space-4);
+    }
+
+    body.embed {
+      background: var(--bg-base);
     }
 
     /* ============================================================================
@@ -666,9 +720,12 @@
   </style>
 </head>
 <body data-theme="light">
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
+  <div class="dev-banner" id="dev-banner">
+    🛠️ <span data-i18n="devMode">DEVELOPER MODE</span>
+  </div>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
       <div class="brand">
         <div class="brand-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -677,9 +734,9 @@
             <line x1="12" x2="12" y1="19" y2="22"/>
           </svg>
         </div>
-        <div class="brand-info">
-          <h1 data-i18n="optionsTitle">EchoType</h1>
-          <span class="version">v0.8.10</span>
+        <div class="brand-meta">
+          <h1 class="brand-text" data-i18n="optionsTitle">EchoType</h1>
+          <span class="version" id="appVersion">v0.8.14</span>
         </div>
       </div>
       <div class="header-actions">
@@ -689,7 +746,9 @@
           </svg>
         </button>
       </div>
-    </header>
+    </div>
+  </header>
+  <div class="container">
 
     <!-- Automation Settings -->
     <section class="card">
@@ -938,7 +997,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>EchoType v0.8.10 • <a href="https://github.com/haotool/echotype" target="_blank">GitHub</a></p>
+      <p>EchoType <span id="footerVersion">v0.8.14</span> • <a href="https://github.com/haotool/echotype" target="_blank">GitHub</a></p>
     </footer>
   </div>
 

@@ -16,7 +16,7 @@ test.describe('Options Page', () => {
     await expect(page).toHaveTitle('EchoType Settings');
     
     // Check main heading
-    await expect(page.locator('h1')).toContainText('EchoType');
+    await expect(page.locator('.brand-text')).toContainText('EchoType');
   });
 
   test('should display all settings toggles', async ({ context, extensionId }) => {
@@ -84,29 +84,22 @@ test.describe('Options Page', () => {
   test('should show keyboard shortcuts section', async ({ context, extensionId }) => {
     const page = await openOptionsPage(context, extensionId);
 
-    // Check shortcuts section exists (card with keyboard icon/title)
-    const shortcutsCard = page.locator('.card').filter({ hasText: 'Keyboard Shortcuts' });
-    await expect(shortcutsCard).toBeVisible();
+    const shortcutsContainer = page.locator('#shortcutsContainer');
+    await expect(shortcutsContainer).toBeVisible();
 
-    // Check shortcut items are displayed (3 shortcuts: toggle, cancel, paste)
-    const shortcutItems = page.locator('.shortcut-item');
+    const shortcutItems = shortcutsContainer.locator('.shortcut-item');
     await expect(shortcutItems).toHaveCount(3);
   });
 
   test('should show customize shortcuts button', async ({ context, extensionId }) => {
     const page = await openOptionsPage(context, extensionId);
 
-    // Scroll to keyboard shortcuts section
-    const shortcutsCard = page.locator('.card').filter({ hasText: 'Keyboard Shortcuts' });
-    await shortcutsCard.scrollIntoViewIfNeeded();
-
     // Check customize button exists (but don't click - it navigates away)
     const customizeBtn = page.locator('#customizeShortcuts');
     await expect(customizeBtn).toBeVisible();
     await expect(customizeBtn).toBeEnabled();
     
-    // Verify button text
-    await expect(customizeBtn).toContainText('Customize');
+    await expect(customizeBtn).toHaveAttribute('data-i18n', 'customizeShortcuts');
     
     // Clean up page before next test
     await page.close();
@@ -126,11 +119,10 @@ test.describe('Options Page', () => {
 
   test('should display version number', async ({ context, extensionId }) => {
     const page = await openOptionsPage(context, extensionId);
-
-    // Check version is displayed in footer
-    const footer = page.locator('.footer');
-    await expect(footer).toBeVisible();
-    await expect(footer).toContainText('v0.8.7');
+    const runtimeVersion = await page.evaluate(() => chrome.runtime.getManifest().version);
+    const footerVersion = page.locator('#footerVersion');
+    await expect(footerVersion).toBeVisible();
+    await expect(footerVersion).toHaveText(`v${runtimeVersion}`);
   });
 
   test('should have developer mode toggle', async ({ context, extensionId }) => {

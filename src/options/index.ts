@@ -28,6 +28,8 @@ const elements = {
   // Theme
   body: document.body,
   btnTheme: document.getElementById('btn-theme') as HTMLButtonElement,
+  appVersion: document.getElementById('appVersion') as HTMLElement,
+  footerVersion: document.getElementById('footerVersion') as HTMLElement,
   
   // Settings
   autoCopyToClipboard: document.getElementById('autoCopyToClipboard') as HTMLInputElement,
@@ -49,6 +51,7 @@ const elements = {
   // Developer Mode
   devMode: document.getElementById('devMode') as HTMLInputElement,
   devSection: document.getElementById('devSection') as HTMLElement,
+  devBanner: document.getElementById('dev-banner') as HTMLElement,
   debugExtId: document.getElementById('debug-ext-id') as HTMLElement,
   debugChatgptTab: document.getElementById('debug-chatgpt-tab') as HTMLElement,
   debugChatgptUrl: document.getElementById('debug-chatgpt-url') as HTMLElement,
@@ -119,6 +122,16 @@ async function toggleTheme(): Promise<void> {
   isDarkTheme = !isDarkTheme;
   applyTheme();
   await chrome.storage.local.set({ [STORAGE_KEY_THEME]: isDarkTheme ? 'dark' : 'light' });
+}
+
+function loadVersion(): void {
+  const version = chrome.runtime.getManifest().version;
+  if (elements.appVersion) {
+    elements.appVersion.textContent = `v${version}`;
+  }
+  if (elements.footerVersion) {
+    elements.footerVersion.textContent = `v${version}`;
+  }
 }
 
 // ============================================================================
@@ -373,11 +386,17 @@ async function loadDevMode(): Promise<void> {
     elements.devMode.checked = isDevMode;
     
     if (isDevMode) {
+      elements.devBanner.classList.add('visible');
       elements.devSection.style.display = 'block';
       await updateDebugInfo();
+    } else {
+      elements.devBanner.classList.remove('visible');
+      elements.devSection.style.display = 'none';
     }
   } catch {
     isDevMode = false;
+    elements.devBanner.classList.remove('visible');
+    elements.devSection.style.display = 'none';
   }
 }
 
@@ -386,10 +405,12 @@ async function toggleDevMode(): Promise<void> {
   await chrome.storage.local.set({ [STORAGE_KEY_DEV_MODE]: isDevMode });
   
   if (isDevMode) {
+    elements.devBanner.classList.add('visible');
     elements.devSection.style.display = 'block';
     await updateDebugInfo();
     showToast('Developer mode enabled');
   } else {
+    elements.devBanner.classList.remove('visible');
     elements.devSection.style.display = 'none';
     showToast('Developer mode disabled');
   }
@@ -630,6 +651,25 @@ function setupEventListeners(): void {
 
 function setupStorageListener(): void {
   chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes[STORAGE_KEY_THEME]?.newValue !== undefined) {
+      isDarkTheme = changes[STORAGE_KEY_THEME].newValue === 'dark';
+      applyTheme();
+    }
+
+    if (area === 'local' && changes[STORAGE_KEY_DEV_MODE]?.newValue !== undefined) {
+      isDevMode = changes[STORAGE_KEY_DEV_MODE].newValue === true;
+      elements.devMode.checked = isDevMode;
+
+      if (isDevMode) {
+        elements.devBanner.classList.add('visible');
+        elements.devSection.style.display = 'block';
+        void updateDebugInfo();
+      } else {
+        elements.devBanner.classList.remove('visible');
+        elements.devSection.style.display = 'none';
+      }
+    }
+
     if (area === 'local' && changes[STORAGE_KEY_LANGUAGE]?.newValue) {
       const nextLocale = String(changes[STORAGE_KEY_LANGUAGE].newValue || '');
       const localeForUi = nextLocale || chrome.i18n.getUILanguage();
@@ -651,6 +691,10 @@ function setupStorageListener(): void {
 // ============================================================================
 
 async function init(): Promise<void> {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('embed') === 'popup') {
+    document.body.classList.add('embed');
+  }
   await initI18n();
   // Set RTL direction for RTL languages
   const storedLang = await chrome.storage.local.get(STORAGE_KEY_LANGUAGE);
@@ -660,6 +704,7 @@ async function init(): Promise<void> {
   // Apply i18n translations to all elements with data-i18n attributes
   applyI18n();
   
+  loadVersion();
   await loadTheme();
   await loadLanguage();
   await loadUI();
