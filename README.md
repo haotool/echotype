@@ -2,6 +2,17 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
+[![CI](https://github.com/haotool/echotype/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/haotool/echotype/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/haotool/echotype?style=flat-square)](https://github.com/haotool/echotype/releases)
+[![License](https://img.shields.io/github/license/haotool/echotype?style=flat-square)](LICENSE)
+[![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
+[![Playwright](https://img.shields.io/badge/Playwright-Testing-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-Unit%20Tests-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Stars](https://img.shields.io/github/stars/haotool/echotype?style=flat-square)](https://github.com/haotool/echotype/stargazers)
+[![Issues](https://img.shields.io/github/issues/haotool/echotype?style=flat-square)](https://github.com/haotool/echotype/issues)
+
 EchoType is a Chrome extension that turns ChatGPT voice dictation into reusable text you can paste anywhere.
 
 ## Highlights
