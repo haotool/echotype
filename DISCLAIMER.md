@@ -2,7 +2,9 @@
 
 ## Legal Notice
 
-**EchoType** is an independent, open-source Chrome extension developed by the community. This project is **NOT** affiliated with, endorsed by, or sponsored by OpenAI, ChatGPT, or any related entities.
+**EchoType** is an independent, open-source Chrome extension developed by the community. This project is **NOT** an official OpenAI product and is **NOT** affiliated with, endorsed by, or sponsored by OpenAI, ChatGPT, or any related entities. OpenAI does not review, certify, or guarantee this project.
+
+EchoType does not use OpenAI branding, logos, or trademarks in a way that implies partnership, sponsorship, or official status.
 
 ## Trademark Notice
 
@@ -62,6 +64,6 @@ This disclaimer may be updated at any time. Continued use of EchoType constitute
 
 ---
 
-**Last Updated**: January 9, 2026
+**Last Updated**: January 18, 2026
 
 © 2026 haotool. All rights reserved.

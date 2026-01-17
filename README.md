@@ -161,7 +161,9 @@ pnpm format
 
 ## ⚠️ Disclaimer
 
-This project is **NOT** affiliated with OpenAI or ChatGPT. See [DISCLAIMER.md](DISCLAIMER.md) for details.
+EchoType is **NOT** an official OpenAI product and is **NOT** affiliated with, endorsed by, or sponsored by OpenAI or ChatGPT.
+OpenAI/ChatGPT/Whisper trademarks are used for identification only.
+See [DISCLAIMER.md](DISCLAIMER.md) for the full legal notice and [PRIVACY.md](PRIVACY.md) for data handling details.
 
 ---
 
