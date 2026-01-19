@@ -14,8 +14,8 @@ Feature: 聽寫控制
     Given 目前在任意網站
     And 聽寫狀態為「待命」
     When 按下啟動快捷鍵 "Alt+Shift+S"
-    Then 系統應切換到 ChatGPT Tab
-    And 點擊「聽寫按鈕」啟動錄音
+    Then 在背景點擊「聽寫按鈕」啟動錄音
+    And 不需切換到 ChatGPT Tab
     And 建立 baseline 快照
     And 聽寫狀態應為「聽寫中」
 
@@ -55,3 +55,31 @@ Feature: 聽寫控制
     When 按下啟動快捷鍵 "Alt+Shift+S"
     Then 應回報錯誤碼 "SELECTOR_NOT_FOUND"
     And 應顯示「無法找到聽寫按鈕，請確認 ChatGPT 頁面版本」提示
+
+  # ============================================================================
+  # 狀態檢查 (v0.8.16+)
+  # ============================================================================
+
+  @start @already-active
+  Scenario: 聽寫已在進行中
+    Given 聽寫狀態為「聽寫中」或「處理中」
+    When 按下啟動快捷鍵 "Alt+Shift+S"
+    Then 應回報錯誤碼 "ALREADY_ACTIVE"
+    And 應顯示「聽寫已在進行中。請等待或取消。」
+
+  @start @unknown-status
+  Scenario: 狀態為 unknown 時允許啟動
+    Given 聽寫狀態為「unknown」
+    When 按下啟動快捷鍵 "Alt+Shift+S"
+    Then 應繼續嘗試啟動聽寫
+    And 由內容腳本進行詳細檢查（登入/權限等）
+
+  @start @pre-checks
+  Scenario: 啟動前檢查順序
+    Given 使用者按下啟動快捷鍵
+    Then 應依序檢查：
+      | 檢查項目     | 錯誤碼              |
+      | 登入狀態     | NOT_LOGGED_IN       |
+      | 麥克風權限   | MICROPHONE_DENIED   |
+      | 語音可用性   | VOICE_INPUT_UNAVAILABLE |
+      | UI 健康狀態  | SELECTOR_NOT_FOUND  |
