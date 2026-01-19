@@ -23,11 +23,12 @@ export default defineConfig({
         'src/shared/icons.ts',    // Static SVG definitions
       ],
       thresholds: {
-        // Only enforce thresholds on testable shared utilities
-        lines: 60,
-        functions: 60,
+        // Thresholds for testable shared utilities
+        // Some functions require Chrome API (tested via E2E)
+        lines: 55,
+        functions: 70,
         branches: 60,
-        statements: 60,
+        statements: 55,
       },
     },
   },
