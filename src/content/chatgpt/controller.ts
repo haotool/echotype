@@ -26,6 +26,8 @@ import {
   waitForComposer,
   checkLoginStatus,
   isVoiceInputAvailable,
+  checkMicrophonePermission,
+  type MicrophonePermissionResult,
 } from './selectors';
 import { readComposerText, captureAfterSubmit, cancelCapture, captureStableText } from './capture';
 import { computeAddedText } from './diff';
@@ -114,6 +116,7 @@ export async function startDictation(): Promise<{
   debug?: {
     loginStatus: { loggedIn: boolean; reason: string };
     voiceAvailable: boolean;
+    micPermission?: MicrophonePermissionResult;
     health: unknown;
     buttonClicked: boolean;
     status?: DictationStatus;
@@ -146,6 +149,16 @@ export async function startDictation(): Promise<{
     };
   }
 
+  // Check microphone permission (non-blocking, for diagnostics)
+  const micPermission = await checkMicrophonePermission();
+  console.log('[EchoType:Controller] Microphone permission:', micPermission);
+  
+  // Warn if permission is denied, but don't block (ChatGPT handles its own permission flow)
+  if (micPermission.status === 'denied') {
+    console.warn('[EchoType:Controller] Microphone permission denied');
+    // Note: We don't return an error here because ChatGPT may still prompt for permission
+  }
+
   // Check if voice input is available
   const voiceAvailable = isVoiceInputAvailable();
   console.log('[EchoType:Controller] Voice input available:', voiceAvailable);
@@ -163,6 +176,7 @@ export async function startDictation(): Promise<{
       debug: {
         loginStatus,
         voiceAvailable,
+        micPermission,
         health: null,
         buttonClicked: false,
       },
@@ -188,6 +202,7 @@ export async function startDictation(): Promise<{
       debug: {
         loginStatus,
         voiceAvailable,
+        micPermission,
         health,
         buttonClicked: false,
       },
@@ -233,6 +248,7 @@ export async function startDictation(): Promise<{
       debug: {
         loginStatus,
         voiceAvailable,
+        micPermission,
         health,
         buttonClicked: false,
         attempts,
@@ -260,6 +276,7 @@ export async function startDictation(): Promise<{
       debug: {
         loginStatus,
         voiceAvailable,
+        micPermission,
         health,
         buttonClicked: true,
         attempts,
@@ -276,6 +293,7 @@ export async function startDictation(): Promise<{
     debug: {
       loginStatus,
       voiceAvailable,
+      micPermission,
       health,
       buttonClicked: true,
       status,

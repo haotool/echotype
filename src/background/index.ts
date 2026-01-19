@@ -373,17 +373,25 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   // Small delay to ensure content script is initialized
   await new Promise((resolve) => setTimeout(resolve, 300));
 
+  // Check current status before starting
+  // Allow start if status is 'idle', 'unknown', or 'error' (recoverable states)
+  // Block only if actively recording/processing
   const preStatus = await requestStatusResync('start-check');
-  if (preStatus && preStatus !== 'idle') {
-    console.warn('[EchoType] Start blocked, current status:', preStatus);
+  const activeStates: DictationStatusType[] = ['listening', 'recording', 'processing'];
+  if (preStatus && activeStates.includes(preStatus)) {
+    console.warn('[EchoType] Start blocked, dictation already active:', preStatus);
     await applyIncomingStatus(preStatus, 'start-precheck');
     return {
       ok: false,
       error: {
-        code: 'UNKNOWN_ERROR',
-        message: `Dictation is not idle (${preStatus}).`,
+        code: 'ALREADY_ACTIVE',
+        message: `Dictation is already active (${preStatus}). Please wait or cancel.`,
       },
     };
+  }
+  // Log if status is unknown (may indicate login required)
+  if (preStatus === 'unknown') {
+    console.log('[EchoType] Status unknown, proceeding to check login state');
   }
 
   await rememberCaptureOrigin({ force: true });

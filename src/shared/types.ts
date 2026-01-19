@@ -98,6 +98,8 @@ export type ErrorCode =
   | 'INJECTION_FAILED'
   | 'NOT_LOGGED_IN'
   | 'VOICE_INPUT_UNAVAILABLE'
+  | 'ALREADY_ACTIVE'
+  | 'MICROPHONE_DENIED'
   | 'UNKNOWN_ERROR';
 
 export interface EchoTypeError {

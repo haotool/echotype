@@ -531,8 +531,8 @@ export function findStartButton(root: Element | null = getDictationRoot()): HTML
   if (!btn) {
     btn = findVisibleButton(SELECTORS.startBtn, {
       root: null, // null means search entire document
-      preferredLabels: DICTATION_LABELS.start,
-    });
+    preferredLabels: DICTATION_LABELS.start,
+  });
   }
   
   return btn;
@@ -552,8 +552,8 @@ export function findStopButton(root: Element | null = getDictationRoot()): HTMLB
   if (!btn) {
     btn = findVisibleButton(SELECTORS.stopBtn, {
       root: null, // null means search entire document
-      preferredLabels: DICTATION_LABELS.stop,
-    });
+    preferredLabels: DICTATION_LABELS.stop,
+  });
   }
   
   return btn;
@@ -573,8 +573,8 @@ export function findSubmitButton(root: Element | null = getDictationRoot()): HTM
   if (!btn) {
     btn = findVisibleButton(SELECTORS.submitBtn, {
       root: null, // null means search entire document
-      preferredLabels: DICTATION_LABELS.submit,
-    });
+    preferredLabels: DICTATION_LABELS.submit,
+  });
   }
   
   return btn;
@@ -748,18 +748,30 @@ function findButtonByText(texts: string[]): Element | null {
  * @returns Object with login status and reason
  */
 export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
-  // Check for login button (indicates not logged in)
-  // Using valid CSS selectors and DOM text search
+  // Priority 1: Check for login/signup buttons (strong indicator of not logged in)
   const loginButton =
     document.querySelector('button[data-testid="login-button"]') ||
     document.querySelector('a[href*="/auth/login"]') ||
     findButtonByText(['Log in', '登入', '登录', 'Sign in', '登錄']);
 
-  if (loginButton) {
-    return { loggedIn: false, reason: 'login_button_found' };
+  const signupButton =
+    document.querySelector('a[href*="/auth/signup"]') ||
+    findButtonByText(['Sign up', 'Get started', '註冊', '注册', '開始使用', '免費註冊', '免费注册', 'Create account']);
+
+  if (loginButton || signupButton) {
+    return {
+      loggedIn: false,
+      reason: loginButton ? 'login_button_found' : 'signup_button_found',
+    };
   }
 
-  // Check for user menu (indicates logged in)
+  // Priority 2: Check for dictation button (strong indicator of logged in)
+  const dictationBtn = findStartButton();
+  if (dictationBtn) {
+    return { loggedIn: true, reason: 'dictation_button_found' };
+  }
+
+  // Priority 3: Check for user profile menu (indicates logged in)
   const userMenu =
     document.querySelector('[data-testid="profile-button"]') ||
     document.querySelector('button[aria-label*="Profile"]') ||
@@ -767,6 +779,7 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
     document.querySelector('button[aria-label*="账户"]') ||
     document.querySelector('button[aria-label*="設定檔"]') ||
     document.querySelector('button[aria-label*="开启设置"]') ||
+    document.querySelector('button[aria-label="開啟設定檔功能表"]') ||
     document.querySelector('img[alt*="User"]') ||
     document.querySelector('img[alt*="設定檔圖像"]') ||
     document.querySelector('img[alt*="头像"]');
@@ -775,24 +788,21 @@ export function checkLoginStatus(): { loggedIn: boolean; reason: string } {
     return { loggedIn: true, reason: 'user_menu_found' };
   }
 
-  // Check for composer (usually only visible when logged in)
+  // Priority 4: Check for composer (usually only visible when logged in)
   const composer = getComposerElement();
   if (composer) {
     return { loggedIn: true, reason: 'composer_found' };
   }
 
-  // Check for "Sign up" or "Get started" buttons (indicates not logged in)
-  const signupButton =
-    document.querySelector('a[href*="/auth/signup"]') ||
-    findButtonByText(['Sign up', 'Get started', '註冊', '注册', '開始使用']);
-
-  if (signupButton) {
-    return { loggedIn: false, reason: 'signup_button_found' };
+  // Priority 5: Check for navigation menu with logged-out items
+  const navLoginLink = document.querySelector('nav a[href*="/auth/login"]');
+  if (navLoginLink) {
+    return { loggedIn: false, reason: 'nav_login_link_found' };
   }
 
-  // Default: assume logged in if composer is found or no login buttons
-  // This is a safer default for the extension
-  return { loggedIn: true, reason: 'no_login_indicators' };
+  // Default: assume not logged in if no indicators found
+  // This is safer than assuming logged in when uncertain
+  return { loggedIn: false, reason: 'no_login_indicators' };
 }
 
 // ============================================================================
@@ -1184,6 +1194,151 @@ export function inspectDOM(force = false): void {
   console.groupEnd();
 }
 
+// ============================================================================
+// Microphone Permission Detection
+// ============================================================================
+
+export type MicrophonePermissionStatus = 'granted' | 'denied' | 'prompt' | 'unknown';
+
+export interface MicrophonePermissionResult {
+  status: MicrophonePermissionStatus;
+  reason: string;
+  canRequest: boolean;
+}
+
+/**
+ * Check microphone permission status using the Permissions API.
+ * Falls back to 'unknown' if the API is not available.
+ *
+ * @returns Promise with permission status and metadata
+ */
+export async function checkMicrophonePermission(): Promise<MicrophonePermissionResult> {
+  // Check if Permissions API is available
+  if (!navigator.permissions) {
+    return {
+      status: 'unknown',
+      reason: 'permissions_api_unavailable',
+      canRequest: true, // Assume we can try
+    };
+  }
+
+  try {
+    const result = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+    
+    switch (result.state) {
+      case 'granted':
+        return {
+          status: 'granted',
+          reason: 'permission_granted',
+          canRequest: false,
+        };
+      case 'denied':
+        return {
+          status: 'denied',
+          reason: 'permission_denied',
+          canRequest: false,
+        };
+      case 'prompt':
+        return {
+          status: 'prompt',
+          reason: 'permission_not_requested',
+          canRequest: true,
+        };
+      default:
+        return {
+          status: 'unknown',
+          reason: `unknown_state_${result.state}`,
+          canRequest: true,
+        };
+    }
+  } catch (error) {
+    // Some browsers don't support microphone permission query
+    return {
+      status: 'unknown',
+      reason: `query_failed_${error instanceof Error ? error.message : 'unknown'}`,
+      canRequest: true,
+    };
+  }
+}
+
+/**
+ * Request microphone access and return the result.
+ * This will trigger the browser's permission prompt if not already granted/denied.
+ *
+ * @returns Promise with permission result
+ */
+export async function requestMicrophoneAccess(): Promise<MicrophonePermissionResult> {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    // Stop all tracks immediately - we just needed to check permission
+    stream.getTracks().forEach(track => track.stop());
+    return {
+      status: 'granted',
+      reason: 'permission_granted_via_request',
+      canRequest: false,
+    };
+  } catch (error) {
+    if (error instanceof DOMException) {
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        return {
+          status: 'denied',
+          reason: 'user_denied_permission',
+          canRequest: false,
+        };
+      }
+      if (error.name === 'NotFoundError') {
+        return {
+          status: 'denied',
+          reason: 'no_microphone_device',
+          canRequest: false,
+        };
+      }
+    }
+    return {
+      status: 'unknown',
+      reason: `request_failed_${error instanceof Error ? error.message : 'unknown'}`,
+      canRequest: true,
+    };
+  }
+}
+
+/**
+ * Get user-friendly message for microphone permission status.
+ *
+ * @param result - Permission check result
+ * @param lang - Language code (default: 'en')
+ * @returns User-friendly message
+ */
+export function getMicrophonePermissionMessage(
+  result: MicrophonePermissionResult,
+  lang: 'en' | 'zh_TW' | 'zh_CN' = 'en'
+): string {
+  const messages: Record<MicrophonePermissionStatus, Record<string, string>> = {
+    granted: {
+      en: 'Microphone access granted.',
+      zh_TW: '麥克風權限已授予。',
+      zh_CN: '麦克风权限已授予。',
+    },
+    denied: {
+      en: 'Microphone access denied. Please enable microphone permission in your browser settings.',
+      zh_TW: '麥克風權限被拒絕。請在瀏覽器設定中啟用麥克風權限。',
+      zh_CN: '麦克风权限被拒绝。请在浏览器设置中启用麦克风权限。',
+    },
+    prompt: {
+      en: 'Microphone permission required. Please allow access when prompted.',
+      zh_TW: '需要麥克風權限。請在提示時允許存取。',
+      zh_CN: '需要麦克风权限。请在提示时允许访问。',
+    },
+    unknown: {
+      en: 'Unable to determine microphone permission status.',
+      zh_TW: '無法確定麥克風權限狀態。',
+      zh_CN: '无法确定麦克风权限状态。',
+    },
+  };
+
+  return messages[result.status][lang] || messages[result.status].en;
+}
+
 // Export for development debugging
 if (DEBUG) {
   (window as unknown as { __ECHOTYPE_SELECTORS__: unknown }).__ECHOTYPE_SELECTORS__ = {
@@ -1195,5 +1350,7 @@ if (DEBUG) {
     findStartButton,
     findStopButton,
     findSubmitButton,
+    checkMicrophonePermission,
+    requestMicrophoneAccess,
   };
 }
