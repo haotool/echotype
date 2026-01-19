@@ -5,6 +5,60 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.17] - 2026-01-20
+
+### 🌐 Internationalization
+- **Complete Error Message i18n** - Added localized error messages for all 25 supported languages:
+  - `errorConnectionFailed` / `errorConnectionFailedDesc`
+  - `errorTabNotFound` / `errorTabNotFoundDesc`
+  - `errorNotLoggedIn` / `errorNotLoggedInDesc`
+  - `errorAlreadyActive` / `errorAlreadyActiveDesc`
+  - `errorMicrophoneDenied` / `errorMicrophoneDeniedDesc`
+- **Smart Error Display** - Popup now maps error codes to localized messages via `ERROR_I18N_MAP`
+
+### 🔧 Bug Fixes
+- **Fixed Hardcoded Error Messages** - Error messages in popup now use i18n instead of raw English strings
+- **Added Error Code Mapping** - `showErrorFromCode()` function translates error codes to user-friendly localized messages
+
+### 🧪 Testing
+- All 140 unit tests passing
+- All 27 E2E tests passing
+
+---
+
+## [0.8.16] - 2026-01-20
+
+### 🔧 Critical Bug Fixes
+- **Fixed "Dictation is not idle (unknown)" Error** - Modified `handleStartDictation()` to allow start when status is `unknown` (common in logged-out state). Now only blocks when actively recording/processing.
+- **Improved Login Detection** - Enhanced `checkLoginStatus()` to prioritize login/signup button detection, check for dictation button presence, and default to "not logged in" when uncertain.
+
+### ✨ Features
+- **Microphone Permission Detection** - Added `checkMicrophonePermission()` and `requestMicrophoneAccess()` functions using the Permissions API
+- **Multi-language Permission Messages** - Added `getMicrophonePermissionMessage()` with EN/繁中/简中 support
+- **New Error Codes** - Added `ALREADY_ACTIVE` and `MICROPHONE_DENIED` to `ErrorCode` type
+
+### 🔁 Reliability
+- **Better State Machine Logic** - `handleStartDictation()` now distinguishes between recoverable states (`idle`, `unknown`, `error`) and active states (`listening`, `recording`, `processing`)
+- **Enhanced Debug Output** - `startDictation()` now includes `micPermission` in debug info for troubleshooting
+
+---
+
+## [0.8.15] - 2026-01-19
+
+### 📝 Documentation
+- **Comprehensive Error Handling Analysis** - Updated `ERROR_HANDLING_ANALYSIS.md` (EN) and `ERROR_HANDLING_ANALYSIS.zh_TW.md` (繁中) with detailed state machine diagrams, DOM detection strategies, and background tab limitations
+- **BDD Test Scenarios** - Added `error-handling.feature` with 20+ scenarios covering login detection, voice availability, health checks, and background tab operations
+
+### 🧪 Testing
+- **New Unit Tests** - Added `selectors.test.ts` with 17 tests covering login status detection, health check logic, dictation status detection, and voice input availability
+- **DOM Integration Tests** - Added `selectors-dom.test.ts` with 23 tests using jsdom environment for realistic DOM detection testing
+- **Test Coverage** - Increased total unit tests from 100 to 140 (+40%)
+
+### 🔁 Reliability
+- **Human-like Automation Guidelines** - Documented best practices for anti-detection: variable delays, natural mouse events, graceful degradation
+
+---
+
 ## [0.8.14] - 2026-01-18
 
 ### 🔁 Reliability
