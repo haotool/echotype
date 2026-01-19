@@ -139,9 +139,8 @@
         background: var(--bg-base);
         color: var(--text-primary);
         width: 340px;
-        height: 420px;
-        max-height: 600px;
-        overflow: hidden;
+        min-height: 420px;
+        overflow-x: hidden;
         display: flex;
         flex-direction: column;
         -webkit-font-smoothing: antialiased;
@@ -149,12 +148,9 @@
       }
 
       #main-view {
-        display: flex;
-        flex-direction: column;
+        display: block;
         flex: 1;
         min-height: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
       }
 
       body.settings-open #main-view {
