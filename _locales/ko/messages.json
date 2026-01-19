@@ -285,6 +285,46 @@
     "message": "취소 실패",
     "description": "Error when cancel fails"
   },
+  "errorConnectionFailed": {
+    "message": "연결 실패",
+    "description": "ChatGPT 연결 실패 시 오류 제목"
+  },
+  "errorConnectionFailedDesc": {
+    "message": "ChatGPT 페이지에 연결할 수 없습니다. 페이지를 새로고침하고 다시 시도해 주세요.",
+    "description": "연결 실패 시 오류 설명"
+  },
+  "errorTabNotFound": {
+    "message": "탭을 찾을 수 없음",
+    "description": "ChatGPT 탭을 찾을 수 없을 때 오류 제목"
+  },
+  "errorTabNotFoundDesc": {
+    "message": "ChatGPT를 열 수 없습니다. 다시 시도해 주세요.",
+    "description": "탭을 찾을 수 없을 때 오류 설명"
+  },
+  "errorNotLoggedIn": {
+    "message": "로그인되지 않음",
+    "description": "사용자가 로그인하지 않았을 때 오류 제목"
+  },
+  "errorNotLoggedInDesc": {
+    "message": "음성 받아쓰기를 사용하려면 ChatGPT에 로그인하세요.",
+    "description": "로그인하지 않았을 때 오류 설명"
+  },
+  "errorAlreadyActive": {
+    "message": "녹음 중",
+    "description": "받아쓰기가 이미 활성화되었을 때 오류 제목"
+  },
+  "errorAlreadyActiveDesc": {
+    "message": "받아쓰기가 이미 진행 중입니다. 기다리거나 취소해 주세요.",
+    "description": "이미 활성화되었을 때 오류 설명"
+  },
+  "errorMicrophoneDenied": {
+    "message": "마이크 액세스 거부됨",
+    "description": "마이크 권한이 거부되었을 때 오류 제목"
+  },
+  "errorMicrophoneDeniedDesc": {
+    "message": "브라우저 설정에서 마이크 권한을 활성화하세요.",
+    "description": "마이크가 거부되었을 때 오류 설명"
+  },
   "devBadge": {
     "message": "개발",
     "description": "Developer badge text"

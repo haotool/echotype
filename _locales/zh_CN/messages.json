@@ -281,6 +281,46 @@
     "message": "取消失败",
     "description": "Error when cancel fails"
   },
+  "errorConnectionFailed": {
+    "message": "连接失败",
+    "description": "连接到 ChatGPT 失败时的错误标题"
+  },
+  "errorConnectionFailedDesc": {
+    "message": "无法连接到 ChatGPT 页面。请刷新页面后重试。",
+    "description": "连接失败时的错误描述"
+  },
+  "errorTabNotFound": {
+    "message": "找不到标签页",
+    "description": "找不到 ChatGPT 标签页时的错误标题"
+  },
+  "errorTabNotFoundDesc": {
+    "message": "无法打开 ChatGPT。请重试。",
+    "description": "找不到标签页时的错误描述"
+  },
+  "errorNotLoggedIn": {
+    "message": "尚未登录",
+    "description": "用户未登录时的错误标题"
+  },
+  "errorNotLoggedInDesc": {
+    "message": "请登录 ChatGPT 以使用语音听写功能。",
+    "description": "未登录时的错误描述"
+  },
+  "errorAlreadyActive": {
+    "message": "正在录音中",
+    "description": "听写已启动时的错误标题"
+  },
+  "errorAlreadyActiveDesc": {
+    "message": "听写已在进行中。请等待或取消。",
+    "description": "已启动时的错误描述"
+  },
+  "errorMicrophoneDenied": {
+    "message": "麦克风权限被拒绝",
+    "description": "麦克风权限被拒绝时的错误标题"
+  },
+  "errorMicrophoneDeniedDesc": {
+    "message": "请在浏览器设置中启用麦克风权限。",
+    "description": "麦克风被拒绝时的错误描述"
+  },
   "devBadge": {
     "message": "开发",
     "description": "Developer badge text"

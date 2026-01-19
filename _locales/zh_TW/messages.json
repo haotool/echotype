@@ -257,6 +257,46 @@
     "message": "取消失敗",
     "description": "取消失敗時的錯誤"
   },
+  "errorConnectionFailed": {
+    "message": "連線失敗",
+    "description": "連線到 ChatGPT 失敗時的錯誤標題"
+  },
+  "errorConnectionFailedDesc": {
+    "message": "無法連線到 ChatGPT 頁面。請重新整理頁面後再試。",
+    "description": "連線失敗時的錯誤描述"
+  },
+  "errorTabNotFound": {
+    "message": "找不到分頁",
+    "description": "找不到 ChatGPT 分頁時的錯誤標題"
+  },
+  "errorTabNotFoundDesc": {
+    "message": "無法開啟 ChatGPT。請再試一次。",
+    "description": "找不到分頁時的錯誤描述"
+  },
+  "errorNotLoggedIn": {
+    "message": "尚未登入",
+    "description": "使用者未登入時的錯誤標題"
+  },
+  "errorNotLoggedInDesc": {
+    "message": "請登入 ChatGPT 以使用語音聽寫功能。",
+    "description": "未登入時的錯誤描述"
+  },
+  "errorAlreadyActive": {
+    "message": "正在錄音中",
+    "description": "聽寫已啟動時的錯誤標題"
+  },
+  "errorAlreadyActiveDesc": {
+    "message": "聽寫已在進行中。請等待或取消。",
+    "description": "已啟動時的錯誤描述"
+  },
+  "errorMicrophoneDenied": {
+    "message": "麥克風權限被拒絕",
+    "description": "麥克風權限被拒絕時的錯誤標題"
+  },
+  "errorMicrophoneDeniedDesc": {
+    "message": "請在瀏覽器設定中啟用麥克風權限。",
+    "description": "麥克風被拒絕時的錯誤描述"
+  },
   "languageSection": {
     "message": "語言",
     "description": "語言設定區塊"

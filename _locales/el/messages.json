@@ -285,6 +285,46 @@
     "message": "Η ακύρωση απέτυχε",
     "description": "Error when cancel fails"
   },
+  "errorConnectionFailed": {
+    "message": "Connection Failed",
+    "description": "Error title when connection to ChatGPT fails"
+  },
+  "errorConnectionFailedDesc": {
+    "message": "Could not connect to ChatGPT page. Please refresh and try again.",
+    "description": "Error description when connection fails"
+  },
+  "errorTabNotFound": {
+    "message": "Tab Not Found",
+    "description": "Error title when ChatGPT tab not found"
+  },
+  "errorTabNotFoundDesc": {
+    "message": "Could not open ChatGPT. Please try again.",
+    "description": "Error description when tab not found"
+  },
+  "errorNotLoggedIn": {
+    "message": "Not Logged In",
+    "description": "Error title when user not logged in"
+  },
+  "errorNotLoggedInDesc": {
+    "message": "Please log in to ChatGPT to use voice dictation.",
+    "description": "Error description when not logged in"
+  },
+  "errorAlreadyActive": {
+    "message": "Already Recording",
+    "description": "Error title when dictation already active"
+  },
+  "errorAlreadyActiveDesc": {
+    "message": "Dictation is already active. Please wait or cancel.",
+    "description": "Error description when already active"
+  },
+  "errorMicrophoneDenied": {
+    "message": "Microphone Access Denied",
+    "description": "Error title when microphone permission denied"
+  },
+  "errorMicrophoneDeniedDesc": {
+    "message": "Please enable microphone permission in your browser settings.",
+    "description": "Error description when microphone denied"
+  },
   "devBadge": {
     "message": "ΠΡΓ",
     "description": "Developer badge text"

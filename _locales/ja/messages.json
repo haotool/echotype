@@ -285,6 +285,46 @@
     "message": "キャンセルに失敗しました",
     "description": "Error when cancel fails"
   },
+  "errorConnectionFailed": {
+    "message": "接続に失敗しました",
+    "description": "ChatGPT への接続に失敗した場合のエラータイトル"
+  },
+  "errorConnectionFailedDesc": {
+    "message": "ChatGPT ページに接続できませんでした。ページを更新してもう一度お試しください。",
+    "description": "接続失敗時のエラー説明"
+  },
+  "errorTabNotFound": {
+    "message": "タブが見つかりません",
+    "description": "ChatGPT タブが見つからない場合のエラータイトル"
+  },
+  "errorTabNotFoundDesc": {
+    "message": "ChatGPT を開けませんでした。もう一度お試しください。",
+    "description": "タブが見つからない場合のエラー説明"
+  },
+  "errorNotLoggedIn": {
+    "message": "ログインしていません",
+    "description": "ユーザーがログインしていない場合のエラータイトル"
+  },
+  "errorNotLoggedInDesc": {
+    "message": "音声入力を使用するには、ChatGPT にログインしてください。",
+    "description": "ログインしていない場合のエラー説明"
+  },
+  "errorAlreadyActive": {
+    "message": "録音中です",
+    "description": "音声入力が既にアクティブな場合のエラータイトル"
+  },
+  "errorAlreadyActiveDesc": {
+    "message": "音声入力は既に進行中です。お待ちいただくか、キャンセルしてください。",
+    "description": "既にアクティブな場合のエラー説明"
+  },
+  "errorMicrophoneDenied": {
+    "message": "マイクへのアクセスが拒否されました",
+    "description": "マイク権限が拒否された場合のエラータイトル"
+  },
+  "errorMicrophoneDeniedDesc": {
+    "message": "ブラウザの設定でマイクの権限を有効にしてください。",
+    "description": "マイクが拒否された場合のエラー説明"
+  },
   "devBadge": {
     "message": "開発",
     "description": "Developer badge text"
