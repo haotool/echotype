@@ -139,22 +139,22 @@
         background: var(--bg-base);
         color: var(--text-primary);
         width: 340px;
-        min-height: 420px;
-        overflow-x: hidden;
+        height: 420px;
+        max-height: 600px;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
 
-      body.settings-open {
-        overflow-y: hidden;
-      }
-
       #main-view {
-        display: block;
+        display: flex;
+        flex-direction: column;
         flex: 1;
         min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
       }
 
       body.settings-open #main-view {
@@ -167,7 +167,6 @@
         flex: 1;
         min-height: 0;
         background: var(--bg-base);
-        overflow: hidden;
       }
 
       body.settings-open .settings-view {

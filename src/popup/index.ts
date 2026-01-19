@@ -325,10 +325,49 @@ function getStatusClass(status: DictationStatus): string {
 // Error Handling
 // ============================================================================
 
+/**
+ * Error code to i18n key mapping
+ */
+const ERROR_I18N_MAP: Record<string, { title: string; desc: string }> = {
+  TAB_NOT_FOUND: { title: 'errorTabNotFound', desc: 'errorTabNotFoundDesc' },
+  INJECTION_FAILED: { title: 'errorConnectionFailed', desc: 'errorConnectionFailedDesc' },
+  NOT_LOGGED_IN: { title: 'errorNotLoggedIn', desc: 'errorNotLoggedInDesc' },
+  ALREADY_ACTIVE: { title: 'errorAlreadyActive', desc: 'errorAlreadyActiveDesc' },
+  MICROPHONE_DENIED: { title: 'errorMicrophoneDenied', desc: 'errorMicrophoneDeniedDesc' },
+  VOICE_INPUT_UNAVAILABLE: { title: 'errorNoVoice', desc: 'errorNoVoiceDesc' },
+  SELECTOR_NOT_FOUND: { title: 'errorNoChatGPT', desc: 'errorNoChatGPTDesc' },
+};
+
+/**
+ * Get localized error messages based on error code
+ */
+function getErrorMessages(error: { code?: string; message?: string }): { title: string; desc: string } {
+  const code = error.code || '';
+  const mapping = ERROR_I18N_MAP[code];
+  
+  if (mapping) {
+    return {
+      title: getMessage(mapping.title) || mapping.title,
+      desc: getMessage(mapping.desc) || error.message || mapping.desc,
+    };
+  }
+  
+  // Fallback to generic error
+  return {
+    title: getMessage('errorStartFailed') || 'Error',
+    desc: error.message || getMessage('errorNoChatGPTDesc') || 'An error occurred',
+  };
+}
+
 function showError(title: string, message: string): void {
   elements.errorTitle.textContent = title;
   elements.errorMessage.textContent = message;
   elements.errorCard.style.display = 'block';
+}
+
+function showErrorFromCode(error: { code?: string; message?: string }): void {
+  const { title, desc } = getErrorMessages(error);
+  showError(title, desc);
 }
 
 function hideError(): void {
@@ -453,7 +492,7 @@ function setupEventListeners(): void {
         } else if (response?.error) {
           const newStatus = await getStatusFromBackground();
           updateStatusUI(newStatus);
-          showError(getMessage('errorSubmitFailed'), response.error.message);
+          showErrorFromCode(response.error);
         }
       } catch (error) {
         console.error('[EchoType] Submit failed:', error);
@@ -474,11 +513,11 @@ function setupEventListeners(): void {
           const newStatus = await getStatusFromBackground();
           updateStatusUI(newStatus);
         } else if (response?.error) {
-          showError(getMessage('errorStartFailed'), response.error.message);
+          showErrorFromCode(response.error);
         }
       } catch (error) {
         console.error('[EchoType] Start failed:', error);
-        showError(getMessage('errorNoChatGPT'), getMessage('errorNoChatGPTDesc'));
+        showErrorFromCode({ code: 'INJECTION_FAILED', message: String(error) });
       }
     }
   });
