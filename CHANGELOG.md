@@ -5,6 +5,38 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-01-20
+
+### 🎨 UI/UX - Major Visual Overhaul
+- **Vibrant Red Recording Theme** - Completely redesigned audio visualizer:
+  - Wide, dynamic wave animations (all 25 bars animate prominently)
+  - 5-tier animation groups: peak → high → mid → outer → edge
+  - Vibrant red gradient (#fca5a5 → #f87171 → #ef4444 → #dc2626)
+  - Wider bars (6-10px) with 3px gap for better visibility
+  - Red ambient glow effect during recording
+  - Red box-shadow on active bars
+
+- **Consistent Color Scheme**:
+  - **Record button**: Red (unchanged)
+  - **Submit button**: Changed from green to red (matches recording theme)
+  - **Ready status**: Changed from gray to green with green indicator dot
+  - **Recording status**: Red (unchanged)
+
+- **Improved Popup Layout**:
+  - Increased min-height from 420px to 480px
+  - All content displays without being clipped
+
+### 🔧 Improvements
+- Removed redundant UI elements (visualizer-status, volume-indicator)
+- Simplified HTML structure for better performance
+- Pure CSS animation mode (no microphone conflicts)
+
+### 🧪 Testing
+- All 140 unit tests passing
+- All 27 E2E tests passing in headless mode
+
+---
+
 ## [0.8.20] - 2026-01-20
 
 ### 🎨 UI/UX

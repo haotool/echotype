@@ -139,7 +139,7 @@
         background: var(--bg-base);
         color: var(--text-primary);
         width: 340px;
-        min-height: 420px;
+        min-height: 480px;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
@@ -303,8 +303,12 @@
       }
 
       .status-badge.idle {
-        background: var(--status-idle-bg);
-        color: var(--status-idle-text);
+        background: var(--status-success-bg);
+        color: var(--status-success-text);
+      }
+
+      .status-badge.idle .status-dot {
+        background: var(--success-500);
       }
 
       .status-badge.recording {
@@ -347,16 +351,16 @@
       }
 
       /* ============================================================================
-         AUDIO VISUALIZER - Modern AI Minimalist Design
-         Inspired by Siri, Google Assistant, and ChatGPT voice interfaces
-         Clean, centered waveform with fluid animations
+         AUDIO VISUALIZER - Modern Recording Style
+         Vibrant red theme with wide, dynamic wave animations
+         All bars animate prominently for engaging visual feedback
          ============================================================================ */
       .audio-visualizer {
         height: 64px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 2px;
+        gap: 3px;
         padding: var(--space-3) var(--space-4);
         background: var(--bg-subtle);
         border-radius: var(--radius-xl);
@@ -365,13 +369,13 @@
         border: 1px solid var(--border-muted);
       }
 
-      /* Subtle ambient glow when active */
+      /* Subtle ambient glow when active - red theme */
       .audio-visualizer::before {
         content: '';
         position: absolute;
         inset: 0;
         background: radial-gradient(ellipse at center, 
-          rgba(99, 102, 241, 0.08) 0%, 
+          rgba(239, 68, 68, 0.12) 0%, 
           transparent 70%);
         opacity: 0;
         transition: opacity 0.5s ease;
@@ -382,14 +386,15 @@
         opacity: 1;
       }
 
-      /* Wave bars - thin, centered, AI-style */
+      /* Wave bars - wider for better visibility */
       .wave-bar {
-        flex: 0 0 3px;
-        width: 3px;
+        flex: 1;
+        max-width: 10px;
+        min-width: 6px;
         min-height: 4px;
         height: 4px;
         background: var(--gray-300);
-        border-radius: 2px;
+        border-radius: 3px;
         transition: height 0.1s ease-out,
                     background 0.2s ease,
                     opacity 0.2s ease;
@@ -401,120 +406,184 @@
         background: var(--gray-600);
       }
 
-      /* Idle state - minimal dots */
+      /* Idle state - gentle breathing */
       .audio-visualizer:not(.active) .wave-bar {
         height: 4px;
         opacity: 0.4;
-        animation: idle-pulse 2s ease-in-out infinite;
+        animation: idle-pulse 2.5s ease-in-out infinite;
       }
 
-      /* Symmetric idle animation (center-out pattern) */
-      .audio-visualizer:not(.active) .wave-bar:nth-child(13) { animation-delay: 0ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(12),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(14) { animation-delay: 80ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(11),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(15) { animation-delay: 160ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(10),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(16) { animation-delay: 240ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(9),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(17) { animation-delay: 320ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(8),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(18) { animation-delay: 400ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(7),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(19) { animation-delay: 480ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(6),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(20) { animation-delay: 560ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(5),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(21) { animation-delay: 640ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(4),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(22) { animation-delay: 720ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(3),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(23) { animation-delay: 800ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(2),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(24) { animation-delay: 880ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(1),
-      .audio-visualizer:not(.active) .wave-bar:nth-child(25) { animation-delay: 960ms; }
+      /* Staggered idle animation - wave pattern */
+      .audio-visualizer:not(.active) .wave-bar:nth-child(1) { animation-delay: 0ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(2) { animation-delay: 100ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(3) { animation-delay: 200ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(4) { animation-delay: 300ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(5) { animation-delay: 400ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(6) { animation-delay: 500ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(7) { animation-delay: 600ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(8) { animation-delay: 700ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(9) { animation-delay: 800ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(10) { animation-delay: 900ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(11) { animation-delay: 1000ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(12) { animation-delay: 1100ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(13) { animation-delay: 1200ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(14) { animation-delay: 1100ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(15) { animation-delay: 1000ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(16) { animation-delay: 900ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(17) { animation-delay: 800ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(18) { animation-delay: 700ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(19) { animation-delay: 600ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(20) { animation-delay: 500ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(21) { animation-delay: 400ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(22) { animation-delay: 300ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(23) { animation-delay: 200ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(24) { animation-delay: 100ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(25) { animation-delay: 0ms; }
 
       @keyframes idle-pulse {
         0%, 100% { height: 4px; opacity: 0.3; }
-        50% { height: 8px; opacity: 0.5; }
+        50% { height: 10px; opacity: 0.5; }
       }
 
-      /* Active state - AI gradient (indigo → violet) */
+      /* Active state - Vibrant red gradient */
       .audio-visualizer.active .wave-bar {
         background: linear-gradient(180deg, 
-          #818cf8 0%,
-          #6366f1 50%,
-          #4f46e5 100%);
+          #fca5a5 0%,
+          #f87171 40%,
+          #ef4444 70%,
+          #dc2626 100%);
         opacity: 1;
-        animation: wave-flow 0.8s ease-in-out infinite;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
       }
 
-      /* Symmetric active animation (center peaks highest) */
+      /* Wide animation - all bars animate prominently */
+      /* Group 1: Center bars (13, 12, 14) - tallest */
       .audio-visualizer.active .wave-bar:nth-child(13) { 
+        animation: wave-peak 0.7s ease-in-out infinite;
         animation-delay: 0ms;
-        animation-name: wave-center;
       }
       .audio-visualizer.active .wave-bar:nth-child(12),
       .audio-visualizer.active .wave-bar:nth-child(14) { 
-        animation-delay: 40ms;
-        animation-name: wave-near-center;
+        animation: wave-peak 0.7s ease-in-out infinite;
+        animation-delay: 50ms;
       }
+
+      /* Group 2: Near-center bars (11, 15, 10, 16) - tall */
       .audio-visualizer.active .wave-bar:nth-child(11),
-      .audio-visualizer.active .wave-bar:nth-child(15) { animation-delay: 80ms; }
+      .audio-visualizer.active .wave-bar:nth-child(15) { 
+        animation: wave-high 0.75s ease-in-out infinite;
+        animation-delay: 100ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(10),
-      .audio-visualizer.active .wave-bar:nth-child(16) { animation-delay: 120ms; }
+      .audio-visualizer.active .wave-bar:nth-child(16) { 
+        animation: wave-high 0.75s ease-in-out infinite;
+        animation-delay: 150ms;
+      }
+
+      /* Group 3: Mid bars (9, 17, 8, 18, 7, 19) - medium-tall */
       .audio-visualizer.active .wave-bar:nth-child(9),
-      .audio-visualizer.active .wave-bar:nth-child(17) { animation-delay: 160ms; }
+      .audio-visualizer.active .wave-bar:nth-child(17) { 
+        animation: wave-mid 0.8s ease-in-out infinite;
+        animation-delay: 200ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(8),
-      .audio-visualizer.active .wave-bar:nth-child(18) { animation-delay: 200ms; }
+      .audio-visualizer.active .wave-bar:nth-child(18) { 
+        animation: wave-mid 0.8s ease-in-out infinite;
+        animation-delay: 250ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(7),
-      .audio-visualizer.active .wave-bar:nth-child(19) { animation-delay: 240ms; }
+      .audio-visualizer.active .wave-bar:nth-child(19) { 
+        animation: wave-mid 0.8s ease-in-out infinite;
+        animation-delay: 300ms;
+      }
+
+      /* Group 4: Outer-mid bars (6, 20, 5, 21) - medium */
       .audio-visualizer.active .wave-bar:nth-child(6),
-      .audio-visualizer.active .wave-bar:nth-child(20) { animation-delay: 280ms; }
+      .audio-visualizer.active .wave-bar:nth-child(20) { 
+        animation: wave-outer 0.85s ease-in-out infinite;
+        animation-delay: 350ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(5),
-      .audio-visualizer.active .wave-bar:nth-child(21) { animation-delay: 320ms; }
+      .audio-visualizer.active .wave-bar:nth-child(21) { 
+        animation: wave-outer 0.85s ease-in-out infinite;
+        animation-delay: 400ms;
+      }
+
+      /* Group 5: Edge bars (4, 22, 3, 23, 2, 24, 1, 25) - still visible */
       .audio-visualizer.active .wave-bar:nth-child(4),
-      .audio-visualizer.active .wave-bar:nth-child(22) { animation-delay: 360ms; }
+      .audio-visualizer.active .wave-bar:nth-child(22) { 
+        animation: wave-edge 0.9s ease-in-out infinite;
+        animation-delay: 450ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(3),
-      .audio-visualizer.active .wave-bar:nth-child(23) { animation-delay: 400ms; }
+      .audio-visualizer.active .wave-bar:nth-child(23) { 
+        animation: wave-edge 0.9s ease-in-out infinite;
+        animation-delay: 500ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(2),
-      .audio-visualizer.active .wave-bar:nth-child(24) { animation-delay: 440ms; }
+      .audio-visualizer.active .wave-bar:nth-child(24) { 
+        animation: wave-edge 0.9s ease-in-out infinite;
+        animation-delay: 550ms;
+      }
       .audio-visualizer.active .wave-bar:nth-child(1),
-      .audio-visualizer.active .wave-bar:nth-child(25) { animation-delay: 480ms; }
+      .audio-visualizer.active .wave-bar:nth-child(25) { 
+        animation: wave-edge 0.9s ease-in-out infinite;
+        animation-delay: 600ms;
+      }
 
-      /* Center bar - tallest peaks */
-      @keyframes wave-center {
+      /* Peak animation - center bars */
+      @keyframes wave-peak {
         0%, 100% { height: 12px; }
-        25% { height: 44px; }
-        50% { height: 36px; }
-        75% { height: 48px; }
+        20% { height: 48px; }
+        40% { height: 36px; }
+        60% { height: 52px; }
+        80% { height: 40px; }
       }
 
-      /* Near-center bars */
-      @keyframes wave-near-center {
+      /* High animation - near-center bars */
+      @keyframes wave-high {
         0%, 100% { height: 10px; }
-        25% { height: 36px; }
-        50% { height: 28px; }
-        75% { height: 40px; }
+        20% { height: 40px; }
+        40% { height: 28px; }
+        60% { height: 44px; }
+        80% { height: 32px; }
       }
 
-      /* Standard flow animation (outer bars) */
-      @keyframes wave-flow {
+      /* Mid animation - middle bars */
+      @keyframes wave-mid {
         0%, 100% { height: 8px; }
-        25% { height: 28px; }
-        50% { height: 20px; }
-        75% { height: 32px; }
+        20% { height: 32px; }
+        40% { height: 20px; }
+        60% { height: 36px; }
+        80% { height: 24px; }
+      }
+
+      /* Outer animation - outer-mid bars */
+      @keyframes wave-outer {
+        0%, 100% { height: 6px; }
+        20% { height: 24px; }
+        40% { height: 16px; }
+        60% { height: 28px; }
+        80% { height: 18px; }
+      }
+
+      /* Edge animation - edge bars (still visible!) */
+      @keyframes wave-edge {
+        0%, 100% { height: 5px; }
+        20% { height: 18px; }
+        40% { height: 12px; }
+        60% { height: 22px; }
+        80% { height: 14px; }
       }
 
       /* Status indicator badge - Hidden to avoid redundancy with status badge */
       .visualizer-status {
-        display: none; /* Removed: redundant with status-badge showing "Listening... SEC 07" */
+        display: none;
       }
 
-      /* Volume level indicator - minimal, only shown when needed */
+      /* Volume level indicator - hidden */
       .volume-indicator {
-        display: none; /* Hidden by default, can be enabled via JS if needed */
+        display: none;
       }
 
       /* ============================================================================
@@ -603,17 +672,17 @@
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
       }
 
-      /* Submit ready state (green) */
+      /* Submit ready state (red - matching recording theme) */
       .btn-submit-ready {
-        background: var(--btn-primary-bg);
+        background: var(--error-500);
         color: white;
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
       }
 
       .btn-submit-ready:hover:not(:disabled) {
-        background: var(--btn-primary-hover);
+        background: var(--error-600);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
       }
 
       /* Cancel button */
