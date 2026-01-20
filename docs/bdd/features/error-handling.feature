@@ -282,3 +282,37 @@ Feature: 錯誤處理與狀態偵測
     When 顯示錯誤訊息
     Then 應使用原始錯誤訊息作為描述
     And 標題應顯示「啟動失敗」
+
+  # ============================================================================
+  # ChatGPT Toast 偵測 (v0.8.18+)
+  # ============================================================================
+
+  @toast @microphone-error
+  Scenario: 偵測 ChatGPT 麥克風錯誤 Toast
+    Given ChatGPT 頁面顯示麥克風錯誤 Toast
+    And Toast 訊息包含「啟用麥克風存取權」
+    When 執行 Toast 偵測
+    Then 應回報 type 為 "microphone_error"
+    And 應包含原始 Toast 訊息
+
+  @toast @observer
+  Scenario: 即時監控 ChatGPT Toast
+    Given 已啟動 Toast 監控
+    When ChatGPT 動態插入麥克風錯誤 Toast
+    Then 應觸發回調函數
+    And 應通知背景腳本狀態變更為 "error"
+
+  @toast @multi-language
+  Scenario Outline: 多語言 Toast 偵測
+    Given ChatGPT 頁面語言為 "<language>"
+    And 顯示麥克風錯誤 Toast 訊息 "<message>"
+    When 執行 Toast 偵測
+    Then 應正確識別為麥克風錯誤
+
+    Examples:
+      | language | message                    |
+      | en       | enable microphone access   |
+      | zh_TW    | 啟用麥克風存取權           |
+      | zh_CN    | 启用麦克风访问             |
+      | ja       | マイクへのアクセス         |
+      | ko       | 마이크 액세스              |

@@ -5,6 +5,37 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.18] - 2026-01-20
+
+### ✨ Features
+- **Real-time Audio Visualization** - Modern audio visualizer with Web Audio API:
+  - 21 wave bars with dynamic height based on microphone input
+  - Color-coded volume levels (green → yellow → red)
+  - Smooth CSS animations with `cubic-bezier` easing
+  - Fallback CSS animation when audio API unavailable
+  - Volume percentage indicator
+- **ChatGPT Toast Detection** - Detect microphone permission errors from ChatGPT:
+  - Multi-language toast pattern matching (EN/繁中/简中/日/韓/德/法/西)
+  - `detectMicrophoneToast()` for immediate detection
+  - `observeMicrophoneToast()` with MutationObserver for real-time monitoring
+  - Automatic status update when toast detected
+
+### 🎨 UI/UX
+- **Redesigned Audio Visualizer** - Premium extension-quality audio feedback:
+  - Ambient glow effect when recording
+  - Gradient backgrounds with subtle depth
+  - Responsive bar animations with natural jitter
+  - Idle state with gentle pulse animation
+
+### 🔧 Bug Fixes
+- **E2E Test Stability** - Increased service worker wait timeout to 30s for reliable test execution
+
+### 🧪 Testing
+- All 140 unit tests passing
+- All 27 E2E tests passing
+
+---
+
 ## [0.8.17] - 2026-01-20
 
 ### 🌐 Internationalization

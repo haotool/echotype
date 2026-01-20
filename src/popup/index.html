@@ -346,44 +346,157 @@
         letter-spacing: 0.1em;
       }
 
-      /* Waveform Visualization */
-      .waveform {
-        height: 48px;
+      /* ============================================================================
+         AUDIO VISUALIZER - Modern Real-time Audio Feedback
+         ============================================================================ */
+      .audio-visualizer {
+        height: 56px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 3px;
-        padding: var(--space-2);
-        background: var(--bg-base);
+        gap: 2px;
+        padding: var(--space-3);
+        background: linear-gradient(135deg, var(--bg-base) 0%, var(--bg-subtle) 100%);
         border-radius: var(--radius-lg);
         overflow: hidden;
+        position: relative;
       }
 
+      /* Ambient glow effect when active */
+      .audio-visualizer::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .audio-visualizer.active::before {
+        opacity: 1;
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse-glow {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+      }
+
+      /* Wave bars with modern styling */
       .wave-bar {
-        width: 4px;
-        height: 8px;
-        background: var(--primary-500);
+        width: 3px;
+        min-height: 4px;
+        height: 4px;
+        background: linear-gradient(180deg, var(--primary-400) 0%, var(--primary-600) 100%);
         border-radius: 2px;
-        transition: height 0.1s ease;
+        transition: height 0.05s cubic-bezier(0.4, 0, 0.2, 1), 
+                    background 0.2s ease,
+                    box-shadow 0.2s ease;
+        transform-origin: center bottom;
+        will-change: height;
       }
 
-      .waveform.active .wave-bar {
-        animation: wave 0.5s ease-in-out infinite;
+      /* Idle state animation */
+      .audio-visualizer:not(.active) .wave-bar {
+        animation: idle-pulse 2s ease-in-out infinite;
+        background: var(--gray-300);
       }
 
-      .wave-bar:nth-child(1) { animation-delay: 0ms; }
-      .wave-bar:nth-child(2) { animation-delay: 100ms; }
-      .wave-bar:nth-child(3) { animation-delay: 200ms; }
-      .wave-bar:nth-child(4) { animation-delay: 300ms; }
-      .wave-bar:nth-child(5) { animation-delay: 400ms; }
-      .wave-bar:nth-child(6) { animation-delay: 350ms; }
-      .wave-bar:nth-child(7) { animation-delay: 250ms; }
-      .wave-bar:nth-child(8) { animation-delay: 150ms; }
-      .wave-bar:nth-child(9) { animation-delay: 50ms; }
+      [data-theme="dark"] .audio-visualizer:not(.active) .wave-bar {
+        background: var(--gray-600);
+      }
 
-      @keyframes wave {
-        0%, 100% { height: 8px; }
-        50% { height: 32px; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(1) { animation-delay: 0ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(2) { animation-delay: 100ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(3) { animation-delay: 200ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(4) { animation-delay: 300ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(5) { animation-delay: 400ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(6) { animation-delay: 500ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(7) { animation-delay: 600ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(8) { animation-delay: 700ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(9) { animation-delay: 800ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(10) { animation-delay: 900ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(11) { animation-delay: 1000ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(12) { animation-delay: 1100ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(13) { animation-delay: 1000ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(14) { animation-delay: 900ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(15) { animation-delay: 800ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(16) { animation-delay: 700ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(17) { animation-delay: 600ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(18) { animation-delay: 500ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(19) { animation-delay: 400ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(20) { animation-delay: 300ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(21) { animation-delay: 200ms; }
+
+      @keyframes idle-pulse {
+        0%, 100% { height: 4px; opacity: 0.4; }
+        50% { height: 8px; opacity: 0.6; }
+      }
+
+      /* Active state - real-time audio visualization */
+      .audio-visualizer.active .wave-bar {
+        background: linear-gradient(180deg, var(--primary-400) 0%, var(--primary-600) 100%);
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+      }
+
+      /* High volume indicator */
+      .audio-visualizer.active .wave-bar.high {
+        background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+        box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+      }
+
+      /* Peak volume indicator */
+      .audio-visualizer.active .wave-bar.peak {
+        background: linear-gradient(180deg, #f87171 0%, #ef4444 100%);
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+      }
+
+      /* Fallback animation when no audio data */
+      .audio-visualizer.active.no-audio .wave-bar {
+        animation: wave-fallback 0.6s ease-in-out infinite;
+      }
+
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(1) { animation-delay: 0ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(2) { animation-delay: 50ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(3) { animation-delay: 100ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(4) { animation-delay: 150ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(5) { animation-delay: 200ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(6) { animation-delay: 250ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(7) { animation-delay: 300ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(8) { animation-delay: 350ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(9) { animation-delay: 400ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(10) { animation-delay: 450ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(11) { animation-delay: 500ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(12) { animation-delay: 500ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(13) { animation-delay: 450ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(14) { animation-delay: 400ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(15) { animation-delay: 350ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(16) { animation-delay: 300ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(17) { animation-delay: 250ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(18) { animation-delay: 200ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(19) { animation-delay: 150ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(20) { animation-delay: 100ms; }
+      .audio-visualizer.active.no-audio .wave-bar:nth-child(21) { animation-delay: 50ms; }
+
+      @keyframes wave-fallback {
+        0%, 100% { height: 6px; }
+        50% { height: 28px; }
+      }
+
+      /* Volume level indicator text */
+      .volume-indicator {
+        position: absolute;
+        bottom: 4px;
+        right: 8px;
+        font-size: 0.625rem;
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .audio-visualizer.active .volume-indicator {
+        opacity: 0.7;
       }
 
       /* ============================================================================
@@ -755,7 +868,7 @@
         </div>
         <span class="status-label" data-i18n="statusLabel">Status</span>
       </div>
-      <div class="waveform" id="waveform">
+      <div class="audio-visualizer" id="audio-visualizer">
         <div class="wave-bar"></div>
         <div class="wave-bar"></div>
         <div class="wave-bar"></div>
@@ -765,6 +878,19 @@
         <div class="wave-bar"></div>
         <div class="wave-bar"></div>
         <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <span class="volume-indicator" id="volume-indicator"></span>
       </div>
     </div>
 

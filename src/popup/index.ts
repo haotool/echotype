@@ -54,7 +54,8 @@ const elements = {
   statusBadge: document.getElementById('status-badge') as HTMLElement,
   statusText: document.getElementById('status-text') as HTMLElement,
   statusTimer: document.getElementById('status-timer') as HTMLElement,
-  waveform: document.getElementById('waveform') as HTMLElement,
+  audioVisualizer: document.getElementById('audio-visualizer') as HTMLElement,
+  volumeIndicator: document.getElementById('volume-indicator') as HTMLElement,
   
   // Error
   errorCard: document.getElementById('error-card') as HTMLElement,
@@ -94,6 +95,14 @@ let isDevMode = false;
 let recordingStartedAt: number | null = null;
 let timerIntervalId: number | null = null;
 
+// Audio visualization state
+let audioContext: AudioContext | null = null;
+let analyser: AnalyserNode | null = null;
+let microphone: MediaStreamAudioSourceNode | null = null;
+let mediaStream: MediaStream | null = null;
+let animationFrameId: number | null = null;
+let isAudioActive = false;
+
 function formatDuration(seconds: number): string {
   return `SEC ${String(seconds).padStart(2, '0')}`;
 }
@@ -120,6 +129,143 @@ function stopRecordingTimer(): void {
   recordingStartedAt = null;
   elements.statusTimer.textContent = '';
   elements.statusTimer.style.display = 'none';
+}
+
+// ============================================================================
+// Audio Visualization
+// ============================================================================
+
+const MIN_HEIGHT = 4;
+const MAX_HEIGHT = 40;
+const SMOOTHING = 0.8;
+
+/**
+ * Initialize audio context and microphone for visualization.
+ * Uses Web Audio API to capture and analyze microphone input.
+ */
+async function initAudioVisualization(): Promise<boolean> {
+  try {
+    // Request microphone access
+    mediaStream = await navigator.mediaDevices.getUserMedia({ 
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      }
+    });
+
+    // Create audio context
+    audioContext = new AudioContext();
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 64; // Small FFT for fast response
+    analyser.smoothingTimeConstant = SMOOTHING;
+
+    // Connect microphone to analyser
+    microphone = audioContext.createMediaStreamSource(mediaStream);
+    microphone.connect(analyser);
+
+    isAudioActive = true;
+    elements.audioVisualizer.classList.remove('no-audio');
+    
+    // Start visualization loop
+    visualize();
+    
+    return true;
+  } catch (error) {
+    console.warn('[EchoType] Audio visualization unavailable:', error);
+    // Fall back to CSS animation
+    elements.audioVisualizer.classList.add('no-audio');
+    isAudioActive = false;
+    return false;
+  }
+}
+
+/**
+ * Stop audio visualization and release resources.
+ */
+function stopAudioVisualization(): void {
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+
+  if (mediaStream) {
+    mediaStream.getTracks().forEach(track => track.stop());
+    mediaStream = null;
+  }
+
+  if (microphone) {
+    microphone.disconnect();
+    microphone = null;
+  }
+
+  if (audioContext && audioContext.state !== 'closed') {
+    audioContext.close().catch(() => {});
+    audioContext = null;
+  }
+
+  analyser = null;
+  isAudioActive = false;
+
+  // Reset bars to minimum height
+  const bars = elements.audioVisualizer.querySelectorAll('.wave-bar');
+  bars.forEach((bar) => {
+    (bar as HTMLElement).style.height = `${MIN_HEIGHT}px`;
+    bar.classList.remove('high', 'peak');
+  });
+
+  elements.volumeIndicator.textContent = '';
+}
+
+/**
+ * Main visualization loop using requestAnimationFrame.
+ * Reads frequency data and updates wave bars accordingly.
+ */
+function visualize(): void {
+  if (!analyser || !isAudioActive) return;
+
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  analyser.getByteFrequencyData(dataArray);
+
+  const bars = elements.audioVisualizer.querySelectorAll('.wave-bar');
+  const barCount = bars.length;
+
+  // Calculate average volume for indicator
+  let totalVolume = 0;
+
+  bars.forEach((bar, index) => {
+    // Map bar index to frequency data (symmetric from center)
+    const centerIndex = Math.floor(barCount / 2);
+    const distance = Math.abs(index - centerIndex);
+    const dataIndex = Math.min(distance, bufferLength - 1);
+    
+    // Get frequency value and normalize
+    const value = dataArray[dataIndex] / 255;
+    totalVolume += value;
+
+    // Calculate height with some randomness for natural feel
+    const jitter = Math.random() * 0.1;
+    const height = MIN_HEIGHT + (value + jitter) * (MAX_HEIGHT - MIN_HEIGHT);
+    
+    const barElement = bar as HTMLElement;
+    barElement.style.height = `${Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, height))}px`;
+
+    // Add color classes based on volume level
+    barElement.classList.remove('high', 'peak');
+    if (value > 0.8) {
+      barElement.classList.add('peak');
+    } else if (value > 0.5) {
+      barElement.classList.add('high');
+    }
+  });
+
+  // Update volume indicator
+  const avgVolume = Math.round((totalVolume / barCount) * 100);
+  elements.volumeIndicator.textContent = `${avgVolume}%`;
+
+  // Continue animation loop
+  animationFrameId = requestAnimationFrame(visualize);
 }
 
 // ============================================================================
@@ -253,18 +399,29 @@ function updateStatusUI(status: DictationStatus): void {
   elements.statusBadge.className = 'status-badge ' + getStatusClass(status);
   elements.statusText.textContent = getStatusLabel(status);
   
-  // Update waveform
-  const isActive = status === 'recording' || status === 'listening';
-  elements.waveform.classList.toggle('active', isActive);
-  
   // Determine if recording
   const isRecordingState = status === 'recording' || status === 'listening';
   const isProcessing = status === 'processing';
+  const wasActive = elements.audioVisualizer.classList.contains('active');
+
+  // Update audio visualizer
+  elements.audioVisualizer.classList.toggle('active', isRecordingState);
 
   if (isRecordingState) {
     startRecordingTimer();
+    // Start audio visualization if not already active
+    if (!wasActive && !isAudioActive) {
+      initAudioVisualization().catch(() => {
+        // Fallback to CSS animation if audio fails
+        elements.audioVisualizer.classList.add('no-audio');
+      });
+    }
   } else {
     stopRecordingTimer();
+    // Stop audio visualization
+    if (wasActive || isAudioActive) {
+      stopAudioVisualization();
+    }
   }
   
   // Update toggle button based on state

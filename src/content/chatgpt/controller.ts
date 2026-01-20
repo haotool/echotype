@@ -27,7 +27,10 @@ import {
   checkLoginStatus,
   isVoiceInputAvailable,
   checkMicrophonePermission,
+  detectMicrophoneToast,
+  observeMicrophoneToast,
   type MicrophonePermissionResult,
+  type ToastDetectionResult,
 } from './selectors';
 import { readComposerText, captureAfterSubmit, cancelCapture, captureStableText } from './capture';
 import { computeAddedText } from './diff';
@@ -51,6 +54,9 @@ const state: ControllerState = {
   isActive: false,
   lastStatus: 'unknown',
 };
+
+// Toast observer cleanup function
+let toastObserverCleanup: (() => void) | null = null;
 
 // ============================================================================
 // Status Monitoring
@@ -286,6 +292,18 @@ export async function startDictation(): Promise<{
   }
 
   console.log('[EchoType:Controller] Dictation started successfully');
+
+  // Start monitoring for microphone toast errors
+  startToastMonitoring();
+
+  // Check for immediate toast error (e.g., permission denied)
+  const toastCheck = detectMicrophoneToast();
+  if (toastCheck.found && toastCheck.type === 'microphone_error') {
+    console.warn('[EchoType:Controller] Microphone toast detected:', toastCheck.message);
+    // Don't fail immediately - let the user see the toast and handle it
+    // The toast observer will notify the background script
+  }
+
   return {
     ok: true,
     baseline: state.baselineText,
@@ -304,12 +322,51 @@ export async function startDictation(): Promise<{
 }
 
 /**
+ * Start monitoring for ChatGPT microphone toast messages.
+ * Notifies background script when a toast is detected.
+ */
+function startToastMonitoring(): void {
+  // Clean up any existing observer
+  stopToastMonitoring();
+
+  toastObserverCleanup = observeMicrophoneToast((result: ToastDetectionResult) => {
+    if (result.type === 'microphone_error') {
+      console.warn('[EchoType:Controller] Microphone toast detected:', result.message);
+      
+      // Notify background script about the error
+      chrome.runtime.sendMessage({
+        type: MSG.STATUS_CHANGED,
+        status: 'error',
+        error: {
+          code: 'MICROPHONE_DENIED',
+          message: result.message || 'Microphone access denied by ChatGPT.',
+          detail: 'ChatGPT reported that microphone access is not available. Please check your browser settings.',
+        },
+      }).catch(() => {
+        // Ignore errors if background is not available
+      });
+    }
+  });
+}
+
+/**
+ * Stop monitoring for ChatGPT toast messages.
+ */
+function stopToastMonitoring(): void {
+  if (toastObserverCleanup) {
+    toastObserverCleanup();
+    toastObserverCleanup = null;
+  }
+}
+
+/**
  * Cancel dictation and clear input.
  * Stops recording and cancels any pending capture.
  *
  * @returns Success status
  */
 export function cancelDictation(): { ok: boolean } {
+  stopToastMonitoring(); // Stop toast monitoring
   const clicked = clickStopButton();
   cancelCapture(); // Cancel any pending capture
   if (clicked) {

@@ -46,7 +46,7 @@ export const test = base.extend<{
     // Wait for service worker to be available (MV3)
     let [serviceWorker] = context.serviceWorkers();
     if (!serviceWorker) {
-      serviceWorker = await context.waitForEvent('serviceworker');
+      serviceWorker = await context.waitForEvent('serviceworker', { timeout: 30000 });
     }
 
     // Extract extension ID from service worker URL

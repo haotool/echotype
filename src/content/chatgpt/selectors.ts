@@ -1195,6 +1195,132 @@ export function inspectDOM(force = false): void {
 }
 
 // ============================================================================
+// ChatGPT Toast Detection (Microphone Error)
+// ============================================================================
+
+/**
+ * Toast message patterns for microphone permission errors across languages.
+ * ChatGPT displays these when microphone access is denied or unavailable.
+ */
+const MICROPHONE_TOAST_PATTERNS = [
+  // English
+  'enable microphone access',
+  'microphone access',
+  'allow microphone',
+  // Traditional Chinese
+  '啟用麥克風存取權',
+  '麥克風存取權',
+  '允許麥克風',
+  // Simplified Chinese
+  '启用麦克风访问',
+  '麦克风访问',
+  '允许麦克风',
+  // Japanese
+  'マイクへのアクセス',
+  'マイクを許可',
+  // Korean
+  '마이크 액세스',
+  '마이크 허용',
+  // German
+  'Mikrofonzugriff',
+  // French
+  'accès au microphone',
+  // Spanish
+  'acceso al micrófono',
+] as const;
+
+export interface ToastDetectionResult {
+  found: boolean;
+  type: 'microphone_error' | 'unknown' | null;
+  message: string | null;
+  element: Element | null;
+}
+
+/**
+ * Detect ChatGPT toast messages, particularly microphone permission errors.
+ * ChatGPT displays a red toast when microphone access is denied.
+ *
+ * @returns Detection result with toast details
+ */
+export function detectMicrophoneToast(): ToastDetectionResult {
+  // Look for toast containers with error styling
+  const toastSelectors = [
+    '.toast-root',
+    '[data-state="entered"].toast-root',
+    '[role="alert"]',
+    'div[class*="toast"]',
+  ];
+
+  for (const selector of toastSelectors) {
+    const toasts = document.querySelectorAll(selector);
+    for (const toast of toasts) {
+      const text = toast.textContent?.toLowerCase() || '';
+      
+      // Check if this is a microphone error toast
+      for (const pattern of MICROPHONE_TOAST_PATTERNS) {
+        if (text.includes(pattern.toLowerCase())) {
+          return {
+            found: true,
+            type: 'microphone_error',
+            message: toast.textContent?.trim() || null,
+            element: toast,
+          };
+        }
+      }
+    }
+  }
+
+  return {
+    found: false,
+    type: null,
+    message: null,
+    element: null,
+  };
+}
+
+/**
+ * Set up a MutationObserver to watch for microphone error toasts.
+ * Calls the callback when a microphone error toast is detected.
+ *
+ * @param callback - Function to call when toast is detected
+ * @returns Cleanup function to disconnect the observer
+ */
+export function observeMicrophoneToast(
+  callback: (result: ToastDetectionResult) => void
+): () => void {
+  let lastToastMessage: string | null = null;
+
+  const observer = new MutationObserver(() => {
+    const result = detectMicrophoneToast();
+    
+    // Only trigger callback if we found a new toast
+    if (result.found && result.message !== lastToastMessage) {
+      lastToastMessage = result.message;
+      callback(result);
+      
+      // Reset after a delay to allow re-detection
+      setTimeout(() => {
+        lastToastMessage = null;
+      }, 5000);
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  // Check immediately in case toast is already present
+  const initialResult = detectMicrophoneToast();
+  if (initialResult.found) {
+    callback(initialResult);
+    lastToastMessage = initialResult.message;
+  }
+
+  return () => observer.disconnect();
+}
+
+// ============================================================================
 // Microphone Permission Detection
 // ============================================================================
 
