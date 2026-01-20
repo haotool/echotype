@@ -142,24 +142,8 @@
       "count": {
         "content": "$1",
         "example": "5"
-      },
-  "manualSubmitAutoCopy": {
-    "message": "Automatisches Kopieren bei manueller Übermittlung",
-    "description": "Toggle label for manual submit auto copy"
-  },
-  "manualSubmitAutoCopyDesc": {
-    "message": "Automatisch kopieren beim manuellen Klicken der Übermitteln-Schaltfläche auf der ChatGPT-Seite",
-    "description": "Toggle description for manual submit auto copy"
-  }
-    },
-  "manualSubmitAutoCopy": {
-    "message": "Automatisches Kopieren bei manueller Übermittlung",
-    "description": "Toggle label for manual submit auto copy"
-  },
-  "manualSubmitAutoCopyDesc": {
-    "message": "Automatisch kopieren beim manuellen Klicken der Übermitteln-Schaltfläche auf der ChatGPT-Seite",
-    "description": "Toggle description for manual submit auto copy"
-  }
+      }
+    }
   },
   "yesterday": {
     "message": "Gestern",
