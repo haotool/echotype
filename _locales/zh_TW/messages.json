@@ -332,5 +332,13 @@
   "audioFeedbackDesc": {
     "message": "在開始、成功和錯誤時播放聲音",
     "description": "Toggle description for audio feedback"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "手動提交自動複製",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "在 ChatGPT 頁面手動點擊提交按鈕時自動複製內容",
+    "description": "Toggle description for manual submit auto copy"
   }
 }

@@ -64,6 +64,7 @@ Open the popup and select Settings.
 | Auto Copy | Copy results to clipboard | On |
 | Auto Paste | Paste to the original input | Off |
 | Return Focus | Return to the original tab after start | Off |
+| Manual Submit Auto Copy | Auto copy when manually clicking submit on ChatGPT | Off |
 
 ## Development
 

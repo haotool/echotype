@@ -22,6 +22,8 @@ export interface EchoTypeSettings {
   returnFocusAfterStart: boolean;
   /** Enable audio feedback sounds */
   audioFeedbackEnabled: boolean;
+  /** Auto-copy when manually clicking submit button on ChatGPT */
+  manualSubmitAutoCopy: boolean;
   /** Maximum history items to keep */
   historySize: number;
 }
@@ -31,6 +33,7 @@ export const DEFAULT_SETTINGS: EchoTypeSettings = {
   autoPasteToActiveTab: false,
   returnFocusAfterStart: false,
   audioFeedbackEnabled: true,
+  manualSubmitAutoCopy: false,
   historySize: 5,
 };
 

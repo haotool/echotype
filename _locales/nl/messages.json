@@ -336,5 +336,13 @@
   "historyCleared": {
     "message": "Geschiedenis gewist",
     "description": "Toast when history is cleared"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "Manual Submit Auto Copy",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Auto copy when manually clicking submit button on ChatGPT page",
+    "description": "Toggle description for manual submit auto copy"
   }
 }

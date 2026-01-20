@@ -53,6 +53,7 @@ pnpm build
 | Auto Copy | 完成後自動複製 | 開啟 |
 | Auto Paste | 貼上到原輸入位置 | 關閉 |
 | Return Focus | 開始後回到原分頁 | 關閉 |
+| Manual Submit Auto Copy | 在 ChatGPT 手動點擊提交時自動複製 | 關閉 |
 
 ## 開發
 

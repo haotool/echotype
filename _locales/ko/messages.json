@@ -142,8 +142,24 @@
       "count": {
         "content": "$1",
         "example": "5"
-      }
-    }
+      },
+  "manualSubmitAutoCopy": {
+    "message": "수동 제출 자동 복사",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "ChatGPT 페이지에서 수동으로 제출 버튼을 클릭할 때 자동 복사",
+    "description": "Toggle description for manual submit auto copy"
+  }
+    },
+  "manualSubmitAutoCopy": {
+    "message": "수동 제출 자동 복사",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "ChatGPT 페이지에서 수동으로 제출 버튼을 클릭할 때 자동 복사",
+    "description": "Toggle description for manual submit auto copy"
+  }
   },
   "yesterday": {
     "message": "어제",
@@ -336,5 +352,13 @@
   "historyCleared": {
     "message": "기록 삭제됨",
     "description": "Toast when history is cleared"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "수동 제출 자동 복사",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "ChatGPT 페이지에서 수동으로 제출 버튼을 클릭할 때 자동 복사",
+    "description": "Toggle description for manual submit auto copy"
   }
 }

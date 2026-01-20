@@ -154,8 +154,24 @@
       "count": {
         "content": "$1",
         "example": "5"
-      }
-    }
+      },
+  "manualSubmitAutoCopy": {
+    "message": "Автокопирование при ручной отправке",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Автоматически копировать при ручном нажатии кнопки отправки на странице ChatGPT",
+    "description": "Toggle description for manual submit auto copy"
+  }
+    },
+  "manualSubmitAutoCopy": {
+    "message": "Автокопирование при ручной отправке",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Автоматически копировать при ручном нажатии кнопки отправки на странице ChatGPT",
+    "description": "Toggle description for manual submit auto copy"
+  }
   },
   "yesterday": {
     "message": "Вчера",
@@ -332,5 +348,13 @@
   "historyCleared": {
     "message": "История очищена",
     "description": "Toast when history is cleared"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "Автокопирование при ручной отправке",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Автоматически копировать при ручном нажатии кнопки отправки на странице ChatGPT",
+    "description": "Toggle description for manual submit auto copy"
   }
 }

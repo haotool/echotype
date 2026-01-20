@@ -52,6 +52,9 @@ export const MSG = {
   HISTORY_RESULT: 'HISTORY_RESULT',
   HISTORY_CLEAR: 'HISTORY_CLEAR',
 
+  // Manual Submit (Content → Background)
+  MANUAL_SUBMIT_CAPTURE: 'MANUAL_SUBMIT_CAPTURE',
+
   // Popup
   GET_STATUS: 'GET_STATUS',
   GET_HISTORY: 'GET_HISTORY',

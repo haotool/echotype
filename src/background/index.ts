@@ -864,6 +864,34 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true;
   }
 
+  // Handle manual submit capture from ChatGPT content script
+  if (message.type === MSG.MANUAL_SUBMIT_CAPTURE) {
+    (async () => {
+      const { text } = message as { text: string; timestamp: number };
+      console.log('[EchoType] Manual submit capture received:', text.substring(0, 50));
+      
+      // Copy to clipboard
+      const clipboardOk = await writeToClipboard(text);
+      if (clipboardOk) {
+        console.log('[EchoType] Manual submit: copied to clipboard');
+      }
+      
+      // Add to history (addToHistory creates the HistoryItem internally)
+      await addToHistory(text);
+      
+      // Play success sound if enabled
+      if (canPlayAudio()) {
+        await playSuccessSound();
+      }
+      
+      // Show success badge briefly
+      await showSuccessBadge();
+      
+      sendResponse({ ok: true });
+    })();
+    return true;
+  }
+
   // Handle heartbeat/health check requests (for developer mode)
   if (message.type === 'GET_HEALTH') {
     (async () => {

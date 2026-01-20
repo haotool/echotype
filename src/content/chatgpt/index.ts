@@ -8,6 +8,8 @@
 
 import { throttle } from '@shared/utils';
 import { MSG } from '@shared/protocol';
+import type { EchoTypeSettings } from '@shared/types';
+import { DEFAULT_SETTINGS } from '@shared/types';
 
 import {
   handleCommand,
@@ -15,7 +17,9 @@ import {
   getStatus,
   resetController,
 } from './controller';
-import { inspectDOM, performHealthCheck, getDiagnosticInfo } from './selectors';
+import { inspectDOM, performHealthCheck, getDiagnosticInfo, findSubmitButton, detectStatus } from './selectors';
+import { readComposerText, captureStableText } from './capture';
+import { normalizeText } from '@shared/utils';
 
 // ============================================================================
 // Initialization
@@ -118,6 +122,98 @@ function safeSendMessage(message: unknown): void {
     attributes: true,
     attributeFilter: ['aria-label', 'aria-disabled', 'disabled', 'class', 'style', 'hidden'],
   });
+
+// ============================================================================
+// Manual Submit Button Click Listener
+// ============================================================================
+
+const STORAGE_KEY = 'echotype_settings';
+let manualSubmitAutoCopyEnabled = false;
+
+/**
+ * Load settings to check if manual submit auto-copy is enabled.
+ */
+async function loadManualSubmitSetting(): Promise<void> {
+  try {
+    const result = await chrome.storage.sync.get(STORAGE_KEY);
+    const settings = result[STORAGE_KEY] as Partial<EchoTypeSettings> | undefined;
+    manualSubmitAutoCopyEnabled = settings?.manualSubmitAutoCopy ?? DEFAULT_SETTINGS.manualSubmitAutoCopy;
+    console.log('[EchoType] Manual submit auto-copy:', manualSubmitAutoCopyEnabled);
+  } catch {
+    manualSubmitAutoCopyEnabled = false;
+  }
+}
+
+// Load setting initially
+loadManualSubmitSetting();
+
+// Listen for setting changes
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes[STORAGE_KEY]?.newValue) {
+    const newSettings = changes[STORAGE_KEY].newValue as Partial<EchoTypeSettings>;
+    manualSubmitAutoCopyEnabled = newSettings.manualSubmitAutoCopy ?? false;
+    console.log('[EchoType] Manual submit auto-copy updated:', manualSubmitAutoCopyEnabled);
+  }
+});
+
+/**
+ * Handle manual submit button click.
+ * Captures text and sends to background for clipboard copy.
+ */
+async function handleManualSubmitClick(): Promise<void> {
+  if (!manualSubmitAutoCopyEnabled) return;
+  
+  const status = detectStatus();
+  // Only capture if we're in recording/listening state
+  if (status !== 'recording' && status !== 'listening') {
+    console.log('[EchoType] Manual submit ignored - not in dictation mode:', status);
+    return;
+  }
+  
+  console.log('[EchoType] Manual submit detected, capturing text...');
+  
+  // Wait a moment for the text to appear in composer
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  // Capture the text
+  const preText = readComposerText();
+  const capture = await captureStableText(preText, { requireChange: false, timeout: 3000 });
+  const text = normalizeText(capture.text);
+  
+  if (text) {
+    console.log('[EchoType] Manual submit captured:', text.substring(0, 50));
+    // Send to background for clipboard copy and history
+    safeSendMessage({
+      type: MSG.MANUAL_SUBMIT_CAPTURE,
+      text,
+      timestamp: Date.now(),
+    });
+  }
+}
+
+/**
+ * Set up click listener for submit button.
+ * Uses event delegation on document body.
+ */
+function setupManualSubmitListener(): void {
+  document.body.addEventListener('click', (event) => {
+    if (!manualSubmitAutoCopyEnabled) return;
+    
+    const target = event.target as HTMLElement;
+    const submitBtn = findSubmitButton();
+    
+    // Check if clicked element is or is within the submit button
+    if (submitBtn && (target === submitBtn || submitBtn.contains(target))) {
+      // Use setTimeout to let the click complete first
+      setTimeout(() => {
+        handleManualSubmitClick().catch(console.error);
+      }, 50);
+    }
+  }, true); // Use capture phase to detect before default handlers
+}
+
+// Initialize manual submit listener
+setupManualSubmitListener();
 
 // ============================================================================
 // Cleanup

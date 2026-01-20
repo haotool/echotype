@@ -4,9 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=340" />
     <title>EchoType</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       /* ============================================================================
          DESIGN TOKENS (Inline for popup performance)
@@ -24,23 +27,23 @@
         --gray-800: #262626;
         --gray-900: #171717;
         --gray-950: #0a0a0a;
-        
+
         --primary-400: #34d399;
         --primary-500: #10b981;
         --primary-600: #059669;
-        
+
         --accent-400: #a78bfa;
         --accent-500: #8b5cf6;
-        
+
         --error-500: #ef4444;
         --error-600: #dc2626;
-        
+
         --success-500: #22c55e;
-        
+
         /* Typography */
         --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
         --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
-        
+
         /* Spacing */
         --space-1: 0.25rem;
         --space-2: 0.5rem;
@@ -48,14 +51,14 @@
         --space-4: 1rem;
         --space-5: 1.25rem;
         --space-6: 1.5rem;
-        
+
         /* Radius */
         --radius-sm: 0.375rem;
         --radius-md: 0.5rem;
         --radius-lg: 0.75rem;
         --radius-xl: 1rem;
         --radius-full: 9999px;
-        
+
         /* Transitions */
         --duration-fast: 150ms;
         --duration-normal: 200ms;
@@ -63,25 +66,26 @@
       }
 
       /* Light Theme (Default) */
-      :root, [data-theme="light"] {
+      :root,
+      [data-theme='light'] {
         --bg-base: #ffffff;
         --bg-subtle: var(--gray-50);
         --bg-muted: var(--gray-100);
         --surface-1: #ffffff;
         --surface-2: var(--gray-50);
-        
+
         --text-primary: var(--gray-900);
         --text-secondary: var(--gray-600);
         --text-muted: var(--gray-500);
-        
+
         --border-default: var(--gray-200);
         --border-muted: var(--gray-100);
-        
+
         --btn-primary-bg: var(--primary-500);
         --btn-primary-hover: var(--primary-600);
         --btn-secondary-bg: var(--gray-100);
         --btn-secondary-hover: var(--gray-200);
-        
+
         --status-recording-bg: rgba(239, 68, 68, 0.1);
         --status-recording-text: var(--error-600);
         --status-idle-bg: var(--gray-100);
@@ -91,25 +95,25 @@
       }
 
       /* Dark Theme */
-      [data-theme="dark"] {
+      [data-theme='dark'] {
         --bg-base: var(--gray-950);
         --bg-subtle: var(--gray-900);
         --bg-muted: var(--gray-800);
         --surface-1: var(--gray-900);
         --surface-2: var(--gray-800);
-        
+
         --text-primary: var(--gray-50);
         --text-secondary: var(--gray-400);
         --text-muted: var(--gray-500);
-        
+
         --border-default: var(--gray-800);
         --border-muted: var(--gray-900);
-        
+
         --btn-primary-bg: var(--primary-500);
         --btn-primary-hover: var(--primary-400);
         --btn-secondary-bg: var(--gray-800);
         --btn-secondary-hover: var(--gray-700);
-        
+
         --status-recording-bg: rgba(239, 68, 68, 0.15);
         --status-recording-text: #f87171;
         --status-idle-bg: var(--gray-800);
@@ -121,7 +125,9 @@
       /* ============================================================================
          RESET & BASE
          ============================================================================ */
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
@@ -323,8 +329,13 @@
       }
 
       @keyframes pulse-recording {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
       }
 
       .status-dot {
@@ -339,8 +350,13 @@
       }
 
       @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
       }
 
       .status-label {
@@ -374,9 +390,11 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse at center, 
-          rgba(239, 68, 68, 0.12) 0%, 
-          transparent 70%);
+        background: radial-gradient(
+          ellipse at center,
+          rgba(239, 68, 68, 0.12) 0%,
+          transparent 70%
+        );
         opacity: 0;
         transition: opacity 0.5s ease;
         pointer-events: none;
@@ -395,14 +413,15 @@
         height: 4px;
         background: var(--gray-300);
         border-radius: 3px;
-        transition: height 0.1s ease-out,
-                    background 0.2s ease,
-                    opacity 0.2s ease;
+        transition:
+          height 0.1s ease-out,
+          background 0.2s ease,
+          opacity 0.2s ease;
         transform-origin: center center;
         will-change: height;
       }
 
-      [data-theme="dark"] .wave-bar {
+      [data-theme='dark'] .wave-bar {
         background: var(--gray-600);
       }
 
@@ -414,166 +433,280 @@
       }
 
       /* Staggered idle animation - wave pattern */
-      .audio-visualizer:not(.active) .wave-bar:nth-child(1) { animation-delay: 0ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(2) { animation-delay: 100ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(3) { animation-delay: 200ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(4) { animation-delay: 300ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(5) { animation-delay: 400ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(6) { animation-delay: 500ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(7) { animation-delay: 600ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(8) { animation-delay: 700ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(9) { animation-delay: 800ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(10) { animation-delay: 900ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(11) { animation-delay: 1000ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(12) { animation-delay: 1100ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(13) { animation-delay: 1200ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(14) { animation-delay: 1100ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(15) { animation-delay: 1000ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(16) { animation-delay: 900ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(17) { animation-delay: 800ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(18) { animation-delay: 700ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(19) { animation-delay: 600ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(20) { animation-delay: 500ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(21) { animation-delay: 400ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(22) { animation-delay: 300ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(23) { animation-delay: 200ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(24) { animation-delay: 100ms; }
-      .audio-visualizer:not(.active) .wave-bar:nth-child(25) { animation-delay: 0ms; }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(1) {
+        animation-delay: 0ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(2) {
+        animation-delay: 100ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(3) {
+        animation-delay: 200ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(4) {
+        animation-delay: 300ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(5) {
+        animation-delay: 400ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(6) {
+        animation-delay: 500ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(7) {
+        animation-delay: 600ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(8) {
+        animation-delay: 700ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(9) {
+        animation-delay: 800ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(10) {
+        animation-delay: 900ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(11) {
+        animation-delay: 1000ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(12) {
+        animation-delay: 1100ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(13) {
+        animation-delay: 1200ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(14) {
+        animation-delay: 1100ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(15) {
+        animation-delay: 1000ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(16) {
+        animation-delay: 900ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(17) {
+        animation-delay: 800ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(18) {
+        animation-delay: 700ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(19) {
+        animation-delay: 600ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(20) {
+        animation-delay: 500ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(21) {
+        animation-delay: 400ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(22) {
+        animation-delay: 300ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(23) {
+        animation-delay: 200ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(24) {
+        animation-delay: 100ms;
+      }
+      .audio-visualizer:not(.active) .wave-bar:nth-child(25) {
+        animation-delay: 0ms;
+      }
 
       @keyframes idle-pulse {
-        0%, 100% { height: 4px; opacity: 0.3; }
-        50% { height: 10px; opacity: 0.5; }
+        0%,
+        100% {
+          height: 4px;
+          opacity: 0.3;
+        }
+        50% {
+          height: 10px;
+          opacity: 0.5;
+        }
       }
 
       /* Active state - Vibrant red gradient */
       .audio-visualizer.active .wave-bar {
-        background: linear-gradient(180deg, 
+        background: linear-gradient(
+          180deg,
           #fca5a5 0%,
           #f87171 40%,
           #ef4444 70%,
-          #dc2626 100%);
+          #dc2626 100%
+        );
         opacity: 1;
         box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
       }
 
       /* Wide animation - all bars animate prominently */
       /* Group 1: Center bars (13, 12, 14) - tallest */
-      .audio-visualizer.active .wave-bar:nth-child(13) { 
+      .audio-visualizer.active .wave-bar:nth-child(13) {
         animation: wave-peak 0.7s ease-in-out infinite;
         animation-delay: 0ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(12),
-      .audio-visualizer.active .wave-bar:nth-child(14) { 
+      .audio-visualizer.active .wave-bar:nth-child(14) {
         animation: wave-peak 0.7s ease-in-out infinite;
         animation-delay: 50ms;
       }
 
       /* Group 2: Near-center bars (11, 15, 10, 16) - tall */
       .audio-visualizer.active .wave-bar:nth-child(11),
-      .audio-visualizer.active .wave-bar:nth-child(15) { 
+      .audio-visualizer.active .wave-bar:nth-child(15) {
         animation: wave-high 0.75s ease-in-out infinite;
         animation-delay: 100ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(10),
-      .audio-visualizer.active .wave-bar:nth-child(16) { 
+      .audio-visualizer.active .wave-bar:nth-child(16) {
         animation: wave-high 0.75s ease-in-out infinite;
         animation-delay: 150ms;
       }
 
       /* Group 3: Mid bars (9, 17, 8, 18, 7, 19) - medium-tall */
       .audio-visualizer.active .wave-bar:nth-child(9),
-      .audio-visualizer.active .wave-bar:nth-child(17) { 
+      .audio-visualizer.active .wave-bar:nth-child(17) {
         animation: wave-mid 0.8s ease-in-out infinite;
         animation-delay: 200ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(8),
-      .audio-visualizer.active .wave-bar:nth-child(18) { 
+      .audio-visualizer.active .wave-bar:nth-child(18) {
         animation: wave-mid 0.8s ease-in-out infinite;
         animation-delay: 250ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(7),
-      .audio-visualizer.active .wave-bar:nth-child(19) { 
+      .audio-visualizer.active .wave-bar:nth-child(19) {
         animation: wave-mid 0.8s ease-in-out infinite;
         animation-delay: 300ms;
       }
 
       /* Group 4: Outer-mid bars (6, 20, 5, 21) - medium */
       .audio-visualizer.active .wave-bar:nth-child(6),
-      .audio-visualizer.active .wave-bar:nth-child(20) { 
+      .audio-visualizer.active .wave-bar:nth-child(20) {
         animation: wave-outer 0.85s ease-in-out infinite;
         animation-delay: 350ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(5),
-      .audio-visualizer.active .wave-bar:nth-child(21) { 
+      .audio-visualizer.active .wave-bar:nth-child(21) {
         animation: wave-outer 0.85s ease-in-out infinite;
         animation-delay: 400ms;
       }
 
       /* Group 5: Edge bars (4, 22, 3, 23, 2, 24, 1, 25) - still visible */
       .audio-visualizer.active .wave-bar:nth-child(4),
-      .audio-visualizer.active .wave-bar:nth-child(22) { 
+      .audio-visualizer.active .wave-bar:nth-child(22) {
         animation: wave-edge 0.9s ease-in-out infinite;
         animation-delay: 450ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(3),
-      .audio-visualizer.active .wave-bar:nth-child(23) { 
+      .audio-visualizer.active .wave-bar:nth-child(23) {
         animation: wave-edge 0.9s ease-in-out infinite;
         animation-delay: 500ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(2),
-      .audio-visualizer.active .wave-bar:nth-child(24) { 
+      .audio-visualizer.active .wave-bar:nth-child(24) {
         animation: wave-edge 0.9s ease-in-out infinite;
         animation-delay: 550ms;
       }
       .audio-visualizer.active .wave-bar:nth-child(1),
-      .audio-visualizer.active .wave-bar:nth-child(25) { 
+      .audio-visualizer.active .wave-bar:nth-child(25) {
         animation: wave-edge 0.9s ease-in-out infinite;
         animation-delay: 600ms;
       }
 
       /* Peak animation - center bars */
       @keyframes wave-peak {
-        0%, 100% { height: 12px; }
-        20% { height: 48px; }
-        40% { height: 36px; }
-        60% { height: 52px; }
-        80% { height: 40px; }
+        0%,
+        100% {
+          height: 12px;
+        }
+        20% {
+          height: 48px;
+        }
+        40% {
+          height: 36px;
+        }
+        60% {
+          height: 52px;
+        }
+        80% {
+          height: 40px;
+        }
       }
 
       /* High animation - near-center bars */
       @keyframes wave-high {
-        0%, 100% { height: 10px; }
-        20% { height: 40px; }
-        40% { height: 28px; }
-        60% { height: 44px; }
-        80% { height: 32px; }
+        0%,
+        100% {
+          height: 10px;
+        }
+        20% {
+          height: 40px;
+        }
+        40% {
+          height: 28px;
+        }
+        60% {
+          height: 44px;
+        }
+        80% {
+          height: 32px;
+        }
       }
 
       /* Mid animation - middle bars */
       @keyframes wave-mid {
-        0%, 100% { height: 8px; }
-        20% { height: 32px; }
-        40% { height: 20px; }
-        60% { height: 36px; }
-        80% { height: 24px; }
+        0%,
+        100% {
+          height: 8px;
+        }
+        20% {
+          height: 32px;
+        }
+        40% {
+          height: 20px;
+        }
+        60% {
+          height: 36px;
+        }
+        80% {
+          height: 24px;
+        }
       }
 
       /* Outer animation - outer-mid bars */
       @keyframes wave-outer {
-        0%, 100% { height: 6px; }
-        20% { height: 24px; }
-        40% { height: 16px; }
-        60% { height: 28px; }
-        80% { height: 18px; }
+        0%,
+        100% {
+          height: 6px;
+        }
+        20% {
+          height: 24px;
+        }
+        40% {
+          height: 16px;
+        }
+        60% {
+          height: 28px;
+        }
+        80% {
+          height: 18px;
+        }
       }
 
       /* Edge animation - edge bars (still visible!) */
       @keyframes wave-edge {
-        0%, 100% { height: 5px; }
-        20% { height: 18px; }
-        40% { height: 12px; }
-        60% { height: 22px; }
-        80% { height: 14px; }
+        0%,
+        100% {
+          height: 5px;
+        }
+        20% {
+          height: 18px;
+        }
+        40% {
+          height: 12px;
+        }
+        60% {
+          height: 22px;
+        }
+        80% {
+          height: 14px;
+        }
       }
 
       /* Status indicator badge - Hidden to avoid redundancy with status badge */
@@ -850,7 +983,7 @@
         z-index: 100;
       }
 
-      [data-theme="dark"] .toast {
+      [data-theme='dark'] .toast {
         background: var(--gray-100);
         color: var(--gray-900);
       }
@@ -890,7 +1023,7 @@
         color: var(--error-600);
       }
 
-      [data-theme="dark"] .error-card {
+      [data-theme='dark'] .error-card {
         color: #f87171;
       }
 
@@ -918,10 +1051,18 @@
     <header class="header">
       <div class="brand">
         <div class="brand-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" x2="12" y1="19" y2="22"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" x2="12" y1="19" y2="22" />
           </svg>
         </div>
         <div class="brand-meta">
@@ -930,150 +1071,229 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="btn-theme" data-i18n-title="toggleTheme" title="Toggle theme">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        <button
+          class="icon-btn"
+          id="btn-theme"
+          data-i18n-title="toggleTheme"
+          title="Toggle theme"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
           </svg>
         </button>
-        <button class="icon-btn" id="btn-settings" data-i18n-title="settings" title="Settings">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
+        <button
+          class="icon-btn"
+          id="btn-settings"
+          data-i18n-title="settings"
+          title="Settings"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            />
+            <circle cx="12" cy="12" r="3" />
           </svg>
         </button>
       </div>
     </header>
 
     <div id="main-view">
-    <!-- Status Card -->
-    <div class="status-card">
-      <div class="status-header">
-        <div class="status-badge idle" id="status-badge">
-          <span class="status-dot"></span>
-          <span id="status-text" data-i18n="statusReady">Ready</span>
-          <span class="status-timer" id="status-timer"></span>
+      <!-- Status Card -->
+      <div class="status-card">
+        <div class="status-header">
+          <div class="status-badge idle" id="status-badge">
+            <span class="status-dot"></span>
+            <span id="status-text" data-i18n="statusReady">Ready</span>
+            <span class="status-timer" id="status-timer"></span>
+          </div>
+          <span class="status-label" data-i18n="statusLabel">Status</span>
         </div>
-        <span class="status-label" data-i18n="statusLabel">Status</span>
+        <div class="audio-visualizer" id="audio-visualizer">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
       </div>
-      <div class="audio-visualizer" id="audio-visualizer">
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-      </div>
-    </div>
 
-    <!-- Error Card (Hidden by default) -->
-    <div class="error-card" id="error-card" style="display: none;">
-      <div class="error-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" x2="12" y1="8" y2="12"/>
-          <line x1="12" x2="12.01" y1="16" y2="16"/>
-        </svg>
-        <span id="error-title">Error</span>
-      </div>
-      <p class="error-message" id="error-message"></p>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="actions actions-toggle">
-      <button class="btn btn-toggle btn-record-ready" id="btn-toggle">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon-mic">
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          <line x1="12" x2="12" y1="19" y2="22"/>
-        </svg>
-        <span class="btn-text" data-i18n="btnRecord">Record</span>
-      </button>
-      <button class="btn btn-secondary" id="btn-cancel" style="display: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" x2="6" y1="6" y2="18"/>
-          <line x1="6" x2="18" y1="6" y2="18"/>
-        </svg>
-        <span data-i18n="btnCancel">Cancel</span>
-      </button>
-    </div>
-
-    <!-- Result Card -->
-    <div class="result-card">
-      <div class="result-header">
-        <span class="result-title" data-i18n="latestResult">Latest Result</span>
-        <span class="result-time" id="result-time"></span>
-      </div>
-      <div class="result-content" id="result-text">
-        <span class="result-empty" data-i18n="noResult">No dictation yet</span>
-      </div>
-      <div class="result-actions">
-        <button class="btn btn-secondary btn-copy" id="btn-copy" disabled>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+      <!-- Error Card (Hidden by default) -->
+      <div class="error-card" id="error-card" style="display: none">
+        <div class="error-title">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
           </svg>
-          <span data-i18n="btnCopy">Copy to Clipboard</span>
+          <span id="error-title">Error</span>
+        </div>
+        <p class="error-message" id="error-message"></p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions actions-toggle">
+        <button class="btn btn-toggle btn-record-ready" id="btn-toggle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon-mic"
+          >
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" x2="12" y1="19" y2="22" />
+          </svg>
+          <span class="btn-text" data-i18n="btnRecord">Record</span>
+        </button>
+        <button class="btn btn-secondary" id="btn-cancel" style="display: none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+          <span data-i18n="btnCancel">Cancel</span>
         </button>
       </div>
-    </div>
 
-    <!-- Shortcuts -->
-    <div class="shortcuts shortcuts-compact">
-      <div class="shortcut">
-        <span class="shortcut-key">⌥⇧S</span>
-        <span class="shortcut-label" data-i18n="shortcutToggle">Toggle</span>
+      <!-- Result Card -->
+      <div class="result-card">
+        <div class="result-header">
+          <span class="result-title" data-i18n="latestResult">Latest Result</span>
+          <span class="result-time" id="result-time"></span>
+        </div>
+        <div class="result-content" id="result-text">
+          <span class="result-empty" data-i18n="noResult">No dictation yet</span>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-secondary btn-copy" id="btn-copy" disabled>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg>
+            <span data-i18n="btnCopy">Copy to Clipboard</span>
+          </button>
+        </div>
       </div>
-      <div class="shortcut">
-        <span class="shortcut-key">⌥⇧C</span>
-        <span class="shortcut-label" data-i18n="shortcutCancel">Cancel</span>
-      </div>
-      <div class="shortcut">
-        <span class="shortcut-key">⌥⇧P</span>
-        <span class="shortcut-label" data-i18n="shortcutPaste">Paste</span>
-      </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <a class="footer-link" id="link-history">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-          <path d="M3 3v5h5"/>
-          <path d="M12 7v5l4 2"/>
-        </svg>
-        <span data-i18n="history">History</span>
-      </a>
-      <a class="footer-link" id="link-options">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-          <polyline points="15 3 21 3 21 9"/>
-          <line x1="10" x2="21" y1="14" y2="3"/>
-        </svg>
-        <span data-i18n="settings">Settings</span>
-      </a>
-    </footer>
+      <!-- Shortcuts -->
+      <div class="shortcuts shortcuts-compact">
+        <div class="shortcut">
+          <span class="shortcut-key">⌥⇧S</span>
+          <span class="shortcut-label" data-i18n="shortcutToggle">Toggle</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">⌥⇧C</span>
+          <span class="shortcut-label" data-i18n="shortcutCancel">Cancel</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">⌥⇧P</span>
+          <span class="shortcut-label" data-i18n="shortcutPaste">Paste</span>
+        </div>
+      </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">Copied!</div>
+      <!-- Footer -->
+      <footer class="footer">
+        <a class="footer-link" id="link-history">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M12 7v5l4 2" />
+          </svg>
+          <span data-i18n="history">History</span>
+        </a>
+        <a class="footer-link" id="link-options">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" x2="21" y1="14" y2="3" />
+          </svg>
+          <span data-i18n="settings">Settings</span>
+        </a>
+      </footer>
+
+      <!-- Toast -->
+      <div class="toast" id="toast">Copied!</div>
     </div>
 
     <!-- Settings View -->

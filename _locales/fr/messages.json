@@ -154,8 +154,24 @@
       "count": {
         "content": "$1",
         "example": "5"
-      }
-    }
+      },
+  "manualSubmitAutoCopy": {
+    "message": "Copie automatique lors de la soumission manuelle",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Copier automatiquement lors du clic manuel sur le bouton de soumission de la page ChatGPT",
+    "description": "Toggle description for manual submit auto copy"
+  }
+    },
+  "manualSubmitAutoCopy": {
+    "message": "Copie automatique lors de la soumission manuelle",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Copier automatiquement lors du clic manuel sur le bouton de soumission de la page ChatGPT",
+    "description": "Toggle description for manual submit auto copy"
+  }
   },
   "yesterday": {
     "message": "Hier",
@@ -332,5 +348,13 @@
   "historyCleared": {
     "message": "Historique effacé",
     "description": "Toast when history is cleared"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "Copie automatique lors de la soumission manuelle",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "Copier automatiquement lors du clic manuel sur le bouton de soumission de la page ChatGPT",
+    "description": "Toggle description for manual submit auto copy"
   }
 }

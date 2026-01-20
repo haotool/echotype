@@ -36,6 +36,7 @@ const elements = {
   autoPasteToActiveTab: document.getElementById('autoPasteToActiveTab') as HTMLInputElement,
   returnFocusAfterStart: document.getElementById('returnFocusAfterStart') as HTMLInputElement,
   audioFeedbackEnabled: document.getElementById('audioFeedbackEnabled') as HTMLInputElement,
+  manualSubmitAutoCopy: document.getElementById('manualSubmitAutoCopy') as HTMLInputElement,
   
   // Language
   languageSelect: document.getElementById('languageSelect') as HTMLSelectElement,
@@ -208,6 +209,7 @@ async function loadUI(): Promise<void> {
   elements.autoPasteToActiveTab.checked = settings.autoPasteToActiveTab;
   elements.returnFocusAfterStart.checked = settings.returnFocusAfterStart;
   elements.audioFeedbackEnabled.checked = settings.audioFeedbackEnabled;
+  elements.manualSubmitAutoCopy.checked = settings.manualSubmitAutoCopy;
   
   await loadShortcuts();
   await loadHistory();
@@ -219,6 +221,7 @@ async function handleSettingChange(): Promise<void> {
     autoPasteToActiveTab: elements.autoPasteToActiveTab.checked,
     returnFocusAfterStart: elements.returnFocusAfterStart.checked,
     audioFeedbackEnabled: elements.audioFeedbackEnabled.checked,
+    manualSubmitAutoCopy: elements.manualSubmitAutoCopy.checked,
     historySize: DEFAULT_SETTINGS.historySize,
   };
   await saveSettings(settings);
@@ -620,6 +623,7 @@ function setupEventListeners(): void {
   elements.autoPasteToActiveTab.addEventListener('change', handleSettingChange);
   elements.returnFocusAfterStart.addEventListener('change', handleSettingChange);
   elements.audioFeedbackEnabled.addEventListener('change', handleSettingChange);
+  elements.manualSubmitAutoCopy.addEventListener('change', handleSettingChange);
   
   // Language
   elements.languageSelect?.addEventListener('change', handleLanguageChange);

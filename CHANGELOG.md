@@ -5,6 +5,32 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-01-21
+
+### ✨ New Features
+- **Manual Submit Auto Copy** - New setting to automatically copy dictation results when manually clicking the submit button on ChatGPT page:
+  - Enable in Settings → Automation → "Manual Submit Auto Copy"
+  - Works when user manually clicks ChatGPT's dictation submit button
+  - Automatically copies captured text to clipboard
+  - Adds result to history
+  - Plays success sound (if audio feedback enabled)
+  - Perfect for users who prefer mouse interaction over keyboard shortcuts
+
+### 🔧 Technical
+- Added `manualSubmitAutoCopy` setting to `EchoTypeSettings` interface
+- New `MANUAL_SUBMIT_CAPTURE` message type in protocol
+- Content script monitors submit button clicks when feature is enabled
+- Background script handles clipboard copy and history addition
+
+### 🌐 i18n
+- Added translations for "Manual Submit Auto Copy" in all 25 supported languages
+
+### 🧪 Testing
+- All 140 unit tests passing
+- Build successful
+
+---
+
 ## [0.9.0] - 2026-01-20
 
 ### 🎨 UI/UX - Major Visual Overhaul

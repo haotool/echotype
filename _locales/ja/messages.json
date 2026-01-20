@@ -142,8 +142,24 @@
       "count": {
         "content": "$1",
         "example": "5"
-      }
-    }
+      },
+  "manualSubmitAutoCopy": {
+    "message": "手動送信時に自動コピー",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "ChatGPTページで手動で送信ボタンをクリックした時に自動コピー",
+    "description": "Toggle description for manual submit auto copy"
+  }
+    },
+  "manualSubmitAutoCopy": {
+    "message": "手動送信時に自動コピー",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "ChatGPTページで手動で送信ボタンをクリックした時に自動コピー",
+    "description": "Toggle description for manual submit auto copy"
+  }
   },
   "yesterday": {
     "message": "昨日",
@@ -336,5 +352,13 @@
   "historyCleared": {
     "message": "履歴がクリアされました",
     "description": "Toast when history is cleared"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "手動送信時に自動コピー",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "ChatGPTページで手動で送信ボタンをクリックした時に自動コピー",
+    "description": "Toggle description for manual submit auto copy"
   }
 }

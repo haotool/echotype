@@ -154,8 +154,24 @@
       "count": {
         "content": "$1",
         "example": "5"
-      }
-    }
+      },
+  "manualSubmitAutoCopy": {
+    "message": "手动提交自动复制",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "在 ChatGPT 页面手动点击提交按钮时自动复制内容",
+    "description": "Toggle description for manual submit auto copy"
+  }
+    },
+  "manualSubmitAutoCopy": {
+    "message": "手动提交自动复制",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "在 ChatGPT 页面手动点击提交按钮时自动复制内容",
+    "description": "Toggle description for manual submit auto copy"
+  }
   },
   "yesterday": {
     "message": "昨天",
@@ -332,5 +348,13 @@
   "historyCleared": {
     "message": "历史记录已清除",
     "description": "Toast when history is cleared"
+  },
+  "manualSubmitAutoCopy": {
+    "message": "手动提交自动复制",
+    "description": "Toggle label for manual submit auto copy"
+  },
+  "manualSubmitAutoCopyDesc": {
+    "message": "在 ChatGPT 页面手动点击提交按钮时自动复制内容",
+    "description": "Toggle description for manual submit auto copy"
   }
 }
