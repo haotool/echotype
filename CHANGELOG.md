@@ -5,6 +5,25 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.3] - 2026-01-21
+
+### 🐛 Bug Fixes
+- **Manual Submit Timing Fix** - Fixed critical timing issue where dictation state was checked after ChatGPT had already processed the click:
+  - Now captures dictation state and baseline text at the moment of click (in capture phase)
+  - Passes saved state to async handler instead of re-checking after setTimeout
+  - This ensures manual submit works correctly even when ChatGPT instantly changes UI state
+
+### 🔧 Technical
+- `setupManualSubmitListener()` now captures state before ChatGPT processes click
+- `handleManualSubmitClick()` now accepts `wasInDictationMode` and `savedBaselineText` parameters
+- Added detailed logging for debugging manual submit flow
+
+### 🧪 Testing
+- All 140 unit tests passing
+- Build successful
+
+---
+
 ## [0.9.2] - 2026-01-21
 
 ### 🐛 Bug Fixes

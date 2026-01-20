@@ -167,28 +167,29 @@ chrome.storage.onChanged.addListener((changes, area) => {
  * 3. Compute added text (baseline diff)
  * 4. Clear the composer
  * 5. Send to background for clipboard copy and history
+ * 
+ * @param wasInDictationMode - Whether dictation was active when click was detected
+ * @param savedBaselineText - Baseline text captured at click time
  */
-async function handleManualSubmitClick(): Promise<void> {
+async function handleManualSubmitClick(
+  wasInDictationMode: boolean,
+  savedBaselineText: string
+): Promise<void> {
   if (!manualSubmitAutoCopyEnabled) return;
   
-  const status = detectStatus();
-  // Only capture if we're in recording/listening state
-  if (status !== 'recording' && status !== 'listening') {
-    console.log('[EchoType] Manual submit ignored - not in dictation mode:', status);
+  // Use the saved state from click time, not current state
+  if (!wasInDictationMode) {
+    console.log('[EchoType] Manual submit ignored - was not in dictation mode');
     return;
   }
   
   console.log('[EchoType] Manual submit detected, starting full capture workflow...');
+  console.log('[EchoType] Baseline text:', savedBaselineText.substring(0, 50));
   
-  // Get baseline text from controller state (captured when dictation started)
-  const controllerState = getControllerState();
-  const baselineText = controllerState.baselineText || '';
-  console.log('[EchoType] Baseline text:', baselineText.substring(0, 50));
+  // Wait for ChatGPT to process the submit and show text in composer
+  await new Promise(resolve => setTimeout(resolve, 200));
   
-  // Wait a moment for the submit click to be processed
-  await new Promise(resolve => setTimeout(resolve, 100));
-  
-  // Read pre-submit text (may still be showing waveform)
+  // Read pre-submit text (may still be showing waveform or transitioning)
   const preSubmitText = readComposerText();
   
   // Capture stable text after submit (same as popup workflow)
@@ -198,7 +199,7 @@ async function handleManualSubmitClick(): Promise<void> {
   });
   
   const finalText = normalizeText(capture.text);
-  const addedText = computeAddedText(baselineText, finalText);
+  const addedText = computeAddedText(savedBaselineText, finalText);
   
   console.log('[EchoType] Manual submit captured:', {
     finalText: finalText.substring(0, 50),
@@ -231,6 +232,10 @@ async function handleManualSubmitClick(): Promise<void> {
 /**
  * Set up click listener for submit button.
  * Uses event delegation on document body.
+ * 
+ * IMPORTANT: We capture the dictation state at click time because
+ * ChatGPT immediately processes the click and changes the UI state.
+ * If we check state after setTimeout, it will already be 'idle'.
  */
 function setupManualSubmitListener(): void {
   document.body.addEventListener('click', (event) => {
@@ -241,9 +246,17 @@ function setupManualSubmitListener(): void {
     
     // Check if clicked element is or is within the submit button
     if (submitBtn && (target === submitBtn || submitBtn.contains(target))) {
-      // Use setTimeout to let the click complete first
+      // CRITICAL: Capture state NOW, before ChatGPT processes the click
+      const currentStatus = detectStatus();
+      const wasInDictationMode = currentStatus === 'recording' || currentStatus === 'listening';
+      const controllerState = getControllerState();
+      const savedBaselineText = controllerState.baselineText || '';
+      
+      console.log('[EchoType] Submit button clicked, status:', currentStatus, 'dictation mode:', wasInDictationMode);
+      
+      // Use setTimeout to let the click complete first, but pass saved state
       setTimeout(() => {
-        handleManualSubmitClick().catch(console.error);
+        handleManualSubmitClick(wasInDictationMode, savedBaselineText).catch(console.error);
       }, 50);
     }
   }, true); // Use capture phase to detect before default handlers
