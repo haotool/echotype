@@ -5,6 +5,31 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.20] - 2026-01-20
+
+### 🎨 UI/UX
+- **Siri-Inspired Audio Visualizer** - Complete redesign with modern aesthetics:
+  - Center-aligned symmetric wave design (inspired by Siri/Google Assistant)
+  - Organic wave animation with varying durations (0.42s-0.58s) for natural feel
+  - Backdrop blur effect (`blur(8px)`) for glassmorphism aesthetic
+  - Subtle scanline effect for retro-modern look
+  - Radial gradient ambient glow with pulse animation
+  - Height increased to 80px for better visual impact
+  - Emerald gradient with inner highlight for depth
+  - Symmetric staggered animations (center outward pattern)
+- **Removed Redundant UI Elements**:
+  - Removed "LIVE" status badge from visualizer (duplicated with status badge)
+  - Removed volume indicator (not applicable for CSS-only animation)
+  - Cleaner, more focused interface
+
+### 🔧 Technical
+- Refactored popup TypeScript to remove unused element references
+- Optimized CSS animation performance with `will-change` hints
+- All 140 unit tests passing
+- All 27 E2E tests passing in headless mode
+
+---
+
 ## [0.8.19] - 2026-01-20
 
 ### 🎨 UI/UX

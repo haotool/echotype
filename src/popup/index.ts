@@ -55,8 +55,6 @@ const elements = {
   statusText: document.getElementById('status-text') as HTMLElement,
   statusTimer: document.getElementById('status-timer') as HTMLElement,
   audioVisualizer: document.getElementById('audio-visualizer') as HTMLElement,
-  volumeIndicator: document.getElementById('volume-indicator') as HTMLElement,
-  visualizerStatus: document.getElementById('visualizer-status') as HTMLElement,
   
   // Error
   errorCard: document.getElementById('error-card') as HTMLElement,
@@ -141,7 +139,6 @@ function startVisualization(): void {
   
   isVisualizerActive = true;
   elements.audioVisualizer.classList.add('active');
-  elements.visualizerStatus.textContent = getMessage('statusListening');
   
   console.log('[EchoType] Visualizer started (CSS animation mode)');
 }
@@ -154,7 +151,6 @@ function stopVisualization(): void {
   
   isVisualizerActive = false;
   elements.audioVisualizer.classList.remove('active');
-  elements.volumeIndicator.textContent = '';
   
   console.log('[EchoType] Visualizer stopped');
 }
