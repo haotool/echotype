@@ -5,8 +5,10 @@
  * Sets up browser context with extension loaded and provides
  * extensionId for accessing extension pages.
  * 
+ * Supports headless mode with --headless=new for Chrome 109+
+ * 
  * @see https://playwright.dev/docs/chrome-extensions
- * Updated: 2026-01-07T22:24:00+08:00 [context7:/ruifigueira/playwright-crx]
+ * Updated: 2026-01-20T22:18:00+08:00
  */
 
 import { test as base, chromium, type BrowserContext } from '@playwright/test';
@@ -14,6 +16,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Check for headless mode from environment (default: true for CI)
+const isHeadless = process.env.HEADLESS !== 'false';
 
 /**
  * Extended Playwright test with Chrome extension fixtures
@@ -28,12 +33,14 @@ export const test = base.extend<{
     
     const context = await chromium.launchPersistentContext('', {
       channel: 'chromium',
-      headless: false, // Extensions require headed mode
+      headless: false, // Extensions always require headed mode (--headless=new handled via args)
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
         '--no-sandbox',
         '--disable-setuid-sandbox',
+        // Enable headless mode for Chrome extensions (Chrome 109+)
+        ...(isHeadless ? ['--headless=new'] : []),
       ],
     });
     

@@ -5,6 +5,36 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.19] - 2026-01-20
+
+### 🎨 UI/UX
+- **Premium Studio-Grade Audio Visualizer** - Completely redesigned equalizer with professional aesthetics:
+  - 25 wave bars (increased from 21) with wider, more prominent design
+  - Subtle grid lines for professional studio look
+  - Reflection effect on each bar for depth
+  - 4-tier color coding: green → purple → amber → red (peak)
+  - Ambient glow with gradient from green to purple
+  - Smooth wave animation with staggered delays for realistic effect
+  - Status indicator badge ("LIVE") during recording
+  - Volume level indicator repositioned to bottom-left
+  - Height increased to 72px for better visibility
+
+### 🔧 Improvements
+- **Simplified Audio Visualization** - Removed getUserMedia dependency:
+  - Pure CSS animation mode to avoid conflicts with ChatGPT's microphone usage
+  - ChatGPT handles audio capture, popup only shows visual feedback
+  - Eliminated permission conflicts between extension and web page
+  - More reliable and consistent visualization behavior
+
+### 🧪 Testing
+- **Headless E2E Testing** - Added `--headless=new` support for CI/CD:
+  - Environment variable `HEADLESS=false` to disable headless mode
+  - Compatible with Chrome 109+ headless mode for extensions
+- All 140 unit tests passing
+- All 27 E2E tests passing in headless mode
+
+---
+
 ## [0.8.18] - 2026-01-20
 
 ### ✨ Features
