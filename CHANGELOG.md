@@ -8,23 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.20] - 2026-01-20
 
 ### 🎨 UI/UX
-- **Siri-Inspired Audio Visualizer** - Complete redesign with modern aesthetics:
-  - Center-aligned symmetric wave design (inspired by Siri/Google Assistant)
-  - Organic wave animation with varying durations (0.42s-0.58s) for natural feel
-  - Backdrop blur effect (`blur(8px)`) for glassmorphism aesthetic
-  - Subtle scanline effect for retro-modern look
-  - Radial gradient ambient glow with pulse animation
-  - Height increased to 80px for better visual impact
-  - Emerald gradient with inner highlight for depth
-  - Symmetric staggered animations (center outward pattern)
-- **Removed Redundant UI Elements**:
-  - Removed "LIVE" status badge from visualizer (duplicated with status badge)
-  - Removed volume indicator (not applicable for CSS-only animation)
-  - Cleaner, more focused interface
+- **Modern AI Minimalist Visualizer** - Redesigned with Siri/Google Assistant inspired aesthetics:
+  - Centered symmetric waveform with 25 thin bars (3px width)
+  - AI-style indigo → violet gradient during recording
+  - Center-out animation pattern (center bars peak highest)
+  - Minimal idle state with subtle pulse animation
+  - Removed redundant "Listening..." status text (now shown in status badge)
+  - Reduced height to 64px for cleaner appearance
+  - Simplified ambient glow effect
 
-### 🔧 Technical
-- Refactored popup TypeScript to remove unused element references
-- Optimized CSS animation performance with `will-change` hints
+### 🔧 Improvements
+- **Cleaner UI** - Removed redundant elements:
+  - Removed visualizer-status element (redundant with status badge showing "Listening... SEC 07")
+  - Removed volume-indicator element (not needed for CSS-only animation)
+  - Simplified HTML structure for better performance
+
+### 🧪 Testing
 - All 140 unit tests passing
 - All 27 E2E tests passing in headless mode
 
