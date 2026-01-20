@@ -5,6 +5,28 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.2] - 2026-01-21
+
+### 🐛 Bug Fixes
+- **Manual Submit Auto Copy - Full Workflow Alignment** - Fixed manual submit to mirror popup submit behavior:
+  - Now properly clears composer after capturing text (same as popup)
+  - Uses baseline diff to compute added text (same as popup)
+  - Resets controller state after submit (same as popup)
+  - Fixed i18n locale files with corrupted `minutesAgo` placeholders structure
+
+### 🔧 Technical
+- Manual submit now uses `captureAfterSubmit()` for stable text capture
+- Added `clearComposerRobust()` call after manual submit
+- Added `computeAddedText()` for baseline diff calculation
+- Added `getControllerState()` export for baseline text access
+- Fixed JSON structure in 9 locale files (de, es, fr, it, ja, ko, pt, ru, zh_CN)
+
+### 🧪 Testing
+- All 140 unit tests passing
+- Build successful
+
+---
+
 ## [0.9.1] - 2026-01-21
 
 ### ✨ New Features

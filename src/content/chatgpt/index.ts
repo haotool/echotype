@@ -16,9 +16,12 @@ import {
   checkStatusChange,
   getStatus,
   resetController,
+  getControllerState,
 } from './controller';
 import { inspectDOM, performHealthCheck, getDiagnosticInfo, findSubmitButton, detectStatus } from './selectors';
-import { readComposerText, captureStableText } from './capture';
+import { readComposerText, captureAfterSubmit } from './capture';
+import { clearComposerRobust } from './clear';
+import { computeAddedText } from './diff';
 import { normalizeText } from '@shared/utils';
 
 // ============================================================================
@@ -158,7 +161,12 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 /**
  * Handle manual submit button click.
- * Captures text and sends to background for clipboard copy.
+ * Mirrors the full popup submit workflow:
+ * 1. Wait for text to appear in composer
+ * 2. Capture stable text
+ * 3. Compute added text (baseline diff)
+ * 4. Clear the composer
+ * 5. Send to background for clipboard copy and history
  */
 async function handleManualSubmitClick(): Promise<void> {
   if (!manualSubmitAutoCopyEnabled) return;
@@ -170,24 +178,53 @@ async function handleManualSubmitClick(): Promise<void> {
     return;
   }
   
-  console.log('[EchoType] Manual submit detected, capturing text...');
+  console.log('[EchoType] Manual submit detected, starting full capture workflow...');
   
-  // Wait a moment for the text to appear in composer
-  await new Promise(resolve => setTimeout(resolve, 300));
+  // Get baseline text from controller state (captured when dictation started)
+  const controllerState = getControllerState();
+  const baselineText = controllerState.baselineText || '';
+  console.log('[EchoType] Baseline text:', baselineText.substring(0, 50));
   
-  // Capture the text
-  const preText = readComposerText();
-  const capture = await captureStableText(preText, { requireChange: false, timeout: 3000 });
-  const text = normalizeText(capture.text);
+  // Wait a moment for the submit click to be processed
+  await new Promise(resolve => setTimeout(resolve, 100));
   
-  if (text) {
-    console.log('[EchoType] Manual submit captured:', text.substring(0, 50));
-    // Send to background for clipboard copy and history
+  // Read pre-submit text (may still be showing waveform)
+  const preSubmitText = readComposerText();
+  
+  // Capture stable text after submit (same as popup workflow)
+  // This waits for the text to appear and stabilize
+  const capture = await captureAfterSubmit(preSubmitText, {
+    requireChange: false, // Don't require change since user manually clicked
+  });
+  
+  const finalText = normalizeText(capture.text);
+  const addedText = computeAddedText(baselineText, finalText);
+  
+  console.log('[EchoType] Manual submit captured:', {
+    finalText: finalText.substring(0, 50),
+    addedText: addedText.substring(0, 50),
+    captureReason: capture.reason,
+  });
+  
+  // Clear the composer (same as popup workflow)
+  const clearResult = await clearComposerRobust();
+  console.log('[EchoType] Composer cleared:', clearResult);
+  
+  // Reset controller state
+  resetController();
+  
+  // Send result to background for clipboard copy and history
+  // Use addedText (baseline diff) as the primary result, same as popup
+  const textToSave = addedText || finalText;
+  if (textToSave) {
     safeSendMessage({
       type: MSG.MANUAL_SUBMIT_CAPTURE,
-      text,
+      text: textToSave,
       timestamp: Date.now(),
     });
+    console.log('[EchoType] Manual submit complete, sent to background');
+  } else {
+    console.log('[EchoType] Manual submit: no text captured');
   }
 }
 
