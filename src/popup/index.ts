@@ -570,11 +570,47 @@ function setupEventListeners(): void {
     }
   });
   
-  // Copy to clipboard
+  // Copy to clipboard with micro-interaction
   elements.btnCopy.addEventListener('click', async () => {
-    if (lastResult) {
-      const success = await copyToClipboard(lastResult.text);
-      showToast(success ? getMessage('copied') : getMessage('copyFailed'));
+    if (!lastResult || elements.btnCopy.disabled) return;
+    
+    // Start copying animation
+    elements.btnCopy.classList.add('copying');
+    elements.btnCopy.disabled = true;
+    
+    const success = await copyToClipboard(lastResult.text);
+    
+    // Remove copying class
+    elements.btnCopy.classList.remove('copying');
+    
+    if (success) {
+      // Success animation
+      const originalHTML = elements.btnCopy.innerHTML;
+      elements.btnCopy.classList.add('copied');
+      elements.btnCopy.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>${getMessage('copied')}</span>
+      `;
+      showToast(getMessage('copied'));
+      
+      // Reset after animation
+      setTimeout(() => {
+        elements.btnCopy.classList.remove('copied');
+        elements.btnCopy.innerHTML = originalHTML;
+        elements.btnCopy.disabled = false;
+      }, 1500);
+    } else {
+      // Failure animation
+      elements.btnCopy.classList.add('copy-failed');
+      showToast(getMessage('copyFailed'));
+      
+      // Reset after animation
+      setTimeout(() => {
+        elements.btnCopy.classList.remove('copy-failed');
+        elements.btnCopy.disabled = false;
+      }, 500);
     }
   });
   

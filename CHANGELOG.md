@@ -5,6 +5,27 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.5] - 2026-01-21
+
+### 🐛 Bug Fixes
+- **Fixed Copy to Clipboard** - Resolved issue where copy button always showed "Copy Failed":
+  - Added missing message handler in background service worker for `OFFSCREEN_CLIPBOARD_WRITE`
+  - Popup now correctly routes clipboard requests through background to offscreen document
+  - Proper async response handling for clipboard operations
+
+### ✨ UI Enhancements
+- **Copy Button Micro-interactions** - Added delightful animations for better user feedback:
+  - Ripple effect on click
+  - Success state with checkmark animation and green color
+  - Failure state with shake animation and red color
+  - Smooth transitions between states
+
+### 🔧 Technical
+- Background service worker now properly handles clipboard write requests from popup
+- Improved error handling for clipboard operations
+
+---
+
 ## [0.9.4] - 2026-01-21
 
 ### 🎨 Visual Refresh

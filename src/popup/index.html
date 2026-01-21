@@ -891,6 +891,61 @@
         width: 100%;
         padding: var(--space-2) var(--space-3);
         font-size: 0.8125rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Copy button micro-interaction */
+      .btn-copy::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .btn-copy.copying::after {
+        width: 200%;
+        height: 200%;
+        opacity: 1;
+      }
+
+      .btn-copy.copied {
+        background: var(--success-500) !important;
+        color: white !important;
+        transform: scale(1.02);
+      }
+
+      .btn-copy.copy-failed {
+        background: var(--error-500) !important;
+        color: white !important;
+        animation: shake 0.4s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-4px); }
+        40% { transform: translateX(4px); }
+        60% { transform: translateX(-4px); }
+        80% { transform: translateX(4px); }
+      }
+
+      /* Success checkmark animation */
+      .btn-copy.copied svg {
+        animation: checkmark-pop 0.3s ease-out;
+      }
+
+      @keyframes checkmark-pop {
+        0% { transform: scale(0.8); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
       }
 
       /* ============================================================================

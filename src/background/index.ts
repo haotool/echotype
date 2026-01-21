@@ -890,6 +890,17 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true;
   }
 
+  // Handle clipboard write requests from popup
+  if (message.type === MSG.OFFSCREEN_CLIPBOARD_WRITE) {
+    (async () => {
+      const { text } = message as { text: string };
+      logger.log(' Clipboard write request from popup');
+      const success = await writeToClipboard(text);
+      sendResponse({ success });
+    })();
+    return true;
+  }
+
   // Handle heartbeat/health check requests (for developer mode)
   if (message.type === 'GET_HEALTH') {
     (async () => {

@@ -13,16 +13,19 @@
 [![Stars](https://img.shields.io/github/stars/haotool/echotype?style=flat-square)](https://github.com/haotool/echotype/stargazers)
 [![Issues](https://img.shields.io/github/issues/haotool/echotype?style=flat-square)](https://github.com/haotool/echotype/issues)
 
-EchoType is a Chrome extension that turns ChatGPT voice dictation into reusable text you can paste anywhere.
+EchoType is a Chrome extension that turns ChatGPT voice dictation into reusable text you can paste anywhere. Use ChatGPT's powerful Whisper speech recognition and copy the results to any application with a single keyboard shortcut.
 
-## Highlights
+## ✨ Features
 
-- Voice dictation powered by ChatGPT Whisper
-- Global keyboard shortcuts for start, submit, cancel, and paste
-- Optional auto-copy and auto-paste after completion
-- History of recent dictation results
-- Multi-language UI (25 languages)
-- Popup and settings UI with MV3 offscreen clipboard support
+- 🎤 **Voice Dictation** - Powered by ChatGPT's Whisper speech recognition
+- ⌨️ **Global Shortcuts** - Start, submit, cancel, and paste with keyboard shortcuts
+- 📋 **Auto Copy** - Automatically copy results to clipboard after dictation
+- 📝 **Auto Paste** - Optionally paste directly to your original input field
+- 📜 **History** - Keep track of your recent dictation results
+- 🌍 **Multi-language** - UI available in 25 languages
+- 🎨 **Modern UI** - Beautiful popup with dark/light theme support
+- 🔊 **Audio Feedback** - Sound effects for start, success, and error states
+- 💾 **MV3 Ready** - Built with Chrome Manifest V3 for security and performance
 
 ## Requirements
 
