@@ -18,9 +18,8 @@ const ICONS_DIR = join(ROOT_DIR, 'icons');
 // Icon sizes required by Chrome Extension
 const SIZES = [16, 32, 48, 128];
 
-// SVG source with explicit fill color (black for monochrome)
-const svgSource = readFileSync(join(ICONS_DIR, 'icon.svg'), 'utf-8')
-  .replace(/currentColor/g, '#1a1a1a'); // Replace currentColor with dark gray
+// SVG source - keep original colors (gradient)
+const svgSource = readFileSync(join(ICONS_DIR, 'icon.svg'), 'utf-8');
 
 async function generateIcons() {
   console.log('🎨 Generating EchoType icons...\n');

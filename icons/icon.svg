@@ -1,66 +1,75 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <!--
-    EchoType Logo - Modern Minimalist Design
-    Concept: Abstract sound wave transforming into text cursor
-    Style: Monochrome, geometric, negative space
+    EchoType Logo - Modern Minimalist Design with Color
+    Concept: Voice waves transforming into text
+    Style: Clean geometric, vibrant accent color
     Designer: EchoType Team
     Updated: 2026-01-21
   -->
   
-  <!-- Main icon group - centered -->
-  <g fill="currentColor">
-    <!-- Left sound wave arc -->
-    <path d="M 28 44 
-             C 28 28, 44 20, 64 20 
-             C 84 20, 100 28, 100 44" 
+  <defs>
+    <!-- Primary gradient - vibrant red/coral -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Main icon group - larger and centered -->
+  <g>
+    <!-- Outer sound wave arc -->
+    <path d="M 20 38 
+             C 20 16, 44 4, 64 4 
+             C 84 4, 108 16, 108 38" 
           fill="none" 
-          stroke="currentColor" 
-          stroke-width="6" 
+          stroke="url(#primaryGradient)" 
+          stroke-width="7" 
           stroke-linecap="round"
-          opacity="0.3"/>
+          opacity="0.35"/>
     
     <!-- Middle sound wave arc -->
-    <path d="M 36 52 
-             C 36 40, 48 34, 64 34 
-             C 80 34, 92 40, 92 52" 
+    <path d="M 30 48 
+             C 30 30, 46 20, 64 20 
+             C 82 20, 98 30, 98 48" 
           fill="none" 
-          stroke="currentColor" 
-          stroke-width="6" 
+          stroke="url(#primaryGradient)" 
+          stroke-width="7" 
           stroke-linecap="round"
-          opacity="0.5"/>
+          opacity="0.55"/>
     
     <!-- Inner sound wave arc -->
-    <path d="M 44 60 
-             C 44 52, 52 48, 64 48 
-             C 76 48, 84 52, 84 60" 
+    <path d="M 40 58 
+             C 40 46, 50 38, 64 38 
+             C 78 38, 88 46, 88 58" 
           fill="none" 
-          stroke="currentColor" 
-          stroke-width="6" 
+          stroke="url(#primaryGradient)" 
+          stroke-width="7" 
           stroke-linecap="round"
-          opacity="0.7"/>
+          opacity="0.8"/>
     
-    <!-- Central microphone capsule - geometric pill shape -->
-    <rect x="54" y="58" width="20" height="32" rx="10" ry="10" fill="currentColor"/>
+    <!-- Central microphone capsule - larger pill shape -->
+    <rect x="48" y="52" width="32" height="44" rx="16" ry="16" 
+          fill="url(#primaryGradient)"/>
     
     <!-- Microphone stand arc -->
-    <path d="M 44 78 
-             C 44 96, 52 102, 64 102 
-             C 76 102, 84 96, 84 78" 
+    <path d="M 36 80 
+             C 36 104, 48 114, 64 114 
+             C 80 114, 92 104, 92 80" 
           fill="none" 
-          stroke="currentColor" 
-          stroke-width="5" 
+          stroke="url(#primaryGradient)" 
+          stroke-width="6" 
           stroke-linecap="round"/>
     
     <!-- Stand vertical line -->
-    <line x1="64" y1="102" x2="64" y2="114" 
-          stroke="currentColor" 
-          stroke-width="5" 
+    <line x1="64" y1="114" x2="64" y2="124" 
+          stroke="url(#primaryGradient)" 
+          stroke-width="6" 
           stroke-linecap="round"/>
     
     <!-- Stand base -->
-    <line x1="50" y1="114" x2="78" y2="114" 
-          stroke="currentColor" 
-          stroke-width="5" 
+    <line x1="46" y1="124" x2="82" y2="124" 
+          stroke="url(#primaryGradient)" 
+          stroke-width="6" 
           stroke-linecap="round"/>
   </g>
 </svg>
