@@ -54,9 +54,9 @@ Keyboard shortcuts:
 
 | Shortcut | Action |
 | --- | --- |
-| `Alt+Shift+S` | Toggle dictation (start/submit) |
+| `Alt+Shift+D` | Toggle dictation (start/submit) |
 | `Alt+Shift+C` | Cancel dictation |
-| `Alt+Shift+P` | Paste last result |
+| `Alt+Shift+V` | Paste last result |
 
 Settings:
 

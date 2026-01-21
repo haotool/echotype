@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ✨ New Features
 - **OS-Aware Shortcut Display** - Keyboard shortcuts now display correctly based on operating system:
-  - macOS: Uses symbols (⌥⇧S for Option+Shift+S)
-  - Windows/Linux: Uses text labels (Alt+Shift+S)
+  - macOS: Uses symbols (⌥⇧D for Option+Shift+D)
+  - Windows/Linux: Uses text labels (Alt+Shift+D)
   - Auto-detected at runtime
 
 ### 🐛 Bug Fixes
@@ -751,9 +751,9 @@ All development dependencies are now at their latest versions:
 
 ### Changed
 - 🎯 **Simplified Keyboard Shortcuts** - Reduced from 4 to 3 commands:
-  - `toggle-dictation` (Alt+Shift+S): Start if idle, Submit if recording
+  - `toggle-dictation` (Alt+Shift+D): Start if idle, Submit if recording
   - `cancel-dictation` (Alt+Shift+C): Cancel recording and clear input
-  - `paste-last-result` (Alt+Shift+P): Paste last result (unchanged)
+  - `paste-last-result` (Alt+Shift+V): Paste last result
 - 🎨 **Redesigned Popup UI** - Single toggle button replaces Start/Pause/Submit
   - Red "Record" button when idle
   - Green "Submit" button when recording

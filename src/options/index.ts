@@ -10,6 +10,7 @@ import type { EchoTypeSettings, HistoryItem } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/types';
 import { MSG, createMessage } from '@shared/protocol';
 import { applyI18n, getMessage, initI18n, setLocaleOverride } from '@shared/i18n';
+import { formatShortcut } from '@shared/shortcuts';
 
 // ============================================================================
 // Constants
@@ -236,6 +237,7 @@ async function loadShortcuts(): Promise<void> {
   
   try {
     const commands = await chrome.commands.getAll();
+    const notSetLabel = getMessage('notSet');
     
     for (const cmd of commands) {
       if (!cmd.name) continue;
@@ -246,7 +248,7 @@ async function loadShortcuts(): Promise<void> {
           el.textContent = formatShortcut(cmd.shortcut);
           el.classList.remove('not-set');
         } else {
-          el.textContent = 'Not set';
+          el.textContent = notSetLabel;
           el.classList.add('not-set');
         }
       }
@@ -256,38 +258,6 @@ async function loadShortcuts(): Promise<void> {
   }
 }
 
-/**
- * Detect the user's operating system.
- */
-function detectOS(): 'mac' | 'windows' | 'linux' {
-  const platform = navigator.platform.toLowerCase();
-  const userAgent = navigator.userAgent.toLowerCase();
-  
-  if (platform.includes('mac') || userAgent.includes('mac')) {
-    return 'mac';
-  }
-  if (platform.includes('win') || userAgent.includes('windows')) {
-    return 'windows';
-  }
-  return 'linux';
-}
-
-function formatShortcut(shortcut: string): string {
-  const os = detectOS();
-  
-  // For Mac, use symbols
-  if (os === 'mac') {
-    return shortcut
-      .replace('Ctrl', '⌃')
-      .replace('Command', '⌘')
-      .replace('Shift', '⇧')
-      .replace('Alt', '⌥')
-      .replace(/\+/g, '');
-  }
-  
-  // For Windows/Linux, keep text format but clean up
-  return shortcut;
-}
 
 // ============================================================================
 // History

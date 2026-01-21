@@ -43,9 +43,9 @@ pnpm build
 
 | 快捷鍵 | 功能 |
 | --- | --- |
-| `Alt+Shift+S` | 切換聽寫（開始/提交） |
+| `Alt+Shift+D` | 切換聽寫（開始/提交） |
 | `Alt+Shift+C` | 取消聽寫 |
-| `Alt+Shift+P` | 貼上最後結果 |
+| `Alt+Shift+V` | 貼上最後結果 |
 
 設定：
 

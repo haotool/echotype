@@ -16,8 +16,14 @@ import type {
 // Initialization
 // ============================================================================
 
-// Don't log on every page to avoid noise
-// console.log('[EchoType] Universal content script loaded');
+const globalScope = window as Window & {
+  __ECHOTYPE_UNIVERSAL_SCRIPT_LOADED__?: boolean;
+};
+const alreadyLoaded = Boolean(globalScope.__ECHOTYPE_UNIVERSAL_SCRIPT_LOADED__);
+
+if (!alreadyLoaded) {
+  globalScope.__ECHOTYPE_UNIVERSAL_SCRIPT_LOADED__ = true;
+}
 
 // ============================================================================ 
 // State
@@ -72,23 +78,31 @@ function recordFocusState(element: HTMLElement): void {
   }
 
   if (element.isContentEditable) {
-    const selection = window.getSelection();
+    const selection = getSelectionForElement(element);
     const range = selection && selection.rangeCount > 0 ? selection.getRangeAt(0).cloneRange() : undefined;
     lastFocusState = { element, range };
   }
 }
 
 function getFocusedEditableElement(): HTMLElement | null {
-  const activeElement = document.activeElement;
+  const activeElement = getDeepActiveElement();
   if (isEditableElement(activeElement)) {
     return activeElement;
   }
 
-  if (lastFocusState?.element && document.contains(lastFocusState.element) && isEditableElement(lastFocusState.element)) {
+  if (lastFocusState?.element && lastFocusState.element.isConnected && isEditableElement(lastFocusState.element)) {
     return lastFocusState.element;
   }
 
   return null;
+}
+
+function getDeepActiveElement(): Element | null {
+  let active: Element | null = document.activeElement;
+  while (active && active instanceof HTMLElement && active.shadowRoot?.activeElement) {
+    active = active.shadowRoot.activeElement;
+  }
+  return active;
 }
 
 // ============================================================================
@@ -130,16 +144,17 @@ function pasteIntoInput(
  */
 function pasteIntoContentEditable(element: HTMLElement, text: string): void {
   // Use execCommand for better compatibility with editors
-  const success = document.execCommand('insertText', false, text);
+  const doc = element.ownerDocument;
+  const success = doc.execCommand('insertText', false, text);
 
   if (!success) {
     // Fallback: insert at cursor using Selection API
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
+    const range = ensureSelectionRange(element);
+    const selection = getSelectionForElement(element);
+    if (selection && range) {
       range.deleteContents();
 
-      const textNode = document.createTextNode(text);
+      const textNode = doc.createTextNode(text);
       range.insertNode(textNode);
 
       // Move cursor to end of inserted text
@@ -187,8 +202,8 @@ function pasteIntoFocusedElement(text: string): boolean {
 
   if (element.isContentEditable) {
     if (lastFocusState?.element === element && lastFocusState.range) {
-      const selection = window.getSelection();
-      if (selection && document.contains(lastFocusState.range.commonAncestorContainer)) {
+      const selection = getSelectionForElement(element);
+      if (selection && lastFocusState.range.commonAncestorContainer.isConnected) {
         selection.removeAllRanges();
         selection.addRange(lastFocusState.range);
       }
@@ -200,6 +215,31 @@ function pasteIntoFocusedElement(text: string): boolean {
   return false;
 }
 
+function getSelectionForElement(element: HTMLElement): Selection | null {
+  return element.ownerDocument.defaultView?.getSelection() ?? null;
+}
+
+function ensureSelectionRange(element: HTMLElement): Range | null {
+  const selection = getSelectionForElement(element);
+  if (!selection) {
+    return null;
+  }
+
+  if (selection.rangeCount > 0) {
+    const range = selection.getRangeAt(0);
+    if (element.contains(range.commonAncestorContainer)) {
+      return range;
+    }
+  }
+
+  const range = element.ownerDocument.createRange();
+  range.selectNodeContents(element);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  return range;
+}
+
 // ============================================================================
 // Message Handler
 // ============================================================================
@@ -207,51 +247,66 @@ function pasteIntoFocusedElement(text: string): boolean {
 /**
  * Handle incoming messages from background.
  */
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  // Handle paste text command
-  if (message.type === MSG.PASTE_TEXT) {
-    const payload = message as PasteTextPayload;
-    const success = pasteIntoFocusedElement(payload.text);
-    sendResponse({ ok: success });
-    return false;
-  }
-
-  // Handle paste last result command
-  if (message.type === MSG.PASTE_LAST_RESULT) {
-    if (lastBroadcastedResult) {
-      const success = pasteIntoFocusedElement(lastBroadcastedResult);
+if (!alreadyLoaded) {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    // Handle paste text command
+    if (message.type === MSG.PASTE_TEXT) {
+      const payload = message as PasteTextPayload;
+      const success = pasteIntoFocusedElement(payload.text);
       sendResponse({ ok: success });
-    } else {
-      sendResponse({ ok: false, error: 'No result available' });
+      return false;
     }
+
+    // Handle paste last result command
+    if (message.type === MSG.PASTE_LAST_RESULT) {
+      if (lastBroadcastedResult) {
+        const success = pasteIntoFocusedElement(lastBroadcastedResult);
+        sendResponse({ ok: success });
+      } else {
+        sendResponse({ ok: false, error: 'No result available' });
+      }
+      return false;
+    }
+
+    // Handle broadcast result (store for later use)
+    if (message.type === MSG.BROADCAST_RESULT) {
+      const payload = message as BroadcastResultPayload;
+      lastBroadcastedResult = payload.text;
+      // No response needed for broadcasts
+      return false;
+    }
+
     return false;
+  });
+
+  // Track last focused editable element for paste-after-return flows
+  document.addEventListener('focusin', (event) => {
+    const editable = getEditableFromEvent(event);
+    if (editable) {
+      recordFocusState(editable);
+    }
+  });
+
+  document.addEventListener('selectionchange', () => {
+    const active = getFocusedEditableElement();
+    if (active) {
+      recordFocusState(active);
+    }
+  });
+}
+
+function getEditableFromEvent(event: Event): HTMLElement | null {
+  if (typeof event.composedPath === 'function') {
+    for (const entry of event.composedPath()) {
+      if (entry instanceof HTMLElement && isEditableElement(entry)) {
+        return entry;
+      }
+    }
   }
 
-  // Handle broadcast result (store for later use)
-  if (message.type === MSG.BROADCAST_RESULT) {
-    const payload = message as BroadcastResultPayload;
-    lastBroadcastedResult = payload.text;
-    // No response needed for broadcasts
-    return false;
-  }
-
-  return false;
-});
-
-// Track last focused editable element for paste-after-return flows
-document.addEventListener('focusin', (event) => {
   const target = event.target as Element | null;
-  if (isEditableElement(target)) {
-    recordFocusState(target);
-  }
-});
-
-document.addEventListener('selectionchange', () => {
-  const active = document.activeElement;
-  if (isEditableElement(active)) {
-    recordFocusState(active);
-  }
-});
+  return isEditableElement(target) ? target : null;
+}
 
 // ============================================================================
 // Debug API

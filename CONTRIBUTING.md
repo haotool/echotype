@@ -157,9 +157,9 @@ pnpm test:e2e --ui
 1. Load the extension in Chrome
 2. Open ChatGPT temporary chat: `https://chatgpt.com/?temporary-chat=true`
 3. Test dictation workflow:
-   - Press `Alt+Shift+S` to toggle dictation
+   - Press `Alt+Shift+D` to toggle dictation
    - Press `Alt+Shift+C` to cancel
-   - Press `Alt+Shift+P` to paste last result
+   - Press `Alt+Shift+V` to paste last result
 
 ## Code Style
 

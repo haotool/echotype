@@ -14,6 +14,7 @@
 import type { HistoryItem, DictationStatus } from '../shared/types';
 import { MSG, createMessage } from '../shared/protocol';
 import { applyI18n, getMessage, initI18n, setLocaleOverride } from '../shared/i18n';
+import { detectOS, formatShortcut, getSuggestedShortcut } from '../shared/shortcuts';
 
 // ============================================================================
 // Constants
@@ -25,63 +26,77 @@ const STORAGE_KEY_HISTORY = 'echotype_history';
 const STORAGE_KEY_LANGUAGE = 'echotype_language';
 
 // ============================================================================
-// OS Detection & Shortcut Display
+// Shortcut Display
 // ============================================================================
 
-/**
- * Detect the user's operating system.
- * @returns 'mac' | 'windows' | 'linux'
- */
-function detectOS(): 'mac' | 'windows' | 'linux' {
-  const platform = navigator.platform.toLowerCase();
-  const userAgent = navigator.userAgent.toLowerCase();
-  
-  if (platform.includes('mac') || userAgent.includes('mac')) {
-    return 'mac';
+type ShortcutDisplay = { toggle: string; cancel: string; paste: string };
+
+const COMMAND_IDS = {
+  toggle: 'toggle-dictation',
+  cancel: 'cancel-dictation',
+  paste: 'paste-last-result',
+} as const;
+
+function resolveShortcut(
+  commands: chrome.commands.Command[],
+  commandName: string,
+  os: ReturnType<typeof detectOS>,
+  notSetLabel: string
+): string {
+  const command = commands.find((cmd) => cmd.name === commandName);
+  const shortcut = command?.shortcut?.trim();
+  if (shortcut) {
+    return formatShortcut(shortcut, os);
   }
-  if (platform.includes('win') || userAgent.includes('windows')) {
-    return 'windows';
-  }
-  return 'linux';
+
+  const suggested = getSuggestedShortcut(commandName, os);
+  return suggested ? formatShortcut(suggested, os) : notSetLabel;
 }
 
-/**
- * Get keyboard shortcut display strings based on OS.
- * Mac: ⌥⇧S (Option+Shift+S)
- * Windows/Linux: Alt+Shift+S
- */
-function getShortcutDisplay(): { toggle: string; cancel: string; paste: string } {
-  const os = detectOS();
-  
-  if (os === 'mac') {
-    return {
-      toggle: '⌥⇧S',
-      cancel: '⌥⇧C',
-      paste: '⌥⇧P',
-    };
-  }
-  
-  // Windows/Linux use text labels
-  return {
-    toggle: 'Alt+Shift+S',
-    cancel: 'Alt+Shift+C',
-    paste: 'Alt+Shift+P',
-  };
-}
-
-/**
- * Update shortcut key display elements based on detected OS.
- */
-function updateShortcutDisplay(): void {
-  const shortcuts = getShortcutDisplay();
-  
+function updateShortcutDisplay(shortcuts: ShortcutDisplay): void {
   const toggleEl = document.getElementById('shortcut-toggle');
   const cancelEl = document.getElementById('shortcut-cancel');
   const pasteEl = document.getElementById('shortcut-paste');
-  
+
   if (toggleEl) toggleEl.textContent = shortcuts.toggle;
   if (cancelEl) cancelEl.textContent = shortcuts.cancel;
   if (pasteEl) pasteEl.textContent = shortcuts.paste;
+}
+
+async function loadShortcutDisplay(): Promise<void> {
+  const os = detectOS();
+  const notSetLabel = getMessage('notSet');
+  const fallback = {
+    toggle: getSuggestedShortcut(COMMAND_IDS.toggle, os),
+    cancel: getSuggestedShortcut(COMMAND_IDS.cancel, os),
+    paste: getSuggestedShortcut(COMMAND_IDS.paste, os),
+  };
+
+  if (!chrome.commands?.getAll) {
+    updateShortcutDisplay({
+      toggle: fallback.toggle ? formatShortcut(fallback.toggle, os) : notSetLabel,
+      cancel: fallback.cancel ? formatShortcut(fallback.cancel, os) : notSetLabel,
+      paste: fallback.paste ? formatShortcut(fallback.paste, os) : notSetLabel,
+    });
+    return;
+  }
+
+  try {
+    const commands = await chrome.commands.getAll();
+    const shortcuts: ShortcutDisplay = {
+      toggle: resolveShortcut(commands, COMMAND_IDS.toggle, os, notSetLabel),
+      cancel: resolveShortcut(commands, COMMAND_IDS.cancel, os, notSetLabel),
+      paste: resolveShortcut(commands, COMMAND_IDS.paste, os, notSetLabel),
+    };
+    updateShortcutDisplay(shortcuts);
+  } catch (error) {
+    console.error('[EchoType] Failed to load shortcuts:', error);
+    updateShortcutDisplay({
+      toggle: fallback.toggle ? formatShortcut(fallback.toggle, os) : notSetLabel,
+      cancel: fallback.cancel ? formatShortcut(fallback.cancel, os) : notSetLabel,
+      paste: fallback.paste ? formatShortcut(fallback.paste, os) : notSetLabel,
+    });
+  }
 }
 
 /**
@@ -747,6 +762,7 @@ function setupStorageListener(): void {
         applyI18n();
         getStatusFromBackground().then(updateStatusUI).catch(() => {});
         updateResultUI(lastResult);
+        loadShortcutDisplay().catch(() => {});
       });
     }
   });
@@ -767,8 +783,7 @@ async function init(): Promise<void> {
   applyI18n();
   loadVersion();
   
-  // Update shortcut display based on OS
-  updateShortcutDisplay();
+  await loadShortcutDisplay();
   
   await Promise.all([
     loadTheme(),

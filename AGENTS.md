@@ -125,13 +125,13 @@ const SELECTORS = {
 
 | Shortcut | Action | Description |
 |----------|--------|-------------|
-| `Alt+Shift+S` | Toggle | Start if idle, Submit if recording |
+| `Alt+Shift+D` | Toggle | Start if idle, Submit if recording |
 | `Alt+Shift+C` | Cancel | Cancel recording and clear input |
-| `Alt+Shift+P` | Paste | Paste last dictation result |
+| `Alt+Shift+V` | Paste | Paste last dictation result |
 
 ## 🎯 MVP Acceptance Criteria
 
-- [x] Keyboard shortcuts configured (Alt+Shift+S/C/P)
+- [x] Keyboard shortcuts configured (Alt+Shift+D/C/V)
 - [x] Baseline diff captures only new text
 - [x] Robust clear with verification (4 retries)
 - [x] Auto-copy to clipboard via Offscreen API

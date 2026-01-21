@@ -55,6 +55,8 @@
       "matches": ["<all_urls>"],
       "js": ["src/content/universal/index.ts"],
       "run_at": "document_idle",
+      "all_frames": true,
+      "match_origin_as_fallback": true,
       "exclude_matches": ["https://chatgpt.com/*"]
     }
   ],
@@ -65,8 +67,8 @@
   "commands": {
     "toggle-dictation": {
       "suggested_key": {
-        "default": "Alt+Shift+S",
-        "mac": "Alt+Shift+S"
+        "default": "Alt+Shift+D",
+        "mac": "Alt+Shift+D"
       },
       "description": "Toggle dictation (Start/Submit)"
     },
@@ -79,8 +81,8 @@
     },
     "paste-last-result": {
       "suggested_key": {
-        "default": "Alt+Shift+P",
-        "mac": "Alt+Shift+P"
+        "default": "Alt+Shift+V",
+        "mac": "Alt+Shift+V"
       },
       "description": "Paste last dictation result"
     }

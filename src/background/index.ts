@@ -80,12 +80,65 @@ async function ensureChatGPTContentScript(tabId: number): Promise<boolean> {
     }
 
     await chrome.scripting.executeScript({
-      target: { tabId },
+      target: { tabId, allFrames: true },
       files: [file],
     });
     return true;
   } catch (error) {
     logger.error('Failed to inject content script:', error);
+    return false;
+  }
+}
+
+function getUniversalContentScriptFile(): string | null {
+  const manifest = chrome.runtime.getManifest();
+  const scripts = manifest.content_scripts ?? [];
+  const entry =
+    scripts.find((script) =>
+      script.matches?.includes('<all_urls>') &&
+      script.exclude_matches?.includes(CHATGPT_URLS.PATTERN)
+    ) ??
+    scripts.find((script) => script.matches?.includes('<all_urls>'));
+  return entry?.js?.[0] ?? null;
+}
+
+async function isUniversalContentScriptReady(tabId: number): Promise<boolean> {
+  try {
+    const result = await chrome.scripting.executeScript({
+      target: { tabId },
+      func: () =>
+        Boolean(
+          (window as { __ECHOTYPE_UNIVERSAL_SCRIPT_LOADED__?: boolean })
+            .__ECHOTYPE_UNIVERSAL_SCRIPT_LOADED__
+        ),
+    });
+    return Boolean(result[0]?.result);
+  } catch (error) {
+    logger.warn('Universal content script probe failed:', error);
+    return false;
+  }
+}
+
+async function ensureUniversalContentScript(tabId: number): Promise<boolean> {
+  const file = getUniversalContentScriptFile();
+  if (!file) {
+    logger.warn('No universal content script entry in manifest');
+    return false;
+  }
+
+  try {
+    const ready = await isUniversalContentScriptReady(tabId);
+    if (ready) {
+      return true;
+    }
+
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: [file],
+    });
+    return true;
+  } catch (error) {
+    logger.error('Failed to inject universal content script:', error);
     return false;
   }
 }
@@ -752,12 +805,11 @@ async function handlePasteLastResult(targetTabId?: number): Promise<boolean> {
     }
   } catch (error) {
     logger.error(' Failed to send paste command:', error);
-    // Content script might not be injected, try to inject it
     try {
-      await chrome.scripting.executeScript({
-        target: { tabId },
-        files: ['src/content/universal/index.ts'],
-      });
+      const injected = await ensureUniversalContentScript(tabId);
+      if (!injected) {
+        return false;
+      }
       // Retry paste after injection
       const retryResponse = await chrome.tabs.sendMessage(tabId, createMessage.pasteText(lastItem.text));
       if (retryResponse?.ok) {
