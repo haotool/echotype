@@ -1,13 +1,15 @@
 /**
  * EchoType - Reliable Messaging Module
  * @module background/messaging
- * 
+ *
  * Provides reliable message passing with retry logic and error handling.
  * Addresses Chrome Extension MV3 Service Worker lifecycle challenges.
- * 
+ *
  * @version 1.0.0
  * @updated 2026-01-10
  */
+
+import { CONFIG } from '@shared/config';
 
 // ============================================================================
 // Types
@@ -36,9 +38,9 @@ export interface MessageResult<T> {
 // ============================================================================
 
 const DEFAULT_OPTIONS: Required<MessageOptions> = {
-  maxRetries: 3,
-  retryDelay: 500,
-  timeout: 5000,
+  maxRetries: CONFIG.MESSAGING.DEFAULT_RETRIES,
+  retryDelay: CONFIG.MESSAGING.DEFAULT_RETRY_DELAY_MS,
+  timeout: CONFIG.MESSAGING.DEFAULT_TIMEOUT_MS,
   exponentialBackoff: true,
 };
 

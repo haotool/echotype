@@ -7,12 +7,8 @@
 
 import type { EchoTypeSettings } from '@shared/types';
 import { DEFAULT_SETTINGS } from '@shared/types';
-
-// ============================================================================
-// Storage Keys
-// ============================================================================
-
-const STORAGE_KEY = 'echotype_settings';
+import { STORAGE_KEYS } from '@shared/constants';
+import { logger } from '@shared/logger';
 
 // ============================================================================
 // Settings API
@@ -25,15 +21,15 @@ const STORAGE_KEY = 'echotype_settings';
  */
 export async function loadSettings(): Promise<EchoTypeSettings> {
   try {
-    const result = await chrome.storage.sync.get(STORAGE_KEY);
-    const stored = result[STORAGE_KEY] as Partial<EchoTypeSettings> | undefined;
+    const result = await chrome.storage.sync.get(STORAGE_KEYS.SETTINGS);
+    const stored = result[STORAGE_KEYS.SETTINGS] as Partial<EchoTypeSettings> | undefined;
 
     return {
       ...DEFAULT_SETTINGS,
       ...stored,
     };
   } catch (error) {
-    console.error('[EchoType] Failed to load settings:', error);
+    logger.error(' Failed to load settings:', error);
     return DEFAULT_SETTINGS;
   }
 }
@@ -45,9 +41,9 @@ export async function loadSettings(): Promise<EchoTypeSettings> {
  */
 export async function saveSettings(settings: EchoTypeSettings): Promise<void> {
   try {
-    await chrome.storage.sync.set({ [STORAGE_KEY]: settings });
+    await chrome.storage.sync.set({ [STORAGE_KEYS.SETTINGS]: settings });
   } catch (error) {
-    console.error('[EchoType] Failed to save settings:', error);
+    logger.error(' Failed to save settings:', error);
     throw error;
   }
 }
@@ -90,8 +86,8 @@ export function onSettingsChange(
     changes: { [key: string]: chrome.storage.StorageChange },
     areaName: string
   ) => {
-    if (areaName === 'sync' && changes[STORAGE_KEY]) {
-      const newValue = changes[STORAGE_KEY].newValue as Partial<EchoTypeSettings> | undefined;
+    if (areaName === 'sync' && changes[STORAGE_KEYS.SETTINGS]) {
+      const newValue = changes[STORAGE_KEYS.SETTINGS].newValue as Partial<EchoTypeSettings> | undefined;
       const newSettings: EchoTypeSettings = {
         ...DEFAULT_SETTINGS,
         ...(newValue || {}),

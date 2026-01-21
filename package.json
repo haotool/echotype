@@ -1,6 +1,6 @@
 {
   "name": "echotype",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Universal voice dictation via ChatGPT Whisper - Chrome Extension",
   "private": true,
   "type": "module",
@@ -36,6 +36,7 @@
     "globals": "^17.0.0",
     "jsdom": "^27.4.0",
     "prettier": "^3.4.2",
+    "sharp": "^0.34.5",
     "terser": "^5.44.1",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.52.0",

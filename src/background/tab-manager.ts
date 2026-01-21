@@ -4,25 +4,14 @@
  *
  * Manages the ChatGPT tab for dictation operations.
  * Handles tab creation, focus, and lifecycle.
- * 
+ *
  * @version 2.0.0 - Enhanced robustness for tab management
  */
 
 import type { ChatGPTTabInfo } from '@shared/types';
-
-// ============================================================================
-// Configuration
-// ============================================================================
-
-const CHATGPT_URL = 'https://chatgpt.com/?temporary-chat=true';
-const CHATGPT_PATTERN = 'https://chatgpt.com/*';
-
-/** Maximum retries for tab operations */
-const MAX_RETRIES = 5;
-/** Delay between retries in ms */
-const RETRY_DELAY = 300;
-/** Timeout for tab complete in ms */
-const TAB_COMPLETE_TIMEOUT = 10000;
+import { CHATGPT_URLS } from '@shared/constants';
+import { CONFIG } from '@shared/config';
+import { logger } from '@shared/logger';
 
 // ============================================================================
 // State
@@ -60,20 +49,20 @@ const state: TabManagerState = {
  */
 export async function findChatGPTTab(): Promise<ChatGPTTabInfo | null> {
   try {
-    const tabs = await chrome.tabs.query({ url: CHATGPT_PATTERN });
+    const tabs = await chrome.tabs.query({ url: CHATGPT_URLS.PATTERN });
     const tab = tabs[0];
 
     if (tab && tab.id !== undefined && tab.windowId !== undefined) {
       return {
         tabId: tab.id,
         windowId: tab.windowId,
-        url: tab.url || CHATGPT_URL,
+        url: tab.url || CHATGPT_URLS.TEMPORARY_CHAT,
       };
     }
 
     return null;
   } catch (error) {
-    console.error('[EchoType] Error finding ChatGPT tab:', error);
+    logger.error('Error finding ChatGPT tab:', error);
     return null;
   }
 }
@@ -89,7 +78,7 @@ export async function createChatGPTTab(
 ): Promise<ChatGPTTabInfo | null> {
   try {
     const tab = await chrome.tabs.create({
-      url: CHATGPT_URL,
+      url: CHATGPT_URLS.TEMPORARY_CHAT,
       active,
     });
 
@@ -100,10 +89,10 @@ export async function createChatGPTTab(
     return {
       tabId: tab.id,
       windowId: tab.windowId,
-      url: tab.url || CHATGPT_URL,
+      url: tab.url || CHATGPT_URLS.TEMPORARY_CHAT,
     };
   } catch (error) {
-    console.error('[EchoType] Error creating ChatGPT tab:', error);
+    logger.error('Error creating ChatGPT tab:', error);
     return null;
   }
 }
@@ -127,7 +116,7 @@ export async function ensureChatGPTTab(
   if (state.chatgptTab) {
     const valid = await isTabValid(state.chatgptTab.tabId);
     if (!valid) {
-      console.log('[EchoType] Cached ChatGPT tab is no longer valid, clearing');
+      logger.log('Cached ChatGPT tab is no longer valid, clearing');
       state.chatgptTab = null;
     }
   }
@@ -137,15 +126,15 @@ export async function ensureChatGPTTab(
 
   // Create if not found
   if (!tabInfo) {
-    console.log('[EchoType] No ChatGPT tab found, creating new one');
+    logger.log('No ChatGPT tab found, creating new one');
     tabInfo = await createChatGPTTab(makeActive);
     
     if (tabInfo) {
       // Wait for the new tab to fully load
-      console.log('[EchoType] Waiting for new tab to load...');
+      logger.log('Waiting for new tab to load...');
       const loaded = await waitForTabComplete(tabInfo.tabId);
       if (!loaded) {
-        console.warn('[EchoType] Tab did not complete loading in time');
+        logger.warn('Tab did not complete loading in time');
       }
       
       // Add a small delay for DOM to be ready
@@ -158,7 +147,7 @@ export async function ensureChatGPTTab(
     // Ensure tab is fully loaded
     const loaded = await waitForTabComplete(tabInfo.tabId, 3000);
     if (!loaded) {
-      console.log('[EchoType] Existing tab may still be loading');
+      logger.log('Existing tab may still be loading');
     }
   }
 
@@ -198,7 +187,7 @@ export async function activateChatGPTTab(
       await chrome.windows.update(tabInfo.windowId, { focused: true });
     }
   } catch (error) {
-    console.error('[EchoType] Error activating ChatGPT tab:', error);
+    logger.error('Error activating ChatGPT tab:', error);
   }
 }
 
@@ -216,7 +205,7 @@ export async function returnToPreviousTab(): Promise<void> {
     }
   } catch (error) {
     // Tab may have been closed
-    console.warn('[EchoType] Could not return to previous tab:', error);
+    logger.warn('Could not return to previous tab:', error);
   } finally {
     state.previousTabId = null;
     state.previousWindowId = null;
@@ -247,7 +236,7 @@ export async function rememberCaptureOrigin(
       state.captureOriginWindowId = currentTab.windowId ?? null;
     }
   } catch (error) {
-    console.warn('[EchoType] Failed to remember capture origin:', error);
+    logger.warn('Failed to remember capture origin:', error);
   }
 }
 
@@ -266,7 +255,7 @@ export async function returnToCaptureOrigin(clear = true): Promise<void> {
       await chrome.windows.update(state.captureOriginWindowId, { focused: true });
     }
   } catch (error) {
-    console.warn('[EchoType] Could not return to capture origin:', error);
+    logger.warn('Could not return to capture origin:', error);
   } finally {
     if (clear) {
       state.captureOriginTabId = null;
@@ -324,7 +313,7 @@ export function getChatGPTTabInfo(): ChatGPTTabInfo | null {
  */
 export async function waitForTabComplete(
   tabId: number,
-  timeoutMs = TAB_COMPLETE_TIMEOUT
+  timeoutMs: number = CONFIG.TAB.COMPLETE_TIMEOUT_MS
 ): Promise<boolean> {
   try {
     const tab = await chrome.tabs.get(tabId);
@@ -332,7 +321,7 @@ export async function waitForTabComplete(
       return true;
     }
   } catch (error) {
-    console.warn('[EchoType] Failed to read tab status:', error);
+    logger.warn('Failed to read tab status:', error);
     return false;
   }
 
@@ -389,13 +378,13 @@ export async function refreshTabIfNeeded(tabId: number): Promise<boolean> {
       !url.startsWith('https://chatgpt.com') || !url.includes('temporary-chat=true');
 
     if (needsChatGPT) {
-      await chrome.tabs.update(tabId, { url: CHATGPT_URL });
+      await chrome.tabs.update(tabId, { url: CHATGPT_URLS.TEMPORARY_CHAT });
       return await waitForTabComplete(tabId);
     }
 
     return true;
   } catch (error) {
-    console.error('[EchoType] Failed to refresh tab:', error);
+    logger.error(' Failed to refresh tab:', error);
     return false;
   }
 }
@@ -404,15 +393,15 @@ export async function refreshTabIfNeeded(tabId: number): Promise<boolean> {
  * Send a message to the ChatGPT tab with retry logic.
  *
  * @param message - Message to send
- * @param retries - Number of retries (default: MAX_RETRIES)
+ * @param retries - Number of retries (default: CONFIG.TAB.MAX_RETRIES)
  * @returns Response from content script
  */
 export async function sendToChatGPTTab<T>(
   message: unknown,
-  retries = MAX_RETRIES
+  retries = CONFIG.TAB.MAX_RETRIES
 ): Promise<T | null> {
   if (!state.chatgptTab) {
-    console.error('[EchoType] No ChatGPT tab available');
+    logger.error(' No ChatGPT tab available');
     return null;
   }
 
@@ -436,11 +425,11 @@ export async function sendToChatGPTTab<T>(
       // Check if it's a connection error that might be recoverable
       if (errorMessage.includes('Receiving end does not exist') && attempt < retries) {
         console.warn(`[EchoType] Connection failed, retrying (${attempt + 1}/${retries})...`);
-        await delay(RETRY_DELAY * (attempt + 1)); // Exponential backoff
+        await delay(CONFIG.TAB.RETRY_DELAY_MS * (attempt + 1)); // Exponential backoff
         continue;
       }
 
-      console.error('[EchoType] Error sending message to ChatGPT tab:', error);
+      logger.error('Error sending message to ChatGPT tab:', error);
       return null;
     }
   }

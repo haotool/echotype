@@ -1,3 +1,13 @@
-Icon source: Google Material Design Icons ("mic")
-https://github.com/google/material-design-icons
-License: Apache License 2.0
+EchoType Icon Attribution
+=========================
+
+Icon Design: EchoType Team
+Style: Modern Minimalist, Monochrome
+Created: 2026-01-21
+
+The EchoType logo represents the concept of voice-to-text transformation:
+- Sound wave arcs symbolize audio input
+- Microphone capsule represents voice capture
+- Clean geometric design ensures clarity at all sizes
+
+License: MIT (same as project)

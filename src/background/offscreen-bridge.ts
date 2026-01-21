@@ -9,12 +9,15 @@
 
 import { MSG } from '@shared/protocol';
 import type { OffscreenClipboardResultPayload } from '@shared/protocol';
+import { PATHS } from '@shared/constants';
+import { CONFIG } from '@shared/config';
+import { logger } from '@shared/logger';
 
 // ============================================================================
 // Configuration
 // ============================================================================
 
-const OFFSCREEN_DOCUMENT_PATH = 'src/offscreen/index.html';
+const OFFSCREEN_DOCUMENT_PATH = PATHS.OFFSCREEN_DOCUMENT;
 const OFFSCREEN_REASON = 'CLIPBOARD' as chrome.offscreen.Reason;
 const OFFSCREEN_JUSTIFICATION = 'Write dictation result to clipboard';
 
@@ -95,14 +98,14 @@ async function ensureOffscreenDocument(): Promise<void> {
  */
 export async function writeToClipboard(text: string): Promise<boolean> {
   if (!text) {
-    console.warn('[EchoType] Clipboard write skipped: empty text');
+    logger.warn(' Clipboard write skipped: empty text');
     return false;
   }
 
   try {
     // Ensure offscreen document exists
     await ensureOffscreenDocument();
-    console.log('[EchoType] Offscreen document ready, sending clipboard request');
+    logger.log(' Offscreen document ready, sending clipboard request');
 
     // Send message to offscreen document with timeout
     const response = await Promise.race([
@@ -112,26 +115,26 @@ export async function writeToClipboard(text: string): Promise<boolean> {
         target: 'offscreen',
       }),
       new Promise<null>((_, reject) => 
-        setTimeout(() => reject(new Error('Clipboard operation timeout')), 5000)
+        setTimeout(() => reject(new Error('Clipboard operation timeout')), CONFIG.OFFSCREEN.CLIPBOARD_TIMEOUT_MS)
       ),
     ]);
 
     const result = response as OffscreenClipboardResultPayload | undefined;
     
     if (result?.success) {
-      console.log('[EchoType] Clipboard write successful');
+      logger.log(' Clipboard write successful');
       return true;
     } else {
-      console.warn('[EchoType] Clipboard write failed:', result?.error || 'Unknown error');
+      logger.warn(' Clipboard write failed:', result?.error || 'Unknown error');
       return false;
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[EchoType] Clipboard write error:', errorMessage);
+    logger.error(' Clipboard write error:', errorMessage);
     
     // If offscreen document failed, try to recreate it
     if (errorMessage.includes('Receiving end does not exist')) {
-      console.log('[EchoType] Attempting to recreate offscreen document...');
+      logger.log(' Attempting to recreate offscreen document...');
       try {
         await chrome.offscreen.closeDocument().catch(() => {});
         creatingOffscreen = null;
@@ -147,7 +150,7 @@ export async function writeToClipboard(text: string): Promise<boolean> {
         const retryResult = retryResponse as OffscreenClipboardResultPayload | undefined;
         return retryResult?.success ?? false;
       } catch (retryError) {
-        console.error('[EchoType] Clipboard retry failed:', retryError);
+        logger.error(' Clipboard retry failed:', retryError);
         return false;
       }
     }

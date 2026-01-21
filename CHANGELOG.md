@@ -5,6 +5,29 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.4] - 2026-01-21
+
+### 🎨 Visual Refresh
+- **New Modern Logo** - Completely redesigned icon with minimalist aesthetic:
+  - Monochrome design for better visibility across all backgrounds
+  - Sound wave arcs representing voice input transformation
+  - Clean geometric microphone symbol
+  - Optimized for all sizes (16px, 32px, 48px, 128px)
+
+### 🔧 Technical Improvements
+- Added `sharp` for automated icon generation
+- New `scripts/generate-icons.mjs` for SVG to PNG conversion
+- Fixed TypeScript errors in `keepalive.ts` and `settings.ts` (incorrect imports)
+- Fixed `waitForTabComplete` parameter type for flexible timeout values
+- Removed unused logger import in `messaging.ts`
+
+### 🧪 Testing
+- All 140 unit tests passing
+- All 27 E2E tests passing (headless mode)
+- Build successful
+
+---
+
 ## [0.9.3] - 2026-01-21
 
 ### 🐛 Bug Fixes

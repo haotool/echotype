@@ -8,14 +8,9 @@
  * @see https://developer.chrome.com/docs/extensions/mv3/service_workers/service-worker-lifecycle/
  */
 
-// ============================================================================
-// Configuration
-// ============================================================================
-
-const ALARM_NAME = 'echotype-keepalive';
-const ALARM_PERIOD_MINUTES = 4.9; // Just under 5 minutes to stay active
-
-const DEBUG = process.env.NODE_ENV === 'development';
+import { ALARM_NAMES } from '@shared/constants';
+import { CONFIG } from '@shared/config';
+import { logger } from '@shared/logger';
 
 // ============================================================================
 // Keep-alive Functions
@@ -27,19 +22,17 @@ const DEBUG = process.env.NODE_ENV === 'development';
  */
 export async function initKeepAlive(): Promise<void> {
   // Clear any existing alarm
-  await chrome.alarms.clear(ALARM_NAME);
+  await chrome.alarms.clear(ALARM_NAMES.KEEPALIVE);
 
   // Create a new periodic alarm
-  chrome.alarms.create(ALARM_NAME, {
-    periodInMinutes: ALARM_PERIOD_MINUTES,
+  chrome.alarms.create(ALARM_NAMES.KEEPALIVE, {
+    periodInMinutes: CONFIG.KEEPALIVE.PERIOD_MINUTES,
   });
 
   // Register alarm listener
   chrome.alarms.onAlarm.addListener(handleAlarm);
 
-  if (DEBUG) {
-    console.log('[EchoType] Keep-alive initialized');
-  }
+  logger.log('Keep-alive initialized');
 }
 
 /**
@@ -47,12 +40,10 @@ export async function initKeepAlive(): Promise<void> {
  * Should be called during cleanup if needed.
  */
 export async function stopKeepAlive(): Promise<void> {
-  await chrome.alarms.clear(ALARM_NAME);
+  await chrome.alarms.clear(ALARM_NAMES.KEEPALIVE);
   chrome.alarms.onAlarm.removeListener(handleAlarm);
 
-  if (DEBUG) {
-    console.log('[EchoType] Keep-alive stopped');
-  }
+  logger.log('Keep-alive stopped');
 }
 
 /**
@@ -60,11 +51,9 @@ export async function stopKeepAlive(): Promise<void> {
  * Simply logs activity - the alarm itself keeps the SW alive.
  */
 function handleAlarm(alarm: chrome.alarms.Alarm): void {
-  if (alarm.name !== ALARM_NAME) return;
+  if (alarm.name !== ALARM_NAMES.KEEPALIVE) return;
 
-  if (DEBUG) {
-    console.log('[EchoType] Keep-alive ping at', new Date().toISOString());
-  }
+  logger.debug('Keep-alive ping at', new Date().toISOString());
 
   // The alarm itself keeps the service worker alive
   // No additional action needed
@@ -76,5 +65,5 @@ function handleAlarm(alarm: chrome.alarms.Alarm): void {
 
 // Initialize keep-alive when module loads
 initKeepAlive().catch((error) => {
-  console.error('[EchoType] Failed to initialize keep-alive:', error);
+  logger.error('Failed to initialize keep-alive:', error);
 });

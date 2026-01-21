@@ -7,13 +7,9 @@
 
 import type { HistoryItem } from '@shared/types';
 import { generateId } from '@shared/utils';
+import { STORAGE_KEYS } from '@shared/constants';
+import { logger } from '@shared/logger';
 import { loadSettings } from './settings';
-
-// ============================================================================
-// Storage Keys
-// ============================================================================
-
-const HISTORY_KEY = 'echotype_history';
 
 // ============================================================================
 // History API
@@ -26,10 +22,10 @@ const HISTORY_KEY = 'echotype_history';
  */
 export async function loadHistory(): Promise<HistoryItem[]> {
   try {
-    const result = await chrome.storage.session.get(HISTORY_KEY);
-    return (result[HISTORY_KEY] as HistoryItem[]) || [];
+    const result = await chrome.storage.session.get(STORAGE_KEYS.HISTORY);
+    return (result[STORAGE_KEYS.HISTORY] as HistoryItem[]) || [];
   } catch (error) {
-    console.error('[EchoType] Failed to load history:', error);
+    logger.error(' Failed to load history:', error);
     return [];
   }
 }
@@ -41,9 +37,9 @@ export async function loadHistory(): Promise<HistoryItem[]> {
  */
 async function saveHistory(history: HistoryItem[]): Promise<void> {
   try {
-    await chrome.storage.session.set({ [HISTORY_KEY]: history });
+    await chrome.storage.session.set({ [STORAGE_KEYS.HISTORY]: history });
   } catch (error) {
-    console.error('[EchoType] Failed to save history:', error);
+    logger.error(' Failed to save history:', error);
   }
 }
 

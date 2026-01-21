@@ -13,6 +13,9 @@ import type {
   StatusChangedPayload,
 } from '@shared/protocol';
 import type { HistoryItem, EchoTypeError } from '@shared/types';
+import { STORAGE_KEYS, CHATGPT_URLS } from '@shared/constants';
+import { CONFIG } from '@shared/config';
+import { logger } from '@shared/logger';
 
 import { loadSettings, onSettingsChange } from './settings';
 import {
@@ -41,15 +44,12 @@ import { notifyStatusChange } from './messaging';
 // Initialization
 // ============================================================================
 
-console.log('[EchoType] Background service worker started');
-
-const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
-const CHATGPT_MATCH = 'https://chatgpt.com/*';
+logger.log('Background service worker started');
 
 function getChatGPTContentScriptFile(): string | null {
   const manifest = chrome.runtime.getManifest();
   const scripts = manifest.content_scripts ?? [];
-  const entry = scripts.find((script) => script.matches?.includes(CHATGPT_MATCH));
+  const entry = scripts.find((script) => script.matches?.includes(CHATGPT_URLS.PATTERN));
   return entry?.js?.[0] ?? null;
 }
 
@@ -61,7 +61,7 @@ async function isChatGPTContentScriptReady(tabId: number): Promise<boolean> {
     });
     return Boolean(result[0]?.result);
   } catch (error) {
-    console.warn('[EchoType] Content script probe failed:', error);
+    logger.warn('Content script probe failed:', error);
     return false;
   }
 }
@@ -69,7 +69,7 @@ async function isChatGPTContentScriptReady(tabId: number): Promise<boolean> {
 async function ensureChatGPTContentScript(tabId: number): Promise<boolean> {
   const file = getChatGPTContentScriptFile();
   if (!file) {
-    console.warn('[EchoType] No ChatGPT content script entry in manifest');
+    logger.warn('No ChatGPT content script entry in manifest');
     return false;
   }
 
@@ -85,7 +85,7 @@ async function ensureChatGPTContentScript(tabId: number): Promise<boolean> {
     });
     return true;
   } catch (error) {
-    console.error('[EchoType] Failed to inject content script:', error);
+    logger.error('Failed to inject content script:', error);
     return false;
   }
 }
@@ -108,8 +108,6 @@ let submitInFlight = false;
 // ============================================================================
 // Dictation Status Management (Persistent via chrome.storage.session)
 // ============================================================================
-
-const STORAGE_KEY_DICTATION_STATUS = 'echotype_dictation_status';
 
 // In-memory cache (synced with storage)
 let currentDictationStatus: 'idle' | 'listening' | 'recording' | 'processing' | 'error' | 'unknown' = 'idle';
@@ -148,7 +146,7 @@ async function setStatusAndNotify(status: DictationStatusType): Promise<void> {
     try {
       listener(status);
     } catch (error) {
-      console.warn('[EchoType] Status listener error:', error);
+      logger.warn(' Status listener error:', error);
     }
   }
 }
@@ -186,7 +184,7 @@ async function requestStatusResync(reason: string): Promise<DictationStatusType 
   try {
     const tabInfo = getChatGPTTabInfo();
     if (!tabInfo) {
-      console.warn('[EchoType] Status resync skipped (no ChatGPT tab):', reason);
+      logger.warn(' Status resync skipped (no ChatGPT tab):', reason);
       return null;
     }
 
@@ -202,7 +200,7 @@ async function requestStatusResync(reason: string): Promise<DictationStatusType 
       return response.status;
     }
   } catch (error) {
-    console.warn('[EchoType] Status resync failed:', error);
+    logger.warn(' Status resync failed:', error);
   } finally {
     resyncInFlight = false;
   }
@@ -212,7 +210,7 @@ async function requestStatusResync(reason: string): Promise<DictationStatusType 
 
 async function applyIncomingStatus(status: DictationStatusType, source: string): Promise<void> {
   if (!isValidStatus(status)) {
-    console.warn('[EchoType] Ignoring invalid status:', status, source);
+    logger.warn(' Ignoring invalid status:', status, source);
     return;
   }
 
@@ -227,7 +225,7 @@ async function applyIncomingStatus(status: DictationStatusType, source: string):
   }
 
   if (!isValidTransition(currentDictationStatus, status)) {
-    console.warn('[EchoType] Invalid status transition:', currentDictationStatus, '->', status, source);
+    logger.warn(' Invalid status transition:', currentDictationStatus, '->', status, source);
     const resynced = await requestStatusResync(`${source}:invalid`);
     if (resynced && isValidTransition(currentDictationStatus, resynced)) {
       await setStatusAndNotify(resynced);
@@ -245,7 +243,7 @@ function isValidStatus(status: unknown): status is DictationStatusType {
 }
 
 async function waitForProcessingCompletion(
-  timeoutMs = 14000
+  timeoutMs = CONFIG.PROCESSING.COMPLETION_TIMEOUT_MS
 ): Promise<DictationStatusType | null> {
   const status = await waitForStatus(['idle', 'error'], timeoutMs);
   if (status) {
@@ -270,14 +268,14 @@ async function waitForProcessingCompletion(
  */
 async function getDictationStatus(): Promise<DictationStatusType> {
   try {
-    const result = await chrome.storage.session.get(STORAGE_KEY_DICTATION_STATUS);
-    const status = result[STORAGE_KEY_DICTATION_STATUS];
+    const result = await chrome.storage.session.get(STORAGE_KEYS.DICTATION_STATUS);
+    const status = result[STORAGE_KEYS.DICTATION_STATUS];
     if (isValidStatus(status)) {
       currentDictationStatus = status;
       return status;
     }
   } catch (error) {
-    console.warn('[EchoType] Failed to get status from storage:', error);
+    logger.warn(' Failed to get status from storage:', error);
   }
   return currentDictationStatus;
 }
@@ -289,21 +287,21 @@ async function getDictationStatus(): Promise<DictationStatusType> {
 async function setDictationStatus(status: DictationStatusType): Promise<void> {
   currentDictationStatus = status;
   try {
-    await chrome.storage.session.set({ [STORAGE_KEY_DICTATION_STATUS]: status });
-    console.log('[EchoType] Status persisted:', status);
+    await chrome.storage.session.set({ [STORAGE_KEYS.DICTATION_STATUS]: status });
+    logger.log(' Status persisted:', status);
   } catch (error) {
-    console.warn('[EchoType] Failed to persist status:', error);
+    logger.warn(' Failed to persist status:', error);
   }
 }
 
 // Initialize settings, badge, status, and heartbeat asynchronously
 (async () => {
   currentSettings = await loadSettings();
-  console.log('[EchoType] Settings loaded:', currentSettings);
+  logger.log(' Settings loaded:', currentSettings);
   
   // Restore status from storage (survives SW termination)
   await getDictationStatus();
-  console.log('[EchoType] Restored status:', currentDictationStatus);
+  logger.log(' Restored status:', currentDictationStatus);
   
   await initBadge();
   await updateBadge(currentDictationStatus);
@@ -314,7 +312,7 @@ async function setDictationStatus(status: DictationStatusType): Promise<void> {
 // Listen for settings changes
 onSettingsChange((settings) => {
   currentSettings = settings;
-  console.log('[EchoType] Settings updated:', settings);
+  logger.log(' Settings updated:', settings);
 });
 
 // ============================================================================
@@ -326,12 +324,12 @@ onSettingsChange((settings) => {
  * Includes robust retry logic and content script injection.
  */
 async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
-  console.log('[EchoType] Start dictation command');
+  logger.log(' Start dictation command');
 
   // Ensure ChatGPT tab exists (activation optional based on settings)
   const tabInfo = await ensureChatGPTTab(false);
   if (!tabInfo) {
-    console.error('[EchoType] Failed to get ChatGPT tab');
+    logger.error(' Failed to get ChatGPT tab');
     await setStatusAndNotify('error');
     if (canPlayAudio()) {
       await playErrorSound();
@@ -350,13 +348,13 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   // Wait for tab to be fully ready
   const ready = await waitForTabComplete(tabInfo.tabId, 8000);
   if (!ready) {
-    console.warn('[EchoType] Tab may not be fully loaded');
+    logger.warn(' Tab may not be fully loaded');
   }
 
   // Ensure content script is injected
   const injected = await ensureChatGPTContentScript(tabInfo.tabId);
   if (!injected) {
-    console.error('[EchoType] Failed to inject content script');
+    logger.error(' Failed to inject content script');
     await setStatusAndNotify('error');
     if (canPlayAudio()) {
       await playErrorSound();
@@ -379,7 +377,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   const preStatus = await requestStatusResync('start-check');
   const activeStates: DictationStatusType[] = ['listening', 'recording', 'processing'];
   if (preStatus && activeStates.includes(preStatus)) {
-    console.warn('[EchoType] Start blocked, dictation already active:', preStatus);
+    logger.warn(' Start blocked, dictation already active:', preStatus);
     await applyIncomingStatus(preStatus, 'start-precheck');
     return {
       ok: false,
@@ -391,7 +389,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   }
   // Log if status is unknown (may indicate login required)
   if (preStatus === 'unknown') {
-    console.log('[EchoType] Status unknown, proceeding to check login state');
+    logger.log(' Status unknown, proceeding to check login state');
   }
 
   await rememberCaptureOrigin({ force: true });
@@ -407,7 +405,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   );
 
   if (!result?.ok && result?.error?.code === 'PAGE_INACTIVE' && !shouldActivateForStart) {
-    console.warn('[EchoType] Page inactive, activating tab and retrying start');
+    logger.warn(' Page inactive, activating tab and retrying start');
     await activateChatGPTTab(tabInfo, { trackPrevious: false });
     result = await sendToChatGPTTab<{ ok: boolean; error?: EchoTypeError; status?: DictationStatusType }>(
       createMessage.cmdStart('snapshot')
@@ -415,7 +413,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
   }
 
   if (result?.ok) {
-    console.log('[EchoType] Dictation started successfully');
+    logger.log(' Dictation started successfully');
     const nextStatus = isValidStatus(result.status) ? result.status : 'recording';
     await applyIncomingStatus(nextStatus, 'start');
     if (canPlayAudio()) {
@@ -429,7 +427,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
     return result;
   } else {
     const errorMessage = result?.error?.message || 'No response from ChatGPT tab';
-    console.error('[EchoType] Failed to start dictation:', errorMessage);
+    logger.error(' Failed to start dictation:', errorMessage);
     await setStatusAndNotify('error');
     if (canPlayAudio()) {
       await playErrorSound();
@@ -453,7 +451,7 @@ async function handleStartDictation(): Promise<{ ok: boolean; error?: EchoTypeEr
  * Cancels recording and clears the input.
  */
 async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeError }> {
-  console.log('[EchoType] Cancel dictation command');
+  logger.log(' Cancel dictation command');
 
   const tabInfo = await ensureChatGPTTab(false);
   if (!tabInfo) {
@@ -482,7 +480,7 @@ async function handleCancelDictation(): Promise<{ ok: boolean; error?: EchoTypeE
   }
 
   if (result?.ok) {
-    console.log('[EchoType] Dictation paused');
+    logger.log(' Dictation paused');
     await setStatusAndNotify('idle');
     clearCaptureOrigin();
     return { ok: true };
@@ -518,7 +516,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
   let pasteTargetTabId: number | null = null;
 
   try {
-    console.log('[EchoType] Submit dictation command');
+    logger.log(' Submit dictation command');
     await setStatusAndNotify('processing');
 
     const tabInfo = await ensureChatGPTTab(false);
@@ -555,7 +553,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
     }
 
     if (!submitAck) {
-      console.error('[EchoType] No response from ChatGPT tab (submit)');
+      logger.error(' No response from ChatGPT tab (submit)');
       if (needsReturn) {
         await returnToCaptureOrigin(true);
         originCleared = true;
@@ -567,7 +565,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
     }
 
     if (submitAck.type === MSG.ERROR) {
-      console.error('[EchoType] Submit error:', submitAck.error);
+      logger.error(' Submit error:', submitAck.error);
       await setStatusAndNotify('error');
       if (canPlayAudio()) {
         await playErrorSound();
@@ -603,7 +601,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
       });
     }
     if (!completionStatus) {
-      console.warn('[EchoType] Processing completion timeout, capturing anyway');
+      logger.warn(' Processing completion timeout, capturing anyway');
     }
 
     if (needsReturn) {
@@ -626,7 +624,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
     }
 
     if (!captureResult) {
-      console.error('[EchoType] No response from ChatGPT tab (capture)');
+      logger.error(' No response from ChatGPT tab (capture)');
       return createMessage.error({
         code: 'UNKNOWN_ERROR',
         message: 'No response from ChatGPT tab',
@@ -634,7 +632,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
     }
 
     if (captureResult.type === MSG.ERROR) {
-      console.error('[EchoType] Dictation error:', captureResult.error);
+      logger.error(' Dictation error:', captureResult.error);
       await setStatusAndNotify('error');
       if (canPlayAudio()) {
         await playErrorSound();
@@ -645,7 +643,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
     if (captureResult.type === MSG.RESULT_READY) {
       const { addedText, capture, clear } = captureResult;
 
-      console.log('[EchoType] Dictation result:', {
+      logger.log(' Dictation result:', {
         addedTextLength: addedText.length,
         captureReason: capture.reason,
         clearOk: clear.ok,
@@ -662,7 +660,7 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
 
         if (currentSettings.autoCopyToClipboard) {
           const copied = await writeToClipboard(addedText);
-          console.log('[EchoType] Auto-copied to clipboard:', copied);
+          logger.log(' Auto-copied to clipboard:', copied);
         }
 
         broadcastResult(addedText, historyItem);
@@ -696,32 +694,32 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
  * Handle the paste-last-result command.
  */
 async function handlePasteLastResult(targetTabId?: number): Promise<void> {
-  console.log('[EchoType] Paste last result command');
+  logger.log(' Paste last result command');
 
   const lastItem = await getLastHistoryItem();
   if (!lastItem) {
-    console.log('[EchoType] No history to paste');
+    logger.log(' No history to paste');
     return;
   }
 
   const tabId = targetTabId ?? await getCurrentTab();
   if (!tabId) {
-    console.log('[EchoType] No active tab');
+    logger.log(' No active tab');
     return;
   }
 
   const chatgptTab = getChatGPTTabInfo();
   if (chatgptTab?.tabId === tabId) {
-    console.log('[EchoType] Skipping auto paste into ChatGPT tab');
+    logger.log(' Skipping auto paste into ChatGPT tab');
     return;
   }
 
   // Send paste command to target tab
   try {
     await chrome.tabs.sendMessage(tabId, createMessage.pasteText(lastItem.text));
-    console.log('[EchoType] Paste command sent');
+    logger.log(' Paste command sent');
   } catch (error) {
-    console.error('[EchoType] Failed to send paste command:', error);
+    logger.error(' Failed to send paste command:', error);
   }
 }
 
@@ -748,7 +746,7 @@ async function broadcastResult(text: string, historyItem: HistoryItem): Promise<
       }
     }
   } catch (error) {
-    console.error('[EchoType] Broadcast error:', error);
+    logger.error(' Broadcast error:', error);
   }
 }
 
@@ -765,7 +763,7 @@ async function broadcastResult(text: string, historyItem: HistoryItem): Promise<
  * - paste-last-result: Paste last result to active tab
  */
 chrome.commands.onCommand.addListener(async (command) => {
-  console.log('[EchoType] Command received:', command);
+  logger.log(' Command received:', command);
 
   switch (command) {
     case 'toggle-dictation':
@@ -868,12 +866,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === MSG.MANUAL_SUBMIT_CAPTURE) {
     (async () => {
       const { text } = message as { text: string; timestamp: number };
-      console.log('[EchoType] Manual submit capture received:', text.substring(0, 50));
+      logger.log(' Manual submit capture received:', text.substring(0, 50));
       
       // Copy to clipboard
       const clipboardOk = await writeToClipboard(text);
       if (clipboardOk) {
-        console.log('[EchoType] Manual submit: copied to clipboard');
+        logger.log(' Manual submit: copied to clipboard');
       }
       
       // Add to history (addToHistory creates the HistoryItem internally)
@@ -911,8 +909,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Dev-only forwarder (options -> background -> ChatGPT content script)
   if (message.type === MSG.DEV_FORWARD) {
     (async () => {
-      const result = await chrome.storage.local.get(STORAGE_KEY_DEV_MODE);
-      if (result[STORAGE_KEY_DEV_MODE] !== true) {
+      const result = await chrome.storage.local.get(STORAGE_KEYS.DEV_MODE);
+      if (result[STORAGE_KEYS.DEV_MODE] !== true) {
         sendResponse({ ok: false, error: 'dev-mode-disabled' });
         return;
       }
@@ -971,5 +969,5 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
  * Handle extension installation/update.
  */
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('[EchoType] Extension installed:', details.reason);
+  logger.log(' Extension installed:', details.reason);
 });
