@@ -532,10 +532,21 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
       await ensureChatGPTContentScript(tabInfo.tabId);
     }
 
+    // Get capture origin for auto-paste
+    // Don't overwrite if already set (from start command)
     await rememberCaptureOrigin({ force: false });
     captureOrigin = getCaptureOrigin();
-    pasteTargetTabId = captureOrigin?.tabId ?? null;
-    needsReturn = Boolean(captureOrigin && captureOrigin.tabId !== tabInfo.tabId);
+    
+    // Determine paste target: use capture origin if it's not the ChatGPT tab
+    const chatgptTabId = tabInfo.tabId;
+    if (captureOrigin && captureOrigin.tabId !== chatgptTabId) {
+      pasteTargetTabId = captureOrigin.tabId;
+    } else {
+      // If capture origin is ChatGPT or not set, try to find another suitable tab
+      pasteTargetTabId = null;
+    }
+    
+    needsReturn = Boolean(captureOrigin && captureOrigin.tabId !== chatgptTabId);
 
     if (needsReturn) {
       await activateChatGPTTab(tabInfo, { trackPrevious: false });
@@ -692,34 +703,71 @@ async function handleSubmitDictation(): Promise<ResultReadyPayload | ErrorPayloa
 
 /**
  * Handle the paste-last-result command.
+ * 
+ * @param targetTabId - Specific tab to paste into (optional)
+ * @returns Success status
  */
-async function handlePasteLastResult(targetTabId?: number): Promise<void> {
-  logger.log(' Paste last result command');
+async function handlePasteLastResult(targetTabId?: number): Promise<boolean> {
+  logger.log(' Paste last result command, target:', targetTabId);
 
   const lastItem = await getLastHistoryItem();
   if (!lastItem) {
     logger.log(' No history to paste');
-    return;
+    return false;
   }
 
   const tabId = targetTabId ?? await getCurrentTab();
   if (!tabId) {
     logger.log(' No active tab');
-    return;
+    return false;
   }
 
   const chatgptTab = getChatGPTTabInfo();
   if (chatgptTab?.tabId === tabId) {
     logger.log(' Skipping auto paste into ChatGPT tab');
-    return;
+    return false;
+  }
+
+  // Verify the tab exists and is accessible
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://')) {
+      logger.log(' Cannot paste into restricted page:', tab.url);
+      return false;
+    }
+  } catch (error) {
+    logger.warn(' Target tab not found:', error);
+    return false;
   }
 
   // Send paste command to target tab
   try {
-    await chrome.tabs.sendMessage(tabId, createMessage.pasteText(lastItem.text));
-    logger.log(' Paste command sent');
+    const response = await chrome.tabs.sendMessage(tabId, createMessage.pasteText(lastItem.text));
+    if (response?.ok) {
+      logger.log(' Paste successful');
+      return true;
+    } else {
+      logger.warn(' Paste failed:', response?.error || 'No focused element');
+      return false;
+    }
   } catch (error) {
     logger.error(' Failed to send paste command:', error);
+    // Content script might not be injected, try to inject it
+    try {
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        files: ['src/content/universal/index.ts'],
+      });
+      // Retry paste after injection
+      const retryResponse = await chrome.tabs.sendMessage(tabId, createMessage.pasteText(lastItem.text));
+      if (retryResponse?.ok) {
+        logger.log(' Paste successful after injection');
+        return true;
+      }
+    } catch (injectError) {
+      logger.error(' Failed to inject content script:', injectError);
+    }
+    return false;
   }
 }
 

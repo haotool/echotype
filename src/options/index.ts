@@ -256,14 +256,37 @@ async function loadShortcuts(): Promise<void> {
   }
 }
 
+/**
+ * Detect the user's operating system.
+ */
+function detectOS(): 'mac' | 'windows' | 'linux' {
+  const platform = navigator.platform.toLowerCase();
+  const userAgent = navigator.userAgent.toLowerCase();
+  
+  if (platform.includes('mac') || userAgent.includes('mac')) {
+    return 'mac';
+  }
+  if (platform.includes('win') || userAgent.includes('windows')) {
+    return 'windows';
+  }
+  return 'linux';
+}
+
 function formatShortcut(shortcut: string): string {
-  // Convert Chrome's format to display format
-  return shortcut
-    .replace('Ctrl', '⌃')
-    .replace('Command', '⌘')
-    .replace('Shift', '⇧')
-    .replace('Alt', '⌥')
-    .replace(/\+/g, '');
+  const os = detectOS();
+  
+  // For Mac, use symbols
+  if (os === 'mac') {
+    return shortcut
+      .replace('Ctrl', '⌃')
+      .replace('Command', '⌘')
+      .replace('Shift', '⇧')
+      .replace('Alt', '⌥')
+      .replace(/\+/g, '');
+  }
+  
+  // For Windows/Linux, keep text format but clean up
+  return shortcut;
 }
 
 // ============================================================================

@@ -24,6 +24,66 @@ const STORAGE_KEY_DEV_MODE = 'echotype_dev_mode';
 const STORAGE_KEY_HISTORY = 'echotype_history';
 const STORAGE_KEY_LANGUAGE = 'echotype_language';
 
+// ============================================================================
+// OS Detection & Shortcut Display
+// ============================================================================
+
+/**
+ * Detect the user's operating system.
+ * @returns 'mac' | 'windows' | 'linux'
+ */
+function detectOS(): 'mac' | 'windows' | 'linux' {
+  const platform = navigator.platform.toLowerCase();
+  const userAgent = navigator.userAgent.toLowerCase();
+  
+  if (platform.includes('mac') || userAgent.includes('mac')) {
+    return 'mac';
+  }
+  if (platform.includes('win') || userAgent.includes('windows')) {
+    return 'windows';
+  }
+  return 'linux';
+}
+
+/**
+ * Get keyboard shortcut display strings based on OS.
+ * Mac: ⌥⇧S (Option+Shift+S)
+ * Windows/Linux: Alt+Shift+S
+ */
+function getShortcutDisplay(): { toggle: string; cancel: string; paste: string } {
+  const os = detectOS();
+  
+  if (os === 'mac') {
+    return {
+      toggle: '⌥⇧S',
+      cancel: '⌥⇧C',
+      paste: '⌥⇧P',
+    };
+  }
+  
+  // Windows/Linux use text labels
+  return {
+    toggle: 'Alt+Shift+S',
+    cancel: 'Alt+Shift+C',
+    paste: 'Alt+Shift+P',
+  };
+}
+
+/**
+ * Update shortcut key display elements based on detected OS.
+ */
+function updateShortcutDisplay(): void {
+  const shortcuts = getShortcutDisplay();
+  
+  const toggleEl = document.getElementById('shortcut-toggle');
+  const cancelEl = document.getElementById('shortcut-cancel');
+  const pasteEl = document.getElementById('shortcut-paste');
+  
+  if (toggleEl) toggleEl.textContent = shortcuts.toggle;
+  if (cancelEl) cancelEl.textContent = shortcuts.cancel;
+  if (pasteEl) pasteEl.textContent = shortcuts.paste;
+}
+
 /**
  * Get localized status labels.
  * Must be called after i18n is initialized.
@@ -706,6 +766,9 @@ async function init(): Promise<void> {
   // Apply i18n translations to all elements with data-i18n attributes
   applyI18n();
   loadVersion();
+  
+  // Update shortcut display based on OS
+  updateShortcutDisplay();
   
   await Promise.all([
     loadTheme(),

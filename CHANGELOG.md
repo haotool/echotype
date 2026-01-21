@@ -5,6 +5,29 @@ All notable changes to EchoType will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.6] - 2026-01-21
+
+### ✨ New Features
+- **OS-Aware Shortcut Display** - Keyboard shortcuts now display correctly based on operating system:
+  - macOS: Uses symbols (⌥⇧S for Option+Shift+S)
+  - Windows/Linux: Uses text labels (Alt+Shift+S)
+  - Auto-detected at runtime
+
+### 🐛 Bug Fixes
+- **Fixed Auto-Paste to Original Tab** - Resolved issue where auto-paste wasn't working:
+  - Improved capture origin tracking to correctly identify the user's original tab
+  - Added validation to ensure paste target is not a restricted page (chrome://, chrome-extension://)
+  - Added automatic content script injection if not already present
+  - Enhanced error handling with detailed logging
+  - Properly skip paste when capture origin is the ChatGPT tab itself
+
+### 🔧 Technical
+- `handlePasteLastResult` now returns success status and handles edge cases
+- Added tab validation before attempting paste
+- Improved capture origin logic to distinguish between ChatGPT and user tabs
+
+---
+
 ## [0.9.5] - 2026-01-21
 
 ### 🐛 Bug Fixes

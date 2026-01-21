@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "EchoType",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "__MSG_extDescription__",
   "author": { "email": "haotool.org@gmail.com" },
   "homepage_url": "https://github.com/haotool/echotype",
